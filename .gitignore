@@ -219,3 +219,6 @@ pip-log.txt
 #############
 Intellij idea
 #############
+
+.idea/misc.xml
+.idea/workspace.xml
