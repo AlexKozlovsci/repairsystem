@@ -31,7 +31,6 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring-framework-version}</version>
         </dependency>
-
         <!--JSF (include "jsf-api" and "jsf-impl")-->
         <dependency>
             <groupId>org.glassfish</groupId>
@@ -39,6 +38,12 @@
             <version>2.2.10</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.16</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>
