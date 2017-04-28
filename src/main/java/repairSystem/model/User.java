@@ -29,7 +29,7 @@ public class User {
     private String secondname;
 
     @Column(name = "phone_number")
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name = "email", unique = true)
     private String email;
@@ -44,10 +44,10 @@ public class User {
     private String password;
 
     public User(String name, String password, String secondname,
-                String phone_number, String email, String login, String role) {
+                String phoneNumber, String email, String login, String role) {
         this.name = name;
         this.secondname = secondname;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.email = email;
         this.login = login;
         this.password = password;

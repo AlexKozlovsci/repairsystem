@@ -2,9 +2,14 @@ package repairSystem.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.UserRepository;
+import repairSystem.model.User;
+
+import javax.servlet.http.HttpSession;
 //import java.util.Objects;
 
 @Controller
@@ -26,7 +31,7 @@ public class AuthController {
         return "test";
     }
 
-    /*@RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ModelAndView loginUser(HttpSession httpSession, @RequestBody User user) {
         User dbUser = userRepository.findByName(user.getName());
         ModelAndView mav = new ModelAndView();
@@ -35,11 +40,24 @@ public class AuthController {
         mav.setViewName("test");
         String userPass = dbUser.getPassword().toString();
         if (dbUser != null && user.getPassword().equals(userPass)) {
-            //httpSession.setAttribute("currentUserName", user.getName());
-            //httpSession.setAttribute("currentUserAuthorityID", user.getAuthorityId());
+            httpSession.setAttribute("currentUserAuthorityID", user.getRole());
+            switch(user.getRole()) {
+                case "admin":
+                    mav.setViewName("adminMainPage");
+                    break;
+                case "engineer":
+                    mav.setViewName("engineerMainPage");
+                    break;
+                case "manager":
+                    mav.setViewName("managerMainPage");
+                    break;
+                default:
+                    mavError.setViewName("error");
+                    break;
+            }
             return mav;
         } else {
             return mavError;
         }
-    }*/
+    }
 }
