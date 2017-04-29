@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="page">
+<head th:fragment="site-head">
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="../static/dist/bootstrap/css/bootstrap.min.css" th:href="@{/dist/bootstrap/css/bootstrap.min.css}"/>
+    <script src="../static/dist/js/jquery-2.2.0.min.js" th:src="@{/dist/js/jquery-2.2.0.min.js}"></script>
+    <link rel="stylesheet" href="../static/dist/css/style.css" th:href="@{/dist/css/style.css}">
+    <script src="../static/dist/bootstrap/js/bootstrap.min.js" th:src="@{/dist/bootstrap/js/bootstrap.min.js}"></script>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700,500&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+
+<!-- header -->
+<nav class="navbar navbar-default header">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapsed" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" id="header_logo" href="#">Repair System</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapsed">
+            <div th:include="this :: header">
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/cabinet/{{ session.user_id }}">{{ session.login }}</a></li>
+                <li id="sign_out"><a href="/logout">Sign Out</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- end header -->
+
+<!-- content -->
+<div id="wrapper">
+    <div class="container">
+        <div th:include="this :: container">
+
+        </div>
+    </div>
+</div>
+<!-- end content -->
+
+
+<!-- footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-xs-12 text-center vcenter text-xs-center vcenter">
+                <h3 id ="logo_footer">Repair System (Kozlovsci, Such, Legchilov, Lukianchik)</h3>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- end footer -->
+
+</body>
+</html>
+
+
+
+

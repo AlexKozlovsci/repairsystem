@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout_auth :: page">
+<head th:replace="layout_auth :: site-head">
+    <title>Authentication</title>
+</head>
+<body>
+<div th:fragment="container">
+    <div class="col-lg-12" id="login_logo" >
+        <h1 class="text-center">Repair System</h1>
+    </div>
+    <div class= "col-sm-4 col-sm-offset-4  col-xs-6 col-xs-offset-3">
+        <form  action="#" th:action="@{/auth/login}" th:object="${repairSystem.model.LoginForm}" method="post" >
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" name="login" placeholder="Username" th:value="*{login}" />
+                <i class="form-control-feedback glyphicon glyphicon-user"></i>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="password" class="form-control" id="password" name="password"  placeholder="Password" th:value="*{password}" />
+                <i class="form-control-feedback glyphicon glyphicon-lock"></i>
+            </div>
+
+            <div class= "form-group">
+                <div class="row">
+                    <div class="col-xs-10 col-xs-offset-1">
+                        <button class="btn btn-success col-xs-12" type="submit">Sign in</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="form-group">
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <a href="#">You don't have account?</a>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <div class="col-sm-12">
+                        <a href="#">Forgot your password?</a>
+                    </div>
+                </div>
+            </div>-->
+
+        </form>
+    </div>
+</div>
+<footer>
+</footer>
+</body>
+</html>
