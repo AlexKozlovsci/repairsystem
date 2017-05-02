@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" th:fragment="page">
 <head th:fragment="site-head">
     <meta charset="utf-8"/>
-    <link rel="stylesheet" href="../static/design/bootstrap/css/bootstrap.min.css" th:href="@{/design/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" href="../static/design/bootstrap/css/bootstrap.min.css" th:href="@{/design/bootstrap/css/bootstrap.min.css}"/>
     <script src="../static/design/js/jquery-2.2.0.min.js" th:src="@{/design/js/jquery-2.2.0.min.js}"></script>
-    <link rel="stylesheet" href="../static/design/css/style.css" th:href="@{/design/css/style.css}">
+    <link rel="stylesheet" type="text/css" href="../static/design/css/style.css" th:href="@{/design/css/style.css}">
     <script src="../static/design/bootstrap/js/bootstrap.min.js" th:src="@{/design/bootstrap/js/bootstrap.min.js}"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,700,500&subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
 </head>
@@ -27,8 +27,12 @@
             <div th:include="this :: header">
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/cabinet/{{ session.user_id }}">{{ session.login }}</a></li>
-                <li id="sign_out"><a href="/logout">Sign Out</a></li>
+                <li><p th:inline="text">[[${#httpServletRequest.remoteUser}]]!</p></li>
+                <li id="sign_out">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Sign Out"/>
+                    </form>
+                </li>
             </ul>
         </div>
     </div>

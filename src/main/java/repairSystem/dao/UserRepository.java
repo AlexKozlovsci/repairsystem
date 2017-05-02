@@ -10,5 +10,6 @@ import repairSystem.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByName(String name);
+
+    User findByLogin(String name);
 }
