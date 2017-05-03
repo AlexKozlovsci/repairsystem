@@ -30,17 +30,20 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th>Number</th>
-                                <th>Some name</th>
-                                <th>Some count</th>
-                                <th>Some cost</th>
-                                <th>
-                                    <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
-                                        <button type="button" class="btn btn-default">Edit</button>
-                                        <button type="button" class="btn btn-default">Delete</button>
-                                    </div>
-                                </th>
+                            <tr th:each="detail : ${details}">
+                                <td th:text="${detail.id}"></td>
+                                <td th:text="${detail.name}"></td>
+                                <td th:text="${detail.count}"></td>
+                                <td th:text="${detail.cost}">Some cost</td>
+                                <td>
+
+                                    <form action="/admin/editParts/" th:action="@{/admin/editParts/}" th:object="${detail}" method="get">
+                                        <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
+                                                <button type="submit" class="btn btn-default" th:value="${detail.id}">Edit</button>
+                                    </form>
+                                                <button type="submit" class="btn btn-default" th:value="${detail.id}">Delete</button>
+                                        <!--</div>-->
+                                </td>
                             </tr>
                             </tbody>
                         </table>
