@@ -18,6 +18,7 @@ public class ManagerController {
     @Autowired
     private UserRepository userRepository;
 
+
     @RequestMapping(value = "/manager/", method = RequestMethod.GET)
     public ModelAndView index(){
         ModelAndView mav = new ModelAndView();

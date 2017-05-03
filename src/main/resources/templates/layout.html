@@ -27,12 +27,8 @@
             <div th:include="this :: header">
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><p th:inline="text">[[${#httpServletRequest.remoteUser}]]!</p></li>
-                <li id="sign_out">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="submit" value="Sign Out"/>
-                    </form>
-                </li>
+                <li><a href="#"  th:text="${session.currentUsername}"></a></li>
+                <li id="sign_out"><a href="/logout">Sign Out</a></li>
             </ul>
         </div>
     </div>

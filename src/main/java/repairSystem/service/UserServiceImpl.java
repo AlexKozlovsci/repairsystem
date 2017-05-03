@@ -9,6 +9,7 @@ import repairSystem.dao.UserRepository;
 import repairSystem.model.User;
 
 @Service
+
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;

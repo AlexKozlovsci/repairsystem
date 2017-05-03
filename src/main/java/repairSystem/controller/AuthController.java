@@ -21,35 +21,6 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    /*@RequestMapping(value = "/auth/login", method = RequestMethod.GET)
-    public String showAuth() {
-        return "login";
-    }*/
-
-    /*@RequestMapping(value = "/auth/login", method = RequestMethod.POST)
-    public ModelAndView loginUser(HttpSession httpSession, @RequestBody User user) throws NoSuchAlgorithmException {
-        User dbUser = userRepository.findByName(user.getLogin());
-        ModelAndView mav = new ModelAndView();
-        ModelAndView mavError = new ModelAndView();
-        mavError.setViewName("404");
-        mav.setViewName("index");
-
-        String userPass = dbUser.getPassword().toString();
-        MessageDigest messageDigest = MessageDigest.getInstance("MD5");
-        messageDigest.update(user.getPassword().getBytes(),0, user.getPassword().length());
-        String md5Pass = new BigInteger(1, messageDigest.digest()).toString(16);
-        if (md5Pass.length() < 32)
-            md5Pass = "0" + md5Pass;
-
-        if (dbUser != null && md5Pass.equals(userPass)) {
-            httpSession.setAttribute("currentUserRole", dbUser.getRole());
-            return mav;
-        } else {
-            return mavError;
-        }
-    }*/
-
-
 
     @RequestMapping(value = "/auth/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
