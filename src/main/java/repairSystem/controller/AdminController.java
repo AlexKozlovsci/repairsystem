@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.DetailRepository;
 import repairSystem.model.Detail;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -47,13 +48,13 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping(value = "/admin/editParts/", method = RequestMethod.GET)
-    public ModelAndView editParts(@ModelAttribute Detail detail, Detail d) {
+    @RequestMapping(value = "/admin/editParts/", method = RequestMethod.GET, params = {"editDetail"})
+    public ModelAndView editParts(@ModelAttribute ("Detail")Detail detail, Model model, final HttpServletRequest req) {
+        final Integer rowId = Integer.valueOf(req.getParameter("editDetail"));
         ModelAndView mav = new ModelAndView();
-        Detail det = (Detail) detailRepository.findById(d.getId());
+        Detail det = (Detail) detailRepository.findById(rowId);
         mav.addObject("detail", det);
-        log.info(det);
-        log.info(d.getId());
+        log.info(det.getName());
         mav.setViewName("admin/editParts");
         return mav;
     }

@@ -16,9 +16,9 @@
         <div class="col-sm-12">
             <div class="panel panel-default" id="type_tasks">
                 <div class="panel-body" >
-                    <input type="text" class="form-control" name="name" placeholder="Name" />
-                    <input type="text" class="form-control" name="count" placeholder="Count"  />
-                    <input type="text" class="form-control" name="cost" placeholder="Cost"  />
+                    <input type="text" class="form-control" name="name" placeholder="Name" th:value="${detail.name}"/>
+                    <input type="text" class="form-control" name="count" placeholder="Count" th:value="${detail.count}" />
+                    <input type="text" class="form-control" name="cost" placeholder="Cost" th:value="${detail.cost}" />
                 </div>
             </div>
             <form action="/admin/editParts/" th:action="@{/admin/editParts/}" method="post">

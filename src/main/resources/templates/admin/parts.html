@@ -37,9 +37,9 @@
                                 <td th:text="${detail.cost}">Some cost</td>
                                 <td>
 
-                                    <form action="/admin/editParts/" th:action="@{/admin/editParts/}" th:object="${detail}" method="get">
+                                    <form action="/admin/editParts/" th:action="@{/admin/editParts/}" method="get">
                                         <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
-                                                <button type="submit" class="btn btn-default" th:value="${detail.id}">Edit</button>
+                                        <button type="submit" name="editDetail" class="btn btn-default" th:value="${detail.id}">Edit</button>
                                     </form>
                                                 <button type="submit" class="btn btn-default" th:value="${detail.id}">Delete</button>
                                         <!--</div>-->
