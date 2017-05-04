@@ -54,13 +54,19 @@ public class AdminController {
         ModelAndView mav = new ModelAndView();
         Detail det = (Detail) detailRepository.findById(rowId);
         mav.addObject("detail", det);
-        log.info(det.getName());
         mav.setViewName("admin/editParts");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/editParts/", method = RequestMethod.POST)
-    public ModelAndView editParts(Model model) {
+    @RequestMapping(value = "/admin/editParts/", method = RequestMethod.POST, params = {"editDetail"})
+    public ModelAndView editParts(Model model, final HttpServletRequest req) {
+        final Integer rowId = Integer.valueOf(req.getParameter("editDetail"));
+        log.info(rowId);
+        if (rowId != 0){
+            Detail det = (Detail) detailRepository.findById(rowId);
+            detailRepository.save(det);
+        }
+
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/editParts");
         return mav;
