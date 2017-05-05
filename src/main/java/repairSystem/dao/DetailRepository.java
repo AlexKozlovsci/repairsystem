@@ -14,4 +14,5 @@ import java.util.List;
 public interface DetailRepository extends JpaRepository<Detail, Long> {
     List<Detail> findAll();
     Detail findById(long id);
+    Detail save(Detail detail);
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+<head th:replace="layout :: site-head">
+    <title>Parts</title>
+</head>
+<body>
+<div th:fragment="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 id="head_name">addPart</h3>
+            <hr id="head_hr" />
+        </div>
+    </div>
+
+    <form action="/admin/addPart" th:action="@{/admin/addPart}" enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default" id="type_tasks">
+                    <div class="panel-body" >
+                        <input type="hidden" name="id" th:value="${detail.id}"/>
+                        <input type="text" class="form-control" name="name" placeholder="Name" th:value="${detail.name}" required/>
+                        <input type="text" class="form-control" name="count" placeholder="Count" th:value="${detail.count}" required/>
+                        <input type="text" class="form-control" name="cost" placeholder="Cost" th:value="${detail.cost}" required/>
+                    </div>
+                </div>
+                <button type="submit" name="editDetail" class="btn btn-default" th:value="${detail.id}">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

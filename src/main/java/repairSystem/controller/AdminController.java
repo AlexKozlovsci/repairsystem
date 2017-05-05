@@ -32,8 +32,8 @@ public class AdminController {
     @Autowired
     private DetailRepository detailRepository;
 
-    @RequestMapping(value = "/admin/parts/", method = RequestMethod.GET)
-    public ModelAndView parts(Model model){
+    @RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
+    public ModelAndView parts(){
         ModelAndView mav = new ModelAndView();
         List<Detail> det = (List<Detail>) detailRepository.findAll();
         mav.addObject("details", det);
@@ -41,45 +41,69 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping(value = "/admin/parts/", method = RequestMethod.POST)
-    public ModelAndView parts(@ModelAttribute Detail detail, Model model) {
+    @RequestMapping(value = "/admin/parts", method = RequestMethod.POST)
+    public ModelAndView parts(@ModelAttribute Detail detail) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/parts");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/editParts/", method = RequestMethod.GET, params = {"editDetail"})
-    public ModelAndView editParts(@ModelAttribute ("Detail")Detail detail, Model model, final HttpServletRequest req) {
-        final Integer rowId = Integer.valueOf(req.getParameter("editDetail"));
+    @RequestMapping(value = "/admin/addPart", method = RequestMethod.GET)
+    public ModelAndView addPart(@ModelAttribute Detail detail){
         ModelAndView mav = new ModelAndView();
-        Detail det = (Detail) detailRepository.findById(rowId);
-        mav.addObject("detail", det);
-        mav.setViewName("admin/editParts");
+        mav.setViewName("admin/addPart");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/editParts/", method = RequestMethod.POST, params = {"editDetail"})
-    public ModelAndView editParts(Model model, final HttpServletRequest req) {
-        final Integer rowId = Integer.valueOf(req.getParameter("editDetail"));
-        log.info(rowId);
-        if (rowId != 0){
-            Detail det = (Detail) detailRepository.findById(rowId);
-            detailRepository.save(det);
+    @RequestMapping(value = "/admin/addPart", method = RequestMethod.POST)
+    public ModelAndView addPart(@ModelAttribute Detail detail, Model model){
+        detailRepository.save(detail);
+        return new ModelAndView("redirect:/admin/parts");
+    }
+
+    @RequestMapping(value = "/admin/editPart", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView editPart(@ModelAttribute Detail detail, final HttpServletRequest req) {
+        final Integer detailId = Integer.valueOf(req.getParameter("id"));
+        Detail det = (Detail) detailRepository.findById(detailId);
+        if (det == null) {
+            return new ModelAndView("404");
         }
-
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("admin/editParts");
+        mav.addObject("detail", det);
+        mav.setViewName("admin/editPart");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/users/", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/editPart", method = RequestMethod.POST)
+    public ModelAndView editPart(@ModelAttribute Detail detail){
+        if (detail.getId() != 0){
+            detailRepository.save(detail);
+            return new ModelAndView("redirect:/admin/parts");
+        }
+        else {
+            return new ModelAndView("404");
+        }
+    }
+
+    @RequestMapping(value = "/admin/deletePart", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView deleteParts(@ModelAttribute Detail detail, final HttpServletRequest req){
+        final Integer detailId = Integer.valueOf(req.getParameter("id"));
+        Detail det = (Detail) detailRepository.findById(detailId);
+        if (det == null) {
+            return new ModelAndView("404");
+        }
+        detailRepository.delete(det);
+        return new ModelAndView("redirect:/admin/parts");
+    }
+
+    @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     public ModelAndView users(){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/users");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/prices/", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/prices", method = RequestMethod.GET)
     public ModelAndView prises(){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/prices");
