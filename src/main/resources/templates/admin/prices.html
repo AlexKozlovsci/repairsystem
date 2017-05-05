@@ -30,17 +30,17 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <th>Number</th>
-                                <th>Some devtype</th>
-                                <th>Some service</th>
-                                <th>Some cost</th>
-                                <th>
+                            <tr th:each="priceItem : ${prices}">
+                                <td th:text="${prices.id}"></td>
+                                <td th:text="${prices.deviceType}"></td>
+                                <td th:text="${prices.action}"></td>
+                                <td th:text="${prices.cost}"></td>
+                                <td>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
                                         <button type="button" class="btn btn-default">Edit</button>
                                         <button type="button" class="btn btn-default">Delete</button>
                                     </div>
-                                </th>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

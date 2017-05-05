@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.DetailRepository;
+import repairSystem.dao.PricelistRepository;
 import repairSystem.model.Detail;
+import repairSystem.model.Pricelist;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,6 +33,9 @@ public class AdminController {
     private static final Logger log = Logger.getLogger(AdminController.class);
     @Autowired
     private DetailRepository detailRepository;
+
+    @Autowired
+    private PricelistRepository pricelistRepository;
 
     @RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
     public ModelAndView parts(){
@@ -96,17 +101,19 @@ public class AdminController {
         return new ModelAndView("redirect:/admin/parts");
     }
 
+    @RequestMapping(value = "/admin/prices", method = RequestMethod.GET)
+    public ModelAndView prises(){
+        ModelAndView mav = new ModelAndView();
+        List<Pricelist> prices = (List<Pricelist>) pricelistRepository.findAll();
+        mav.addObject("priceItems", prices);
+        mav.setViewName("admin/prices");
+        return mav;
+    }
+
     @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
     public ModelAndView users(){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/users");
-        return mav;
-    }
-
-    @RequestMapping(value = "/admin/prices", method = RequestMethod.GET)
-    public ModelAndView prises(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("admin/prices");
         return mav;
     }
 
