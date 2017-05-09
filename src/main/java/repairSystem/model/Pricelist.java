@@ -15,7 +15,8 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Pricelist {
+@Table(name = "pricelist")
+public class PriceList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -28,5 +29,5 @@ public class Pricelist {
     private String action;
 
     @Column(name = "cost")
-    private String cost;
+    private long cost;
 }
