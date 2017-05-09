@@ -25,8 +25,8 @@ public class Detail {
     private String name;
 
     @Column(name = "count")
-    private int count;
+    private long count;
 
     @Column(name = "cost")
-    private String cost;
+    private long cost;
 }

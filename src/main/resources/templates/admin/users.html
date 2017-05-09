@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <h3 id="head_name">Users
-                    <a href="#" class="pull-right">+</a>
+                    <a href="/admin/addUser" th:action="@{/admin/addUser}" class="pull-right">+</a>
                 </h3>
 
                 <hr id="head_hr" />
@@ -25,25 +25,31 @@
                                 <tr>
                                     <th>№</th>
                                     <th>Username</th>
-                                    <th>First Name</th>
-                                    <th>Second Name</th>
+                                    <th>Name</th>
+                                    <th>Sername</th>
+                                    <th>Email</th>
                                     <th>Role</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th>Number</th>
-                                    <th>Some username</th>
-                                    <th>Some name</th>
-                                    <th>Some second</th>
-                                    <th>Some role</th>
-                                    <th>
-                                        <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
-                                            <button type="button" class="btn btn-default">Edit</button>
-                                            <button type="button" class="btn btn-default">Delete</button>
-                                        </div>
-                                    </th>
+                                <tr th:each="user : ${users}">
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.login}"></td>
+                                    <td th:text="${user.name}"></td>
+                                    <td th:text="${user.secondname}"></td>
+                                    <td th:text="${user.email}"></td>
+                                    <td th:text="${user.role.substring(5,user.role.length()).toLowerCase()}"></td>
+                                    <td>
+                                        <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
+                                        <form action="/admin/editUser" th:action="@{/admin/editUser}" method="get">
+                                            <button type="submit" name="id" class="btn btn-default" th:value="${user.id}">Edit</button>
+                                        </form>
+                                        <form action="/admin/deleteUser" th:action="@{/admin/deleteUser}" method="get">
+                                            <button type="submit" name="id" class="btn btn-default" th:value="${user.id}">Delete</button>
+                                        </form>
+                                        <!--</div>-->
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

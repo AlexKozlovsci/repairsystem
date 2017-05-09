@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 <head th:replace="layout :: site-head">
-    <title>Orders</title>
+    <title>Parts</title>
 </head>
 <body>
     <div th:fragment="container">
@@ -30,7 +30,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="detail : ${details}">
+                            <tr th:each="detail : ${parts}">
                                 <td th:text="${detail.id}"></td>
                                 <td th:text="${detail.name}"></td>
                                 <td th:text="${detail.count}"></td>

@@ -2,16 +2,20 @@ package repairSystem.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.DetailRepository;
-import repairSystem.dao.PricelistRepository;
+import repairSystem.dao.PriceListRepository;
+import repairSystem.dao.UserRepository;
 import repairSystem.model.Detail;
-import repairSystem.model.Pricelist;
+import repairSystem.model.PriceList;
+import repairSystem.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -35,21 +39,62 @@ public class AdminController {
     private DetailRepository detailRepository;
 
     @Autowired
-    private PricelistRepository pricelistRepository;
+    private PriceListRepository priceListRepository;
 
-    @RequestMapping(value = "/admin/parts", method = RequestMethod.GET)
-    public ModelAndView parts(){
+    @Autowired
+    private UserRepository userRepository;
+
+    private ModelAndView getModelView(String model, JpaRepository repository){
         ModelAndView mav = new ModelAndView();
-        List<Detail> det = (List<Detail>) detailRepository.findAll();
-        mav.addObject("details", det);
-        mav.setViewName("admin/parts");
+        List<Model> obj = (List<Model>) repository.findAll();
+        mav.addObject(model, obj);
+        mav.setViewName("admin/".concat(model));
         return mav;
     }
 
-    @RequestMapping(value = "/admin/parts", method = RequestMethod.POST)
-    public ModelAndView parts(@ModelAttribute Detail detail) {
+    /*@RequestMapping(value = "/admin/delete{model}", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView deleteParts(@ModelAttribute Model model, @PathVariable(value="model") String modelName, final HttpServletRequest req){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("admin/parts");
+        final Integer modelItemId = Integer.valueOf(req.getParameter("id"));
+        if (modelName.equals("Parts")) {
+            mav = deleteModel("parts", detailRepository, modelItemId);
+        }
+        else if (model.equals("PriceItem")) {
+            mav = deleteModel("prices", priceListRepository, modelItemId);
+        }
+        else if (model.equals("User")) {
+            mav = deleteModel("users", userRepository, modelItemId);
+        }
+        else {
+            mav.setViewName("admin/404");
+        }
+        return mav;
+    }
+
+    private ModelAndView deleteModel(String model, JpaRepository repository, Integer modelItemId){
+        Model modelItem = (Model) repository.findById(modelItemId);
+        if (modelItem == null) {
+            return new ModelAndView("404");
+        }
+        repository.delete(modelItem);
+        return new ModelAndView("redirect:/admin/".concat(model));
+    }*/
+
+    @RequestMapping(value = "/admin/{model}", method = RequestMethod.GET)
+    public ModelAndView AdminMappingModel(@PathVariable(value="model") String model){
+        ModelAndView mav = new ModelAndView();
+        if (model.equals("parts")) {
+            mav = getModelView(model, detailRepository);
+        }
+        else if (model.equals("prices")) {
+            mav = getModelView(model, priceListRepository);
+        }
+        else if (model.equals("users")) {
+            mav = getModelView(model, userRepository);
+        }
+        else {
+            mav.setViewName("404");
+        }
         return mav;
     }
 
@@ -101,20 +146,110 @@ public class AdminController {
         return new ModelAndView("redirect:/admin/parts");
     }
 
-    @RequestMapping(value = "/admin/prices", method = RequestMethod.GET)
-    public ModelAndView prises(){
+    @RequestMapping(value = "/admin/addPriceItem", method = RequestMethod.GET)
+    public ModelAndView addPriceItem(@ModelAttribute PriceList priceList){
         ModelAndView mav = new ModelAndView();
-        List<Pricelist> prices = (List<Pricelist>) pricelistRepository.findAll();
-        mav.addObject("priceItems", prices);
-        mav.setViewName("admin/prices");
+        mav.setViewName("admin/addPriceItem");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/users", method = RequestMethod.GET)
-    public ModelAndView users(){
+    @RequestMapping(value = "/admin/addPriceItem", method = RequestMethod.POST)
+    public ModelAndView addPriceItem(@ModelAttribute PriceList priceList, Model model){
+        priceListRepository.save(priceList);
+        return new ModelAndView("redirect:/admin/prices");
+    }
+
+    @RequestMapping(value = "/admin/editPriceItem", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView editPriceItem(@ModelAttribute PriceList priceList, final HttpServletRequest req) {
+        final Integer priceItemId = Integer.valueOf(req.getParameter("id"));
+        PriceList priceItem = (PriceList) priceListRepository.findById(priceItemId);
+        if (priceItem == null) {
+            return new ModelAndView("404");
+        }
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("admin/users");
+        mav.addObject("priceItem", priceItem);
+        mav.setViewName("admin/editPriceItem");
         return mav;
     }
 
+    @RequestMapping(value = "/admin/editPriceItem", method = RequestMethod.POST)
+    public ModelAndView editPriceItem(@ModelAttribute PriceList priceList){
+        log.info(priceList.getId());
+        if (priceList.getId() != 0){
+            priceListRepository.save(priceList);
+            return new ModelAndView("redirect:/admin/prices");
+        }
+        else {
+            return new ModelAndView("404");
+        }
+    }
+
+    @RequestMapping(value = "/admin/deletePriceItem", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView deletePriceItem(@ModelAttribute PriceList pricelistItem, final HttpServletRequest req){
+        final Integer priceItemId = Integer.valueOf(req.getParameter("id"));
+        PriceList priceItem = (PriceList) priceListRepository.findById(priceItemId);
+        if (priceItem == null) {
+            return new ModelAndView("404");
+        }
+        priceListRepository.delete(priceItem);
+        return new ModelAndView("redirect:/admin/prices");
+    }
+
+    @RequestMapping(value = "/admin/addUser", method = RequestMethod.GET)
+    public ModelAndView addUser(@ModelAttribute User user){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("admin/addUser");
+        return mav;
+    }
+
+    @RequestMapping(value = "/admin/addUser", method = RequestMethod.POST)
+    public ModelAndView addUser(@ModelAttribute User user, Model model){
+        user.setRole("ROLE_".concat(user.getRole().toUpperCase()));
+
+        //магия с паролем
+
+        //Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+        //user.setPassword(encoder.encode(user.getPassword()));
+        //user.setPassword(  MD5Util.md5Custom(user.getPassword());
+        userRepository.save(user);
+        return new ModelAndView("redirect:/admin/users");
+    }
+
+    @RequestMapping(value = "/admin/editUser", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView editUser(@ModelAttribute User user, final HttpServletRequest req) {
+        final Integer userId = Integer.valueOf(req.getParameter("id"));
+        User userItem = (User) userRepository.findById(userId);
+        if (userItem == null) {
+            return new ModelAndView("404");
+        }
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("user", userItem);
+        mav.setViewName("admin/editUser");
+        return mav;
+    }
+
+    @RequestMapping(value = "/admin/editUser", method = RequestMethod.POST)
+    public ModelAndView editUser(@ModelAttribute User user){
+        if (user.getId() != 0){
+
+            //магия с паролем
+
+            userRepository.save(user);
+            return new ModelAndView("redirect:/admin/users");
+        }
+        else {
+            return new ModelAndView("404");
+        }
+    }
+
+    @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView deleteUser(@ModelAttribute User user, final HttpServletRequest req){
+        final Integer userId = Integer.valueOf(req.getParameter("id"));
+        User userItem = (User) userRepository.findById(userId);
+        if (userItem == null) {
+            return new ModelAndView("404");
+        }
+        userRepository.delete(userItem);
+        return new ModelAndView("redirect:/admin/users");
+    }
 }

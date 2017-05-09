@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+<head th:replace="layout :: site-head">
+    <title>Prices</title>
+</head>
+<body>
+<div th:fragment="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 id="head_name">Edit PriceList Item</h3>
+            <hr id="head_hr" />
+        </div>
+    </div>
+
+    <form action="/admin/editPriceItem" th:action="@{/admin/editPriceItem}" enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default" id="type_tasks">
+                    <div class="panel-body" >
+                        <input type="hidden" name="id" th:value="${priceItem.id}"/>
+                        <input type="text" class="form-control" name="deviceType" placeholder="Device Type" th:value="${priceItem.deviceType}" required/>
+                        <input type="text" class="form-control" name="cost" placeholder="Cost" th:value="${priceItem.cost}" pattern="[0-9_-]+" required/>
+                        <input type="text" class="form-control" name="action" placeholder="Action" th:value="${priceItem.action}" required/>
+                    </div>
+                </div>
+                <button type="submit" name="editPriceItem" class="btn btn-default">Apply</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
 <head th:replace="layout :: site-head">
-    <title>Orders</title>
+    <title>Parts</title>
 </head>
 <body>
 <div th:fragment="container">
     <div class="row">
         <div class="col-sm-4">
-            <h3 id="head_name">editPart</h3>
+            <h3 id="head_name">Edit Part</h3>
             <hr id="head_hr" />
         </div>
     </div>
@@ -19,8 +19,8 @@
                     <div class="panel-body" >
                         <input type="hidden" name="id" th:value="${detail.id}"/>
                         <input type="text" class="form-control" name="name" placeholder="Name" th:value="${detail.name}" required/>
-                        <input type="text" class="form-control" name="count" placeholder="Count" th:value="${detail.count}" required/>
-                        <input type="text" class="form-control" name="cost" placeholder="Cost" th:value="${detail.cost}" required/>
+                        <input type="text" class="form-control" name="count" placeholder="Count" th:value="${detail.count}" pattern="[0-9_-]+" required/>
+                        <input type="text" class="form-control" name="cost" placeholder="Cost" th:value="${detail.cost}" pattern="[0-9_-]+" required/>
                     </div>
                 </div>
                     <button type="submit" name="editDetail" class="btn btn-default" th:value="${detail.id}">Apply</button>
