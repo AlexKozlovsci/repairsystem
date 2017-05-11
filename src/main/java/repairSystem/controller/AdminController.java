@@ -3,6 +3,7 @@ package repairSystem.controller;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -205,35 +206,53 @@ public class AdminController {
     @RequestMapping(value = "/admin/addUser", method = RequestMethod.POST)
     public ModelAndView addUser(@ModelAttribute User user, Model model){
         user.setRole("ROLE_".concat(user.getRole().toUpperCase()));
-
-        //магия с паролем
-
-        //Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        //user.setPassword(encoder.encode(user.getPassword()));
-        //user.setPassword(  MD5Util.md5Custom(user.getPassword());
+        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+        user.setPassword(encoder.encodePassword(user.getPassword(),""));
         userRepository.save(user);
         return new ModelAndView("redirect:/admin/users");
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping(value = "/admin/editUser", method = RequestMethod.GET, params = {"id"})
     public ModelAndView editUser(@ModelAttribute User user, final HttpServletRequest req) {
         final Integer userId = Integer.valueOf(req.getParameter("id"));
         User userItem = (User) userRepository.findById(userId);
+        userItem.setRole(userItem.getRole().substring(5,userItem.getRole().length()).toLowerCase());
         if (userItem == null) {
             return new ModelAndView("404");
         }
         ModelAndView mav = new ModelAndView();
+        String pass = "";
         mav.addObject("user", userItem);
+        mav.addObject("pass", pass);
         mav.setViewName("admin/editUser");
         return mav;
     }
 
     @RequestMapping(value = "/admin/editUser", method = RequestMethod.POST)
-    public ModelAndView editUser(@ModelAttribute User user){
+    public ModelAndView editUser(@ModelAttribute User user, String pass){
+    log.info(pass);
         if (user.getId() != 0){
-
-            //магия с паролем
-
+            user.setRole("ROLE_".concat(user.getRole().toUpperCase()));
+            User oldUser = userRepository.findById(user.getId());
+            if(pass.isEmpty()){
+                user.setPassword(oldUser.getPassword());
+            }else{
+                Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+                user.setPassword(encoder.encodePassword(pass, ""));
+            }
             userRepository.save(user);
             return new ModelAndView("redirect:/admin/users");
         }
@@ -241,6 +260,19 @@ public class AdminController {
             return new ModelAndView("404");
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.GET, params = {"id"})
     public ModelAndView deleteUser(@ModelAttribute User user, final HttpServletRequest req){

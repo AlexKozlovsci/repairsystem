@@ -2,13 +2,12 @@ package repairSystem.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import repairSystem.model.Order;
+import repairSystem.model.Client;
 
 /**
- * Created by Алексей on 29.04.2017.
+ * Created by Алексей on 07.05.2017.
  */
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long>{
-
+public interface ClientRepository extends JpaRepository<Client, Long> {
 }

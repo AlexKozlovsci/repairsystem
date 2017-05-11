@@ -24,7 +24,7 @@
                         <input type="text" class="form-control" name="email" placeholder="Email" th:value="${user.email}" required/>
                         <input type="text" class="form-control" name="role" placeholder="Role" th:value="${user.role}" required/>
                         <input type="text" class="form-control" name="login" placeholder="Login" th:value="${user.login}" pattern="[A-Za-z0-9_-]+" required/>
-                        <input type="text" class="form-control" name="password" id="password" placeholder="Password" th:value="${user.password}" pattern="[A-Za-z0-9]+" required/>
+                        <input type="text" class="form-control" name="pass" id="password" placeholder="Password" th:value="${pass}" pattern="[A-Za-z0-9]+" />
                     </div>
                 </div>
                 <button type="submit" name="editUser" class="btn btn-default">Apply</button>
