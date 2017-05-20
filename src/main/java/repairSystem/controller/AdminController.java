@@ -213,18 +213,6 @@ public class AdminController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     @RequestMapping(value = "/admin/editUser", method = RequestMethod.GET, params = {"id"})
     public ModelAndView editUser(@ModelAttribute User user, final HttpServletRequest req) {
         final Integer userId = Integer.valueOf(req.getParameter("id"));
@@ -260,18 +248,6 @@ public class AdminController {
             return new ModelAndView("404");
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.GET, params = {"id"})

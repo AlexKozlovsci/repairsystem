@@ -43,6 +43,17 @@ public class User {
 
     @Column(name = "password")
     private String password;
+/*
+    @OneToOne(mappedBy = "id_engineer", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, optional = false    )
+    private Workorder workorder;
+
+    public void setWorkorder(Workorder wo) {
+        this.workorder = wo;
+        workorder.setId_engineer(this);
+    }
+
+*/
 
     public User(String name, String password, String secondname,
                 String phoneNumber, String email, String login, String role) {

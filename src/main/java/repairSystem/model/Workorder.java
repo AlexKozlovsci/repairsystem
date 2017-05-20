@@ -3,6 +3,7 @@ package repairSystem.model;
 /**
  * Created by Юрий on 28.04.2017.
  */
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,12 @@ public class Workorder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
+    /*
+    @OneToOne(cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_engineer")
+    private User id_engineer;
 
+*/
     @Column(name = "id_engineer")
     private long id_engineer;
 
@@ -45,7 +51,20 @@ public class Workorder {
     @Column(name = "complete_at")
     private String complete_at;
 
+/*
 
+    @OneToOne(cascade = { CascadeType.REMOVE }, orphanRemoval = true)
+    @JoinColumn(name="user_id")
+    public User getId_engineer() {
+        return id_engineer;
+    }
+
+    public void setId_engineer(User id_engineer) {
+        this.id_engineer = id_engineer;
+    }
+
+
+*/
     public Workorder(long id_engineer, long id_manager, long id_client, String description,
                      String problem, String status, String create_at, String complete_at) {
         this.id_engineer = id_engineer;
@@ -57,4 +76,6 @@ public class Workorder {
         this.create_at = create_at;
         this.complete_at = complete_at;
     }
+
+
 }
