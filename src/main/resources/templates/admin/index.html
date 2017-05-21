@@ -4,50 +4,31 @@
     <title>Admin</title>
 </head>
 <body>
-
+    <div th:fragment="header">
+        <ul class="nav navbar-nav" >
+            <li><a href="/admin/users">Manage users<span class="sr-only">(current)</span></a></li>
+            <li><a href="/admin/parts">Manage parts<span class="sr-only">(current)</span></a></li>
+            <li><a href="/admin/prices">Manage prices</a></li>
+        </ul>
+    </div>
     <div th:fragment="container" class="container">
-
-        <div >
-            <div class="row">
-                <div class="col-sm-4">
-                    <h3 id="head_name">"Name"+"Secondname"</h3>
-                    <hr id="head_hr" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="panel panel-default" id="type_tasks">
-                        <div class="panel-body" >
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><h4>Username</h4></div>
-                                <div class="panel-body">Some username</div>
+        <div class="row margin_top20">
+            <div class="col-sm-12">
+                <div class="panel panel-default" id="type_tasks">
+                    <div class="panel-body" >
+                        <h1 class="text-center" th:text="|Hello, ${name}|"></h1>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <h2><a href="/admin/users" class="btn btn-lg btn-default">Manage users</a></h2>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><h4>Email</h4></div>
-                                <div class="panel-body">Some email</div>
+                            <div class="col-md-4 text-center">
+                                <h2><a href="/admin/parts" class="btn btn-lg btn-default">Manage parts</a></h2>
                             </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading"><h4>Phone number</h4></div>
-                                <div class="panel-body">Some phone number</div>
+                            <div class="col-md-4 text-center">
+                                <h2><a href="/admin/prices" class="btn btn-lg btn-default">Manage price</a></h2>
                             </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <h2><a href="/admin/users" class="btn btn-lg btn-warning" role="button">Mange users</a></h2>
-                                    <!--<p>Allows you to add, delete and edit users records </p>-->
-                                </div>
-                                <div class="col-md-4">
-                                    <h2><a href="/admin/parts" class="btn btn-lg btn-warning"  role="button">Mange parts</a></h2>
-                                    <!--<p>Allows you to add, delete and edit detail records </p>-->
-                                </div>
-                                <div class="col-md-4">
-                                    <h2><a href="/admin/prices" class="btn btn-lg btn-warning" role="button">Mange price</a></h2>
-                                    <!--<p>Allows you to add, delete and edit price records </p>-->
-                                </div>
-                            </div>
-
                         </div>
+
                     </div>
                 </div>
             </div>

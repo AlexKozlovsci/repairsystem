@@ -4,29 +4,52 @@
     <title>Parts</title>
 </head>
 <body>
-<div th:fragment="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <h3 id="head_name">Add Part</h3>
-            <hr id="head_hr" />
-        </div>
+    <div th:fragment="header">
+        <ul class="nav navbar-nav" >
+            <li><a href="/admin/users">Manage users<span class="sr-only">(current)</span></a></li>
+            <li><a href="/admin/parts">Manage parts<span class="sr-only">(current)</span></a></li>
+            <li><a href="/admin/prices">Manage prices</a></li>
+        </ul>
     </div>
-
-    <form action="/admin/addPart" th:action="@{/admin/addPart}" enctype="multipart/form-data" method="post">
+    <div th:fragment="container">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default" id="type_tasks">
-                    <div class="panel-body" >
-                        <input type="hidden" name="id" th:value="${detail.id}"/>
-                        <input type="text" class="form-control" name="name" placeholder="Name" th:value="${detail.name}" required/>
-                        <input type="text" class="form-control" name="count" placeholder="Count" th:value="${detail.count}" pattern="[0-9_-]+" required/>
-                        <input type="text" class="form-control" name="cost" placeholder="Count" th:value="${detail.cost}" pattern="[0-9_-]+" required/>
-                    </div>
-                </div>
-                <button type="submit" name="addDetail" class="btn btn-default">Apply</button>
+            <div class="col-sm-4">
+                <h3 id="head_name">Add Part</h3>
+                <hr id="head_hr" />
             </div>
         </div>
-    </form>
-</div>
+
+        <form action="/admin/addPart" th:action="@{/admin/addPart}" enctype="multipart/form-data" method="post" class="form-horizontal">
+            <div class="col-sm-12">
+                <div class="panel panel-default" id="type_tasks">
+                    <div class="panel-body row" >
+                        <input type="hidden" name="id" th:value="${detail.id}"/>
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <label for="inputName" class="col-sm-4 control-label margin_top20">Name: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Name" th:value="${detail.name}" required/>
+                                </div>
+
+                                <label for="inputCount" class="col-sm-4 control-label margin_top20">Count: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputCount" name="count" placeholder="Count" th:value="${detail.count}" pattern="[0-9_-]+" required/>
+                                </div>
+
+                                <label for="inputCost" class="col-sm-4 control-label margin_top20">Cost: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputCost"  name="cost" placeholder="Count" th:value="${detail.cost}" pattern="[0-9_-]+" required/>
+                                </div>
+
+                                <div class="col-sm-4 col-sm-offset-5 margin_top20">
+                                    <button type="submit" name="addDetail" class="btn btn-success col-sm-12">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
