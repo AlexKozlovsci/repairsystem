@@ -33,21 +33,27 @@
         </div>
     </div>
 
-    <form action="/manager/add_order" th:action="@{/manager/add_order}" enctype="multipart/form-data" method="post">
+    <form action="/manager/addOrder" th:action="@{/manager/addOrder}" enctype="multipart/form-data" method="post">
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default" id="type_tasks">
                     <div class="panel-body" >
+                        <input type="hidden" name="id" th:value="${workorder.id}"/>
                         <input type="text" class="form-control" name="name" placeholder="Client name" th:value="${client.name}" required/>
                         <input type="text" class="form-control" name="secondname" placeholder="Client secondname" th:value="${client.secondname}" required/>
                         <input type="text" class="form-control" name="phone_number" placeholder="Client phone number" th:value="${client.phone_number}" required/>
                         <input type="text" class="form-control" name="email" placeholder="Client email" th:value="${client.email}" required/>
                         <input type="text" class="form-control" name="discount" placeholder="Discount" th:value="${client.discount}" required/>
+                        <select name="id_engineer" class="form-control" size="2">
+                            <option th:each="engineer : ${engineers}"
+                                    th:value="${engineer.id}"
+                                        th:text="| ${engineer.name} ${engineer.secondname}|">Wireframe</option>
+                        </select>
                         <input type="text" class="form-control" name="description" placeholder="Order description" th:value="${workorder.description}" required/>
                         <input type="text" class="form-control" name="problem" placeholder="Order problem" th:value="${workorder.problem}" required/>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-default">Apply</button>
+                <button type="submit"  class="btn btn-default" >Apply</button>
             </div>
         </div>
     </form>

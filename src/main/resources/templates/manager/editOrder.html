@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+<head th:replace="layout :: site-head">
+    <title>Orders</title>
+</head>
+<body>
+<div th:fragment="header">
+    <ul class="nav navbar-nav" >
+        <li class="dropdown" >
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="active_nav">Tasks <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#">Task manager</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Bugs</a></li>
+                <li><a href="#">New features</a></li>
+                <li><a href="#">Proposal</a></li>
+                <li><a href="#">Tasks</a></li>
+            </ul>
+        </li>
+        <li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Projects</a></li>
+        <!--{% if session.role == 'pm'%}
+        <li><a href="/project/{{ project.id }}/executors/page:1">Executors</a></li>
+        {% endif %}-->
+    </ul>
+</div>
+<div th:fragment="container">
+
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 id="head_name">New order</h3>
+            <hr id="head_hr" />
+        </div>
+    </div>
+
+    <form action="/manager/editOrder" th:action="@{/manager/editOrder}" enctype="multipart/form-data" method="post">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default" id="type_tasks">
+                    <div class="panel-body" >
+                        <input type="hidden" name="id" th:value="${workorder.id}"/>
+                        <input type="text" class="form-control" name="description" placeholder="Order description" th:value="${workorder.description}" required/>
+                        <input type="text" class="form-control" name="problem" placeholder="Order problem" th:value="${workorder.problem}" required/>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-default" th:value="${workorder.id}">Apply</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<footer>
+</footer>
+</body>
+</html>
+
+
