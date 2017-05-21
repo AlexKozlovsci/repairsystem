@@ -27,6 +27,7 @@ import java.util.*;
 @Controller
 public class ManagerController {
     private static final Logger log = Logger.getLogger(ManagerController.class);
+
     @Autowired
     private UserRepository userRepository;
 
@@ -65,6 +66,65 @@ public class ManagerController {
         return mav;
     }
 
+    @RequestMapping(value = "/manager/order{id}", method = RequestMethod.GET)
+    public ModelAndView showOrder(@ModelAttribute Workorder order, final HttpServletRequest req){
+        final Integer workOrderId = Integer.valueOf(req.getParameter("id"));
+        List<repairSystem.model.User> engineers = (List<repairSystem.model.User>) userRepository.findAllByRole("ROLE_ENGINEER");
+        String status = "";
+        String id_engineer = "";
+        Workorder wo = (Workorder) workorderRepository.findById(workOrderId);
+        if (wo == null) {
+            return new ModelAndView("404");
+        }
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("status", status);
+        mav.addObject("id_engineer", id_engineer);
+        mav.addObject("engineers", engineers);
+        mav.addObject("workorder", wo);
+        mav.setViewName("manager/order");
+        return mav;
+    }
+
+    @RequestMapping(value = "/manager/order/changeOrderStatus", method = RequestMethod.POST)
+    public ModelAndView changeOrderStatus(@ModelAttribute Workorder workorder, String status, HttpServletRequest request){
+        switch (status) {
+            case "1":
+                status = "Open";
+                break;
+            case "2":
+                status = "In work";
+                break;
+            case "3":
+                status = "Complete";
+                break;
+            case "4":
+                status = "Closed";
+                break;
+        }
+        Workorder wo = workorderRepository.findById(workorder.getId());
+        wo.setStatus(status);
+        workorderRepository.save(wo);
+        ModelAndView mav = new ModelAndView();
+        Integer temp = (int)workorder.getId();
+        String id = temp.toString();
+        String referer = request.getHeader("Referer");
+        mav.setViewName("redirect:"+ referer);
+        return mav;
+    }
+
+    @RequestMapping(value = "/manager/order/changeOrderEngineer", method = RequestMethod.POST)
+    public ModelAndView changeOrderEngineer(@ModelAttribute Workorder workorder, String id_engineer, HttpServletRequest request){
+        Workorder wo = workorderRepository.findById(workorder.getId());
+        long eng_id = (long)Integer.parseInt(id_engineer);
+        wo.setId_engineer(eng_id);
+        workorderRepository.save(wo);
+        ModelAndView mav = new ModelAndView();
+        String referer = request.getHeader("Referer");
+        mav.setViewName("redirect:"+ referer);
+        return mav;
+    }
+
+
     @RequestMapping(value = "/manager/addOrder", method = RequestMethod.GET)
     public ModelAndView addPart(@ModelAttribute Workorder workorder, @ModelAttribute Client client){
         List<repairSystem.model.User> engineers = (List<repairSystem.model.User>) userRepository.findAllByRole("ROLE_ENGINEER");
@@ -86,7 +146,6 @@ public class ManagerController {
         workorder.setId_manager(u.getId());
         workorder.setId_client(client.getId());
         workorder.setStatus("Open");
-        log.info(id_engineer);
         long temp = (long)Integer.parseInt(id_engineer);
         workorder.setId_engineer(temp);
         Date curDate = new Date();

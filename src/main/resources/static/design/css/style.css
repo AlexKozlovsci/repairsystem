@@ -171,12 +171,12 @@ body{
 
 	#project_panel {
 		color: #777;
-		height: 230px;
+		height: 120px;
 	}
 
 	#project_panel_empty{
 		background-color: #EDE5F4; 
-		height: 230px;
+		height: 120px;
 	}
 
 	#add_project{
@@ -328,5 +328,15 @@ body{
 
 	}
 
+	.margin_top20{
+		margin-top: 20px;
+	}
 
+	#status_change{
+		display: none;
+	}
+
+	#engineer_change{
+		display: none;
+	}
 /* end footer */

@@ -28,9 +28,7 @@
 
     <div class="row">
         <div class="col-sm-4">
-            <h3 id="head_name">Orders name
-                <a href="#" class="pull-right">+</a>
-            </h3>
+            <h3 id="head_name">Orders name</h3>
 
             <hr id="head_hr" />
         </div>
@@ -38,13 +36,55 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <div class="panel panel-default" id="type_tasks">
-                <div class="panel-body" >
-                    <button class="btn btn-success" type="submit">Appoint enhineer</button>
+            <div class="panel panel-default" >
+                <div class="panel-body" id="order_actions">
+
+                    <h1>Тут информация о заказе </h1>
+                    <button class="btn btn-success" id="change_status" type="submit" onclick="showForm('status_change'); return false;">Change status</button>
+                    <button class="btn btn-success" id="change_engineer" type="submit" onclick="showForm('engineer_change'); return false;">Change engineer</button>
                     <button class="btn btn-success" type="submit">Create recipe</button>
                     <button class="btn btn-success" type="submit">Create warranty card</button>
                     <button class="btn btn-success" type="submit">Confirm completition</button>
                     <button class="btn btn-success" type="submit">Generate payment recipe</button>
+
+                        <form method="post" th:action="@{/manager/order/changeOrderStatus}" id="status_change">
+                        <div class="col-sm-3 margin_top20">
+                            <div class="panel panel-default">
+                                <div class="panel-body text-center">
+                                    <input type="hidden" name="id" th:value="${workorder.id}"/>
+                                    <p><b>Status: </b>
+                                        <select class="form-control" name="status">
+                                            <option value="1">Open</option>
+                                            <option value="2">In work</option>
+                                            <option value="3">Complete</option>
+                                            <option value="4">Closed</option>
+                                        </select></p>
+                                    <input type="submit" class="btn btn-success" id="submit_status_change"   value="Change" />
+                                    <input type="submit" class="btn btn-warning"  onclick="hideForm('status_change'); return false;" value="Close" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form method="post" th:action="@{/manager/order/changeOrderEngineer}" id="engineer_change">
+                        <div class="col-sm-3 margin_top20">
+                            <div class="panel panel-default">
+                                <div class="panel-body text-center">
+                                    <input type="hidden" name="id" th:value="${workorder.id}"/>
+                                    <p><b>Status: </b>
+                                        <select name="id_engineer" class="form-control" size="2">
+                                            <option th:each="engineer : ${engineers}"
+                                                    th:value="${engineer.id}"
+                                                    th:text="| ${engineer.name} ${engineer.secondname}|">Wireframe</option>
+                                        </select>
+                                    </p>
+                                    <input type="submit" class="btn btn-success" id="submit_engineer_change"  value="Change" />
+                                    <input type="submit" class="btn btn-warning"  onclick="hideForm('engineer_change'); return false;" value="Close" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>

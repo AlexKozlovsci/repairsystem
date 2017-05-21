@@ -59,7 +59,10 @@
                             <td th:text="${clients['__${order.id}__']}"></td>
                             <td th:text="${engineers['__${order.id}__']}"></td>
                             <td>
-
+                                <form action="/manager/order" th:action="@{/manager/order}" method="get">
+                                    <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
+                                    <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">More</button>
+                                </form>
                                 <form action="/manager/editOrder" th:action="@{/manager/editOrder}" method="get">
                                     <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
                                     <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">Edit</button>
