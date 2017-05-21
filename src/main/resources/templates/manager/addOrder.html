@@ -47,7 +47,7 @@
                         <select name="id_engineer" class="form-control" size="2">
                             <option th:each="engineer : ${engineers}"
                                     th:value="${engineer.id}"
-                                        th:text="| ${engineer.name} ${engineer.secondname}|">Wireframe</option>
+                                        th:text="| ${engineer.name} ${engineer.secondname}|"></option>
                         </select>
                         <input type="text" class="form-control" name="description" placeholder="Order description" th:value="${workorder.description}" required/>
                         <input type="text" class="form-control" name="problem" placeholder="Order problem" th:value="${workorder.problem}" required/>

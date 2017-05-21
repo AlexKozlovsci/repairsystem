@@ -67,8 +67,9 @@
                                     <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
                                     <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">Edit</button>
                                 </form>
-                                <form action="/manager/deleteOrder" th:action="@{/manager/deleteOrder}" method="get">
-                                    <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">Delete</button>
+                                <form action="/manager/deleteOrder" th:action="@{/manager/deleteOrder}"  method="post" th:id="'deleteOrder_' + ${order.id}">
+                                    <input type="hidden" name="id" th:value="${order.id}"/>
+                                    <a class="btn_delete btn btn-default" th:value="${order.id}">Delete</a>
                                     <!--</div>-->
                                 </form>
                             </td>

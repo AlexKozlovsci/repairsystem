@@ -45,7 +45,12 @@
                                         <form action="/admin/editUser" th:action="@{/admin/editUser}" method="get">
                                             <button type="submit" name="id" class="btn btn-default" th:value="${user.id}">Edit</button>
                                         </form>
-                                        <form action="/admin/deleteUser" th:action="@{/admin/deleteUser}" method="get">
+                                        <form action="/admin/deleteUser" th:action="@{/admin/deleteUser}"  method="post" th:id="'deleteUser_' + ${user.id}">
+                                            <input type="hidden" name="id" th:value="${user.id}"/>
+                                            <a class="btn_delete btn btn-default" th:value="${user.id}">Delete</a>
+                                            <!--</div>-->
+                                        </form>
+                                        <!--<form action="/admin/deleteUser" th:action="@{/admin/deleteUser}" method="get">
                                             <button type="submit" name="id" class="btn btn-default" th:value="${user.id}">Delete</button>
                                         </form>
                                         <!--</div>-->

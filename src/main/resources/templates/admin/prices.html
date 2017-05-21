@@ -40,7 +40,12 @@
                                         <form action="/admin/editPriceItem" th:action="@{/admin/editPriceItem}" method="get">
                                             <button type="submit" name="id" class="btn btn-default" th:value="${priceItem.id}">Edit</button>
                                         </form>
-                                        <form action="/admin/deletePriceItem" th:action="@{/admin/deletePriceItem}" method="get">
+                                        <form action="/admin/deletePriceItem" th:action="@{/admin/deletePriceItem}"  method="post" th:id="'deletePriceItem_' + ${priceItem.id}">
+                                            <input type="hidden" name="id" th:value="${priceItem.id}"/>
+                                            <a class="btn_delete btn btn-default" th:value="${priceItem.id}">Delete</a>
+                                            <!--</div>-->
+                                        </form>
+                                        <!--<form action="/admin/deletePriceItem" th:action="@{/admin/deletePriceItem}" method="get">
                                             <button type="submit" name="id" class="btn btn-default" th:value="${priceItem.id}">Delete</button>
                                         </form>
                                     <!--</div>-->

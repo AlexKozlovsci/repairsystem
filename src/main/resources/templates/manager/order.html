@@ -75,7 +75,7 @@
                                         <select name="id_engineer" class="form-control" size="2">
                                             <option th:each="engineer : ${engineers}"
                                                     th:value="${engineer.id}"
-                                                    th:text="| ${engineer.name} ${engineer.secondname}|">Wireframe</option>
+                                                    th:text="| ${engineer.name} ${engineer.secondname}|"></option>
                                         </select>
                                     </p>
                                     <input type="submit" class="btn btn-success" id="submit_engineer_change"  value="Change" />

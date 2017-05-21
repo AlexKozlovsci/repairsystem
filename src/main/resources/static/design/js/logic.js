@@ -1,6 +1,30 @@
 
 $( document ).ready(function(){
+    $(".btn_delete").on('click', function(e) {
+        var form = $(".btn_delete").closest("form");
+        swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this order!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DB073D",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            },
+            function(){
+                swal({
+                        title: "Successful!",
+                        text: "Discussion deleted successfully!",
+                        type: "success",
+                        timer: 2000,
+                        showConfirmButton: false
+                    },
+                    function(){
 
+                        form.submit();
+                    });
+            });
+    });
 
 	/*var add;
 	$("#add_new_project").click(function(){
@@ -45,26 +69,3 @@ function hideForm(id) {
     document.getElementById(id).style.display = 'none';
 }
 
-function confirmDelete(this_id){
-	swal({  
-		 	title: "Are you sure?", 
-		  	text: "You will not be able to recover this project!",   
-		  	type: "warning",   
-		  	showCancelButton: true,   
-		  	confirmButtonColor: "#DB073D",   
-		  	confirmButtonText: "Yes, delete it!",   
-		  	closeOnConfirm: false 
-		  },
-	function(){   
-		swal({  
-		 	title: "Successful!", 
-		  	text: "Discussion deleted successfully!",   
-		  	type: "success",   
-		  	timer: 3000,
-		  	showConfirmButton: false
-		  },
-		function(){
-			$(this_id).submit();
-		});
-	});
-}

@@ -186,10 +186,10 @@ public class ManagerController {
         }
     }
 
-    @RequestMapping(value = "/manager/deleteOrder", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView deleteParts(@ModelAttribute Workorder workorder, final HttpServletRequest req){
-        final Integer workorderId = Integer.valueOf(req.getParameter("id"));
-        Workorder wo = (Workorder) workorderRepository.findById(workorderId);
+    @RequestMapping(value = "/manager/deleteOrder", method = RequestMethod.POST)
+    public ModelAndView deleteParts(@ModelAttribute Workorder workorder){
+        long id = workorder.getId();
+        Workorder wo = (Workorder) workorderRepository.findById(id);
         if (wo == null) {
             return new ModelAndView("404");
         }

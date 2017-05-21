@@ -53,34 +53,6 @@ public class AdminController {
         return mav;
     }
 
-    /*@RequestMapping(value = "/admin/delete{model}", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView deleteParts(@ModelAttribute Model model, @PathVariable(value="model") String modelName, final HttpServletRequest req){
-        ModelAndView mav = new ModelAndView();
-        final Integer modelItemId = Integer.valueOf(req.getParameter("id"));
-        if (modelName.equals("Parts")) {
-            mav = deleteModel("parts", detailRepository, modelItemId);
-        }
-        else if (model.equals("PriceItem")) {
-            mav = deleteModel("prices", priceListRepository, modelItemId);
-        }
-        else if (model.equals("User")) {
-            mav = deleteModel("users", userRepository, modelItemId);
-        }
-        else {
-            mav.setViewName("admin/404");
-        }
-        return mav;
-    }
-
-    private ModelAndView deleteModel(String model, JpaRepository repository, Integer modelItemId){
-        Model modelItem = (Model) repository.findById(modelItemId);
-        if (modelItem == null) {
-            return new ModelAndView("404");
-        }
-        repository.delete(modelItem);
-        return new ModelAndView("redirect:/admin/".concat(model));
-    }*/
-
     @RequestMapping(value = "/admin/{model}", method = RequestMethod.GET)
     public ModelAndView AdminMappingModel(@PathVariable(value="model") String model){
         ModelAndView mav = new ModelAndView();
@@ -136,10 +108,10 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/deletePart", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView deleteParts(@ModelAttribute Detail detail, final HttpServletRequest req){
-        final Integer detailId = Integer.valueOf(req.getParameter("id"));
-        Detail det = (Detail) detailRepository.findById(detailId);
+    @RequestMapping(value = "/admin/deletePart", method = RequestMethod.POST)
+    public ModelAndView deleteParts(@ModelAttribute Detail detail){
+        long id = detail.getId();
+        Detail det = (Detail) detailRepository.findById(id);
         if (det == null) {
             return new ModelAndView("404");
         }
@@ -185,10 +157,10 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/deletePriceItem", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView deletePriceItem(@ModelAttribute Pricelist pricelistItem, final HttpServletRequest req){
-        final Integer priceItemId = Integer.valueOf(req.getParameter("id"));
-        Pricelist priceItem = (Pricelist) priceListRepository.findById(priceItemId);
+    @RequestMapping(value = "/admin/deletePriceItem", method = RequestMethod.POST)
+    public ModelAndView deletePriceItem(@ModelAttribute Pricelist pricelistItem){
+        long id = pricelistItem.getId();
+        Pricelist priceItem = (Pricelist) priceListRepository.findById(id);
         if (priceItem == null) {
             return new ModelAndView("404");
         }
@@ -250,10 +222,10 @@ public class AdminController {
     }
 
 
-    @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView deleteUser(@ModelAttribute User user, final HttpServletRequest req){
-        final Integer userId = Integer.valueOf(req.getParameter("id"));
-        User userItem = (User) userRepository.findById(userId);
+    @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.POST)
+    public ModelAndView deleteUser(@ModelAttribute User user){
+        long id = user.getId();
+        User userItem = (User) userRepository.findById(id);
         if (userItem == null) {
             return new ModelAndView("404");
         }
