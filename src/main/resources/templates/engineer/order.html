@@ -43,15 +43,19 @@
                         <tr>
                             <th>№</th>
                             <th>Start date</th>
-                            <th>End date</th>
                             <th>Problem</th>
+                            <th>Status</th>
                             <th>Client</th>
                             <th>Manager</th>
-                            <th>Engineer</th>
                         </tr>
                         </thead>
                         <tbody>
-
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.create_at}"></td>
+                            <td th:text="${order.problem}"></td>
+                            <td th:text="${order.status}"></td>
+                            <td th:text="${client}"></td>
+                            <td th:text="${manager}"></td>
                         </tbody>
                     </table>
 

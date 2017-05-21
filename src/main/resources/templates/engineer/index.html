@@ -15,9 +15,9 @@
                 <li><a href="http://localhost:8080/engineer/WorkItems/">Work</a></li>
             </ul>
         </li>
-        <li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
+        <!--<li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
         <li><a href="#">Projects</a></li>
-        <!--{% if session.role == 'pm'%}
+        {% if session.role == 'pm'%}
         <li><a href="/project/{{ project.id }}/executors/page:1">Executors</a></li>
         {% endif %}-->
     </ul>
@@ -39,15 +39,27 @@
                         <thead>
                         <tr>
                             <th>№</th>
-                            <th>Action</th>
                             <th>Status</th>
+                            <th>Problem</th>
                             <th>Manager</th>
+                            <th>More</th>
 
                         </tr>
                         </thead>
                         <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.status}"></td>
+                            <td th:text="${order.problem}"></td>
+                            <td th:text="${managers['__${order.id}__']}"></td>
+                            <td>
 
-                        </tbody>
+                                <form action="/engineer/order" th:action="@{/engineer/order}" method="get">
+                                    <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
+                                    <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">Info</button>
+                                </form>
+                            </td>
+                        </tr>
                     </table>
 
 

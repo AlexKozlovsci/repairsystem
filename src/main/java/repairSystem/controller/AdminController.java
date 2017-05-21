@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.DetailRepository;
-import repairSystem.dao.PriceListRepository;
+import repairSystem.dao.PricelistRepository;
 import repairSystem.dao.UserRepository;
 import repairSystem.model.Detail;
-import repairSystem.model.PriceList;
+import repairSystem.model.Pricelist;
 import repairSystem.model.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +40,7 @@ public class AdminController {
     private DetailRepository detailRepository;
 
     @Autowired
-    private PriceListRepository priceListRepository;
+    private PricelistRepository priceListRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -148,22 +148,22 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/addPriceItem", method = RequestMethod.GET)
-    public ModelAndView addPriceItem(@ModelAttribute PriceList priceList){
+    public ModelAndView addPriceItem(@ModelAttribute Pricelist priceList){
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/addPriceItem");
         return mav;
     }
 
     @RequestMapping(value = "/admin/addPriceItem", method = RequestMethod.POST)
-    public ModelAndView addPriceItem(@ModelAttribute PriceList priceList, Model model){
+    public ModelAndView addPriceItem(@ModelAttribute Pricelist priceList, Model model){
         priceListRepository.save(priceList);
         return new ModelAndView("redirect:/admin/prices");
     }
 
     @RequestMapping(value = "/admin/editPriceItem", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView editPriceItem(@ModelAttribute PriceList priceList, final HttpServletRequest req) {
+    public ModelAndView editPriceItem(@ModelAttribute Pricelist priceList, final HttpServletRequest req) {
         final Integer priceItemId = Integer.valueOf(req.getParameter("id"));
-        PriceList priceItem = (PriceList) priceListRepository.findById(priceItemId);
+        Pricelist priceItem = (Pricelist) priceListRepository.findById(priceItemId);
         if (priceItem == null) {
             return new ModelAndView("404");
         }
@@ -174,7 +174,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/editPriceItem", method = RequestMethod.POST)
-    public ModelAndView editPriceItem(@ModelAttribute PriceList priceList){
+    public ModelAndView editPriceItem(@ModelAttribute Pricelist priceList){
         log.info(priceList.getId());
         if (priceList.getId() != 0){
             priceListRepository.save(priceList);
@@ -186,9 +186,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/deletePriceItem", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView deletePriceItem(@ModelAttribute PriceList pricelistItem, final HttpServletRequest req){
+    public ModelAndView deletePriceItem(@ModelAttribute Pricelist pricelistItem, final HttpServletRequest req){
         final Integer priceItemId = Integer.valueOf(req.getParameter("id"));
-        PriceList priceItem = (PriceList) priceListRepository.findById(priceItemId);
+        Pricelist priceItem = (Pricelist) priceListRepository.findById(priceItemId);
         if (priceItem == null) {
             return new ModelAndView("404");
         }
