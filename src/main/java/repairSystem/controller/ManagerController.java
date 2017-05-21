@@ -80,6 +80,15 @@ public class ManagerController {
             return new ModelAndView("404");
         }
         ModelAndView mav = new ModelAndView();
+
+        Client client = clientRepository.findById(wo.getId_client());
+        String clientName = client.getName().concat(" ").concat(client.getSecondname());
+
+        repairSystem.model.User engineer = userRepository.findById(wo.getId_engineer());
+        String engineerName = engineer.getName().concat(" ").concat(engineer.getSecondname());
+
+        mav.addObject("client", clientName);
+        mav.addObject("engineer", engineerName);
         mav.addObject("status", status);
         mav.addObject("id_engineer", id_engineer);
         mav.addObject("engineers", engineers);
