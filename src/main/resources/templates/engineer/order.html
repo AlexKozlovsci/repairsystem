@@ -61,9 +61,53 @@
 
                 </div>
                 <div class="panel-body" >
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Action</th>
+                            <th>Cost</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="price : ${prices}">
+                            <td th:text="${price.id}"></td>
+                            <td th:text="${price.action}"></td>
+                            <td th:text="${price.cost}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="panel-body" >
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Name</th>
+                            <th>Cost</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="detail : ${details}">
+                                <td th:text="${detail.id}"></td>
+                                <td th:text="${detail.name}"></td>
+                                <td th:text="${detail.cost}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="panel-body">
+                    <h3>Total cost</h3>
+                    <h3 th:text="${totalCost}"></h3>
+                </div>
+
+                <div class="panel-body" >
                     <button class="btn btn-success" type="submit">Create Diagnostics</button>
-                    <button class="btn btn-success" type="submit">Add workitem</button>
-                    <button class="btn btn-success" type="submit">Change status</button>
+                    <button class="btn btn-success" type="submit">Add detail</button>
+                    <button class="btn btn-success" type="submit">Change priselist</button>
                     <button class="btn btn-success" type="submit">Create report</button>
                 </div>
             </div>

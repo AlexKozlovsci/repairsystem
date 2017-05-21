@@ -12,13 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.ClientRepository;
 import repairSystem.dao.UserRepository;
 import repairSystem.dao.WorkorderRepository;
+import repairSystem.model.Detail;
+import repairSystem.model.Pricelist;
 import repairSystem.model.Workorder;
 
+import javax.persistence.OrderBy;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Vlad on 01.05.2017.
@@ -45,14 +45,13 @@ public class EngineerController {
         repairSystem.model.User manager;
         List<Workorder> workorders = (List<Workorder>) workorderRepository.findAllByIdEngineer(u.getId());
         for (Iterator<Workorder> i = workorders.iterator(); i.hasNext();) {
+
             item = i.next();
             Integer temp = (int)item.getId();
             String id = temp.toString();
             manager = userRepository.findById(item.getId_manager());
             String managerName = manager.getName().concat(" ").concat(manager.getSecondname());
             mapManagers.put(id, managerName);
-            log.info(id);
-            log.info(managerName);
         }
         mav.addObject("orders", workorders);
         mav.addObject("managers", mapManagers);
@@ -68,10 +67,23 @@ public class EngineerController {
         String managerName = manager.getName().concat(" ").concat(manager.getSecondname());
         repairSystem.model.Client client = clientRepository.findById(workorder.getId_manager());
         String clientName = client.getName().concat(" ").concat(client.getSecondname());
+
+        Set<Detail> details =  workorder.getDetail();
+        Set<Pricelist> pricelists =  workorder.getPricelists();
+        int totalCost = 0;
+        for (Detail detail: details)
+            totalCost += detail.getCost();
+        for (Pricelist pricelist: pricelists)
+            totalCost += pricelist.getCost();
+
+
         ModelAndView mav = new ModelAndView();
         mav.addObject("order", workorder);
         mav.addObject("manager", managerName);
         mav.addObject("client", clientName);
+        mav.addObject("details", details);
+        mav.addObject("prices", pricelists);
+        mav.addObject("totalCost", totalCost);
         mav.setViewName("engineer/order");
         return mav;
     }
@@ -90,8 +102,16 @@ public class EngineerController {
     }
     @RequestMapping(value = "/engineer/WorkItems", method = RequestMethod.GET)
     public ModelAndView WorkItems(){
+
+        Workorder workorders = (Workorder) workorderRepository.findById(1);
+        for (Detail detail :  workorders.getDetail()) {
+            log.info(detail);
+        }
+
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/WorkItems");
         return mav;
     }
+
+
 }
