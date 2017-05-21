@@ -2,7 +2,7 @@ package repairSystem.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import repairSystem.model.PriceList;
+import repairSystem.model.Pricelist;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import java.util.List;
  */
 
 @Repository
-public interface PriceListRepository extends JpaRepository<PriceList, Long> {
-    List<PriceList> findAll();
-    PriceList findById(long id);
-    PriceList save(PriceList priceItem);
+public interface PricelistRepository extends JpaRepository<Pricelist, Long> {
+    List<Pricelist> findAll();
+    Pricelist findById(long id);
+    Pricelist save(Pricelist priceItem);
 }
