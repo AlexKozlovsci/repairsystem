@@ -53,7 +53,10 @@
                             <td th:text="${order.id}"></td>
                             <td th:text="${order.create_at}"></td>
                             <td th:text="${order.problem}"></td>
-                            <td th:text="${order.status}"></td>
+                            <td >
+                                <p th:text="${order.status}"></p>
+                                <label class="btn btn-warning" for="modal-1">Change status</label>
+                            </td>
                             <td th:text="${client}"></td>
                             <td th:text="${manager}"></td>
                         </tbody>
@@ -114,6 +117,42 @@
         </div>
     </div>
 
+    <div class="mymodal row">
+        <input class="mymodal-open" id="modal-1" type="checkbox" hidden>
+        <div class="mymodal-wrap" aria-hidden="true" role="dialog">
+            <label class="mymodal-overlay" for="modal-1"></label>
+            <div class="mymodal-dialog">
+                <div class="mymodal-header">
+                    <h2 class="text-center">Change status</h2>
+                    <label class="mybtn-close" for="modal-1" aria-hidden="true">×</label>
+                </div>
+                <div class="modal-body col-sm-12">
+                    <form method="post" th:action="@{/engineer/order/changeOrderStatus}" >
+                        <div class="row" >
+                            <input type="hidden" name="id" th:value="${workorder.id}"/>
+                            <div class="form-group col-sm-12">
+
+                                <label for="inputStatus" class="col-sm-2 margin_top10 control-label">Status: </label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="status" id="inputStatus">
+                                        <option value="1">Open</option>
+                                        <option value="2">In work</option>
+                                        <option value="3">Complete</option>
+                                        <option value="4">Closed</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 col-sm-offset-2 margin_top20">
+                                    <input type="submit" class="btn btn-success col-sm-12" id="submit_status_change"  value="Change" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 <footer>

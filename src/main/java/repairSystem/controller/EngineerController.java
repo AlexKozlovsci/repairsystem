@@ -83,7 +83,7 @@ public class EngineerController {
         for (Pricelist pricelist: pricelists)
             totalCost += pricelist.getCost();
 
-
+        String status = "";
         ModelAndView mav = new ModelAndView();
         mav.addObject("order", workorder);
         mav.addObject("manager", managerName);
@@ -91,6 +91,7 @@ public class EngineerController {
         mav.addObject("details", details);
         mav.addObject("prices", pricelists);
         mav.addObject("totalCost", totalCost);
+        mav.addObject("status", status);
         mav.setViewName("engineer/order");
         return mav;
     }
@@ -127,5 +128,32 @@ public class EngineerController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/auth/login";
+    }
+
+    @RequestMapping(value = "/engineer/order/changeOrderStatus", method = RequestMethod.POST)
+    public ModelAndView changeOrderStatus(@ModelAttribute Workorder workorder, String status, HttpServletRequest request){
+        switch (status) {
+            case "1":
+                status = "Open";
+                break;
+            case "2":
+                status = "In work";
+                break;
+            case "3":
+                status = "Complete";
+                break;
+            case "4":
+                status = "Closed";
+                break;
+        }
+        Workorder wo = workorderRepository.findById(workorder.getId());
+        wo.setStatus(status);
+        workorderRepository.save(wo);
+        ModelAndView mav = new ModelAndView();
+        Integer temp = (int)workorder.getId();
+        String id = temp.toString();
+        String referer = request.getHeader("Referer");
+        mav.setViewName("redirect:"+ referer);
+        return mav;
     }
 }
