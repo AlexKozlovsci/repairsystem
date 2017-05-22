@@ -26,14 +26,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" id="header_logo" href="#">Repair System</a>
+            <a class="navbar-brand" id="header_logo" th:href="@{/{role}/(role=${session.currentUserRole})}">Repair System</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapsed">
             <div th:include="this :: header">
             </div>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"  th:text="${session.currentUsername}"></a></li>
-                <li id="sign_out"><a href="/logout">Sign Out</a></li>
+                <li id="sign_out"><a th:href="@{/{role}/logout(role=${session.currentUserRole})}">Sign Out</a></li>
             </ul>
         </div>
     </div>

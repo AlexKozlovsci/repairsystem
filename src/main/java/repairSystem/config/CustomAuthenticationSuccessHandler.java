@@ -28,6 +28,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         HttpSession session = httpServletRequest.getSession();
         User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         repairSystem.model.User u = userRepository.findByLogin(authUser.getUsername());
+        session.setAttribute("currentUserRole", u.getRole().substring(5,u.getRole().length()).toLowerCase());
         session.setAttribute("currentUser", u);
         session.setAttribute("currentUsername", u.getLogin());
         httpServletResponse.setStatus(HttpServletResponse.SC_OK);

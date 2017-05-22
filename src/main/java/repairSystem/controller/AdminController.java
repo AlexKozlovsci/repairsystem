@@ -4,6 +4,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +22,8 @@ import repairSystem.model.Pricelist;
 import repairSystem.model.User;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,13 +32,6 @@ import java.util.List;
 
 @Controller
 public class AdminController {
-
-    @RequestMapping(value = "/admin/", method = RequestMethod.GET)
-    public ModelAndView index(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("admin/index");
-        return mav;
-    }
 
     private static final Logger log = Logger.getLogger(AdminController.class);
     @Autowired
@@ -44,6 +42,18 @@ public class AdminController {
 
     @Autowired
     private UserRepository userRepository;
+
+
+    @RequestMapping(value = "/admin/", method = RequestMethod.GET)
+    public ModelAndView index(){
+        ModelAndView mav = new ModelAndView();
+        org.springframework.security.core.userdetails.User authUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        repairSystem.model.User u = userRepository.findByLogin(authUser.getUsername());
+        String name = u.getName().concat(" ").concat(u.getSecondname());
+        mav.addObject("name", name);
+        mav.setViewName("admin/index");
+        return mav;
+    }
 
     private ModelAndView getModelView(String model, JpaRepository repository){
         ModelAndView mav = new ModelAndView();
@@ -122,6 +132,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/addPriceItem", method = RequestMethod.GET)
     public ModelAndView addPriceItem(@ModelAttribute Pricelist priceList){
         ModelAndView mav = new ModelAndView();
+        mav.addObject("priceList", priceList);
         mav.setViewName("admin/addPriceItem");
         return mav;
     }
@@ -171,13 +182,17 @@ public class AdminController {
     @RequestMapping(value = "/admin/addUser", method = RequestMethod.GET)
     public ModelAndView addUser(@ModelAttribute User user){
         ModelAndView mav = new ModelAndView();
+        List<String> roles = Arrays.asList("admin", "manager", "engineer");
+        String role = "";
+        mav.addObject("role", role);
+        mav.addObject("roles", roles);
         mav.setViewName("admin/addUser");
         return mav;
     }
 
     @RequestMapping(value = "/admin/addUser", method = RequestMethod.POST)
-    public ModelAndView addUser(@ModelAttribute User user, Model model){
-        user.setRole("ROLE_".concat(user.getRole().toUpperCase()));
+    public ModelAndView addUser(@ModelAttribute User user, Model model, String role){
+        user.setRole("ROLE_".concat(role.toUpperCase()));
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         user.setPassword(encoder.encodePassword(user.getPassword(),""));
         userRepository.save(user);
@@ -195,6 +210,10 @@ public class AdminController {
         }
         ModelAndView mav = new ModelAndView();
         String pass = "";
+        List<String> roles = Arrays.asList("admin", "manager", "engineer");
+        String role = "";
+        mav.addObject("role", role);
+        mav.addObject("roles", roles);
         mav.addObject("user", userItem);
         mav.addObject("pass", pass);
         mav.setViewName("admin/editUser");
@@ -202,10 +221,10 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/editUser", method = RequestMethod.POST)
-    public ModelAndView editUser(@ModelAttribute User user, String pass){
+    public ModelAndView editUser(@ModelAttribute User user, String pass, String role){
     log.info(pass);
         if (user.getId() != 0){
-            user.setRole("ROLE_".concat(user.getRole().toUpperCase()));
+            user.setRole("ROLE_".concat(role.toUpperCase()));
             User oldUser = userRepository.findById(user.getId());
             if(pass.isEmpty()){
                 user.setPassword(oldUser.getPassword());
@@ -231,5 +250,14 @@ public class AdminController {
         }
         userRepository.delete(userItem);
         return new ModelAndView("redirect:/admin/users");
+    }
+
+    @RequestMapping(value="/admin/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/auth/login";
     }
 }

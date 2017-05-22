@@ -6,22 +6,7 @@
 <body>
 <div th:fragment="header">
     <ul class="nav navbar-nav" >
-        <li class="dropdown" >
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="active_nav">Tasks <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Task manager</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Bugs</a></li>
-                <li><a href="#">New features</a></li>
-                <li><a href="#">Proposal</a></li>
-                <li><a href="#">Tasks</a></li>
-            </ul>
-        </li>
-        <li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Projects</a></li>
-        <!--{% if session.role == 'pm'%}
-        <li><a href="/project/{{ project.id }}/executors/page:1">Executors</a></li>
-        {% endif %}-->
+        <li><a href="/manager/">Orders</a></li>
     </ul>
 </div>
 <div th:fragment="container">
@@ -33,30 +18,68 @@
         </div>
     </div>
 
-    <form action="/manager/addOrder" th:action="@{/manager/addOrder}" enctype="multipart/form-data" method="post">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default" id="type_tasks">
-                    <div class="panel-body" >
-                        <input type="hidden" name="id" th:value="${workorder.id}"/>
-                        <input type="text" class="form-control" name="name" placeholder="Client name" th:value="${client.name}" required/>
-                        <input type="text" class="form-control" name="secondname" placeholder="Client secondname" th:value="${client.secondname}" required/>
-                        <input type="text" class="form-control" name="phone_number" placeholder="Client phone number" th:value="${client.phone_number}" required/>
-                        <input type="text" class="form-control" name="email" placeholder="Client email" th:value="${client.email}" required/>
-                        <input type="text" class="form-control" name="discount" placeholder="Discount" th:value="${client.discount}" required/>
-                        <select name="id_engineer" class="form-control" size="2">
-                            <option th:each="engineer : ${engineers}"
-                                    th:value="${engineer.id}"
-                                        th:text="| ${engineer.name} ${engineer.secondname}|"></option>
-                        </select>
-                        <input type="text" class="form-control" name="description" placeholder="Order description" th:value="${workorder.description}" required/>
-                        <input type="text" class="form-control" name="problem" placeholder="Order problem" th:value="${workorder.problem}" required/>
+
+        <form action="/manager/addOrder" th:action="@{/manager/addOrder}" enctype="multipart/form-data" method="post" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default" id="type_tasks">
+                        <div class="panel-body row" >
+                            <input type="hidden" name="id" th:value="${workorder.id}"/>
+                            <div class="form-group col-sm-6">
+                                <label for="inputName" class="col-sm-4 control-label margin_top20">Client name: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Client name" th:value="${client.name}" required/>
+                                </div>
+
+                                <label for="inputSecondName" class="col-sm-4 control-label margin_top20">Client sername: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputSecondName" name="secondname" placeholder="Client secondname" th:value="${client.secondname}" required/>
+                                </div>
+
+                                <label for="inputPhone" class="col-sm-4 control-label margin_top20">Client phone number: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputPhone" name="phone_number" placeholder="Client phone number" th:value="${client.phone_number}" required/>
+                                </div>
+
+                                <label for="inputEmail" class="col-sm-4 control-label margin_top20">Client email: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputEmail" name="email" placeholder="Client email" th:value="${client.email}" required/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="inputDiscount" class="col-sm-4 control-label">Discount: </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="inputDiscount" name="discount" placeholder="Discount" th:value="${client.discount}" required/>
+                                </div>
+
+                                <label for="inputEngineer" class="col-sm-4 control-label margin_top20">Engineer: </label>
+                                <div class="col-sm-6">
+                                    <select name="id_engineer" class="form-control margin_top20" size="2" id="inputEngineer">
+                                        <option th:each="engineer : ${engineers}"
+                                                th:value="${engineer.id}"
+                                                th:text="| ${engineer.name} ${engineer.secondname}|"></option>
+                                    </select>
+                                </div>
+
+                                <label for="inputDescription" class="col-sm-4 control-label margin_top20">Description: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputDescription" name="description" placeholder="Order description" th:value="${workorder.description}" required/>
+                                </div>
+
+                                <label for="inputProblem" class="col-sm-4 control-label margin_top20">Problem: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputProblem" name="problem" placeholder="Order problem" th:value="${workorder.problem}" required/>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-4 col-sm-offset-4 margin_top20">
+                                <button type="submit" name="addOrder" class="btn btn-success col-sm-12">Add</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button type="submit"  class="btn btn-default" >Apply</button>
             </div>
-        </div>
-    </form>
+        </form>
 
 </div>
 <footer>

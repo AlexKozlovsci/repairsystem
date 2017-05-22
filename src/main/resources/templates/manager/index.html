@@ -6,22 +6,7 @@
 <body>
 <div th:fragment="header">
     <ul class="nav navbar-nav" >
-        <li class="dropdown" >
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="active_nav">Tasks <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#">Task manager</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="#">Bugs</a></li>
-                <li><a href="#">New features</a></li>
-                <li><a href="#">Proposal</a></li>
-                <li><a href="#">Tasks</a></li>
-            </ul>
-        </li>
-        <li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Projects</a></li>
-        <!--{% if session.role == 'pm'%}
-        <li><a href="/project/{{ project.id }}/executors/page:1">Executors</a></li>
-        {% endif %}-->
+        <li><a href="/manager/" id="active_nav">Orders</a></li>
     </ul>
 </div>
 <div th:fragment="container">
@@ -48,7 +33,7 @@
                             <th>status</th>
                             <th>client</th>
                             <th>engineer</th>
-                            <th>action</th>
+                            <th class="text-center">action</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -59,18 +44,15 @@
                             <td th:text="${clients['__${order.id}__']}"></td>
                             <td th:text="${engineers['__${order.id}__']}"></td>
                             <td>
-                                <form action="/manager/order" th:action="@{/manager/order}" method="get">
-                                    <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
-                                    <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">More</button>
+                                <form action="/manager/order" th:action="@{/manager/order}" method="get" class="col-sm-4">
+                                    <button type="submit" name="id" class="btn btn-info col-sm-10 col-sm-offset-1" th:value="${order.id}">More</button>
                                 </form>
-                                <form action="/manager/editOrder" th:action="@{/manager/editOrder}" method="get">
-                                    <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
-                                    <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">Edit</button>
+                                <form action="/manager/editOrder" th:action="@{/manager/editOrder}" method="get" class="col-sm-4">
+                                    <button type="submit" name="id" class="btn btn-seccess col-sm-10 col-sm-offset-1" th:value="${order.id}">Edit</button>
                                 </form>
-                                <form action="/manager/deleteOrder" th:action="@{/manager/deleteOrder}"  method="post" th:id="'deleteOrder_' + ${order.id}">
+                                <form action="/manager/deleteOrder" th:action="@{/manager/deleteOrder}"  method="post" th:id="'deleteOrder_' + ${order.id}" class="col-sm-4">
                                     <input type="hidden" name="id" th:value="${order.id}"/>
-                                    <a class="btn_delete btn btn-default" th:value="${order.id}">Delete</a>
-                                    <!--</div>-->
+                                    <a class="btn_delete btn btn-danger col-sm-10 col-sm-offset-1" th:value="${order.id}">Delete</a>
                                 </form>
                             </td>
                         </tr>

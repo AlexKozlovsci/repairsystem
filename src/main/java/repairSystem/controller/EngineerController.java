@@ -2,8 +2,10 @@ package repairSystem.controller;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,11 @@ import repairSystem.model.Workorder;
 import javax.persistence.OrderBy;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Vlad on 01.05.2017.
@@ -113,5 +120,12 @@ public class EngineerController {
         return mav;
     }
 
-
+    @RequestMapping(value="/engineer/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/auth/login";
+    }
 }
