@@ -7,19 +7,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import repairSystem.dao.ClientRepository;
-import repairSystem.dao.UserRepository;
-import repairSystem.dao.WorkorderRepository;
+import repairSystem.dao.*;
 import repairSystem.model.Detail;
 import repairSystem.model.Pricelist;
 import repairSystem.model.Workorder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -36,6 +36,12 @@ public class EngineerController {
     private WorkorderRepository workorderRepository;
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private DetailRepository detailRepository;
+    @Autowired
+    private PricelistRepository pricelistRepository;
+
+    private InputStream stream;
 
     @RequestMapping(value = "/engineer/", method = RequestMethod.GET)
     public ModelAndView index(){
@@ -125,6 +131,76 @@ public class EngineerController {
         return "redirect:/auth/login";
     }
 
+    @RequestMapping(value = "/engineer/addDetailToOrder", method = RequestMethod.GET)
+    public ModelAndView addDetailToOrder(@ModelAttribute  Detail detail, int orderId){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("engineer/addDetailToOrder");
+        mav.addObject("detail", detail);
+        mav.addObject("orderId", orderId);
+        return mav;
+    }
+
+    @RequestMapping(value = "/engineer/addDetailToOrder", method = RequestMethod.POST)
+    public ModelAndView addDetailToOrder(@ModelAttribute Detail detail, int orderId, Model model){
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        Set<Detail> details = new HashSet<Detail>(workorder.getDetail());
+        details.add(detail);
+        workorder.setDetail(details);
+        workorderRepository.save(workorder);
+        Integer temp = (int)orderId;
+        String id = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(id));
+    }
+
+    @RequestMapping(value = "/engineer/deleteActionFromOrder", method = RequestMethod.POST)
+    public ModelAndView deleteActionFromOrder(@ModelAttribute Pricelist priceList, int orderId){
+        long id = priceList.getId();
+        Pricelist actionItem = (Pricelist) pricelistRepository.findById(id);
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        for (Workorder orderAction : actionItem.workorder) {
+            orderAction.pricelists.remove(actionItem);
+        }
+        pricelistRepository.delete(actionItem);
+        Integer temp = (int)orderId;
+        String orderIdstr = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
+    }
+
+    @RequestMapping(value = "/engineer/deleteDetailFromOrder", method = RequestMethod.POST)
+    public ModelAndView deleteDetailFromOrder(@ModelAttribute Detail detail, int orderId){
+        long id = detail.getId();
+        Detail detailItem = (Detail) detailRepository.findById(id);
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        for (Workorder orderDetail : detailItem.workorder) {
+            orderDetail.details.remove(detailItem);
+        }
+        detailRepository.delete(detailItem);
+        Integer temp = (int)orderId;
+        String orderIdstr = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
+    }
+
+    @RequestMapping(value = "/engineer/addActionToOrder", method = RequestMethod.GET)
+    public ModelAndView addActionToOrder(@ModelAttribute  Pricelist priceList, int orderId){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("engineer/addActionToOrder");
+        mav.addObject("priceList", priceList);
+        mav.addObject("orderId", orderId);
+        return mav;
+    }
+
+    @RequestMapping(value = "/engineer/addActionToOrder", method = RequestMethod.POST)
+    public ModelAndView addActionToOrder(@ModelAttribute Pricelist priceList, int orderId, Model model){
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        Set<Pricelist> actions = new HashSet<Pricelist>(workorder.getPricelists());
+        actions.add(priceList);
+        workorder.setPricelists(actions);
+        workorderRepository.save(workorder);
+        Integer temp = (int)orderId;
+        String id = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(id));
+    }
+
     @RequestMapping(value = "/engineer/order/changeOrderStatus", method = RequestMethod.POST)
     public ModelAndView changeOrderStatus(@ModelAttribute Workorder workorder, String status, HttpServletRequest request){
         switch (status) {
@@ -152,6 +228,32 @@ public class EngineerController {
         String id = temp.toString();
         String referer = request.getHeader("Referer");
         mav.setViewName("redirect:"+ referer);
+        return mav;
+    }
+
+
+
+    @RequestMapping(value = "/engineer/order/createDiagnosticsList", method = RequestMethod.POST)
+    public ModelAndView createDiagnosticsList(@ModelAttribute Workorder workorder, String document, HttpServletRequest request){
+        ModelAndView mav = new ModelAndView();
+        switch (document) {
+            case "1":
+                document = "pdf";
+                try {
+                    //stream = ByteArrayInputStream();
+                }
+                catch (Exception e){
+                    mav.setViewName("404");
+                    return mav;
+                }
+                break;
+            case "2":
+                document = "xml";
+                break;
+            case "3":
+                document = "Drisnya";
+                break;
+        }
         return mav;
     }
 }

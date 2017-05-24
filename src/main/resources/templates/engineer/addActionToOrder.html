@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:include="layout :: page">
+<head th:replace="layout :: site-head">
+    <title>Prices</title>
+</head>
+<body>
+<div th:fragment="header"></div>
+<div th:fragment="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <h3 id="head_name">Add action</h3>
+            <hr id="head_hr" />
+        </div>
+
+
+
+        <form action="/engineer/addActionToOrder" th:action="@{/engineer/addActionToOrder}" enctype="multipart/form-data" method="post" class="form-horizontal">
+            <div class="col-sm-12">
+                <div class="panel panel-default" id="type_tasks">
+                    <div class="panel-body row" >
+                        <input type="hidden" name="id" th:value="${priceList.id}"/>
+                        <input type="hidden" name="orderId" th:value="${orderId}"/>
+                        <div class="form-group col-sm-12">
+                            <div class="row">
+                                <label for="inputDeviceType" class="col-sm-4 control-label margin_top20">Device type: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputDeviceType" name="deviceType" placeholder="Device Type" th:value="${priceList.deviceType}" required/>
+                                </div>
+
+                                <label for="inputAction" class="col-sm-4 control-label margin_top20">Action: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputAction" name="action" placeholder="Action" th:value="${priceList.action}" required/>
+                                </div>
+
+                                <label for="inputCost" class="col-sm-4 control-label margin_top20">Cost: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputCost" name="cost" placeholder="Cost" th:value="${priceList.cost}" pattern="[0-9_-]+" required/>
+                                </div>
+
+                                <div class="col-sm-4 col-sm-offset-5 margin_top20">
+                                    <button type="submit" name="addActionToOrder" class="btn btn-success col-sm-12">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -77,6 +77,13 @@
                             <td th:text="${price.id}"></td>
                             <td th:text="${price.action}"></td>
                             <td th:text="${price.cost}"></td>
+                            <td>
+                                <form action="/engineer/deleteActionFromOrder" th:action="@{/engineer/deleteActionFromOrder}"  method="post">
+                                    <input type="hidden" name="id" th:value="${price.id}"/>
+                                    <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                    <button class="btn btn-danger col-sm-10 col-sm-offset-1" th:value="${price.id}">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -96,6 +103,13 @@
                                 <td th:text="${detail.id}"></td>
                                 <td th:text="${detail.name}"></td>
                                 <td th:text="${detail.cost}"></td>
+                                <td>
+                                    <form action="/engineer/deleteDetailFromOrder" th:action="@{/engineer/deleteDetailFromOrder}"  method="post" class="col-sm-6">
+                                        <input type="hidden" name="id" th:value="${detail.id}"/>
+                                        <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                        <button class="btn btn-danger col-sm-10 col-sm-offset-1" th:value="${detail.id}">Delete</button>
+                                    </form>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -108,9 +122,15 @@
                 </div>
 
                 <div class="panel-body" >
-                    <button class="btn btn-success" type="submit">Create Diagnostics</button>
-                    <button class="btn btn-success" type="submit">Add detail</button>
-                    <button class="btn btn-success" type="submit">Change priselist</button>
+                    <label class="btn btn-warning" for="modal-2">Create Diagnostics</label>
+                    <form action="/engineer/addDetailToOrder" th:action="@{/engineer/addDetailToOrder}" method="get">
+                        <input type="hidden" name="orderId" th:value="${order.id}"/>
+                        <button class="btn btn-success" type="submit">Add detail</button>
+                    </form>
+                    <form action="/engineer/addActionToOrder" th:action="@{/engineer/addActionToOrder}" method="get">
+                        <input type="hidden" name="orderId" th:value="${order.id}"/>
+                        <button class="btn btn-success" type="submit">Add action</button>
+                    </form>
                     <button class="btn btn-success" type="submit">Create report</button>
                 </div>
             </div>
@@ -151,6 +171,44 @@
             </div>
         </div>
     </div>
+
+
+    <div class="mymodal row">
+        <input class="mymodal-open" id="modal-2" type="checkbox" hidden>
+        <div class="mymodal-wrap" aria-hidden="true" role="dialog">
+            <label class="mymodal-overlay" for="modal-2"></label>
+            <div class="mymodal-dialog">
+                <div class="mymodal-header">
+                    <h2 class="text-center">Change Diagnostics</h2>
+                    <label class="mybtn-close" for="modal-1" aria-hidden="true">×</label>
+                </div>
+                <div class="modal-body col-sm-12">
+                    <form method="post" th:action="@{/engineer/order/createDiagnosticsList}" >
+                        <div class="row" >
+                            <input type="hidden" name="id" th:value="${workorder.id}"/>
+                            <div class="form-group col-sm-12">
+
+                                <label for="inputStatus" class="col-sm-2 margin_top10 control-label">Status: </label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="status" id="inputStatus">
+                                        <option value="1">pdf</option>
+                                        <option value="2">xml</option>
+                                        <option value="3">Drisnya</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 col-sm-offset-2 margin_top20">
+                                    <input type="submit" class="btn btn-success col-sm-12" id="submit_create_diagnostics"  value="Create" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
 
 </div>
 <footer>

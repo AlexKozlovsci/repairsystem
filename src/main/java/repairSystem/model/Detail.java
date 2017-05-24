@@ -4,9 +4,7 @@ package repairSystem.model;
  * Created by Юрий on 28.04.2017.
  */
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -58,7 +56,7 @@ public class Detail {
     }
 
     @ManyToMany(mappedBy = "details")
-    private Set<Workorder> workorder;
+    public Set<Workorder> workorder;
     public void setWorkorder(Set<Workorder> workorder)
     {
         this.workorder = workorder;

@@ -59,7 +59,7 @@ public class Pricelist {
     }
 
     @ManyToMany(mappedBy = "pricelists")
-    private Set<Workorder> workorder;
+    public Set<Workorder> workorder;
     public void setWorkorder(Set<Workorder> workorder)
     {
         this.workorder = workorder;
