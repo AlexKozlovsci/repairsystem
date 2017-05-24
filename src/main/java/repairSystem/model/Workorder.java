@@ -5,9 +5,7 @@ package repairSystem.model;
  */
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -100,7 +98,7 @@ public class Workorder {
     @Column(name = "problem")
     private String problem;
     public String getProblem(){
-        return description;
+        return problem;
     }
 
     public void setProblem(String problem){

@@ -22,7 +22,7 @@
         {% endif %}-->
     </ul>
 </div>
-<div th:fragment="container">
+<div th:fragment="container" class="main">
 
     <div class="row">
         <div class="col-sm-4">
@@ -117,16 +117,16 @@
         </div>
     </div>
 
-    <div class="mymodal row">
-        <input class="mymodal-open" id="modal-1" type="checkbox" hidden>
-        <div class="mymodal-wrap" aria-hidden="true" role="dialog">
-            <label class="mymodal-overlay" for="modal-1"></label>
-            <div class="mymodal-dialog">
-                <div class="mymodal-header">
+    <div class="modal-window row">
+        <input class="modal-window-open" id="modal-1" type="checkbox" hidden>
+        <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+            <label class="modal-window-overlay" for="modal-1"></label>
+            <div class="modal-window-dialog">
+                <div class="modal-window-header">
                     <h2 class="text-center">Change status</h2>
                     <label class="mybtn-close" for="modal-1" aria-hidden="true">×</label>
                 </div>
-                <div class="modal-body col-sm-12">
+                <div class="modal-window-body col-sm-12">
                     <form method="post" th:action="@{/engineer/order/changeOrderStatus}" >
                         <div class="row" >
                             <input type="hidden" name="id" th:value="${workorder.id}"/>
@@ -149,9 +149,7 @@
                     </form>
                 </div>
             </div>
-
         </div>
-
     </div>
 
 </div>

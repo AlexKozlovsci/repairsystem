@@ -345,13 +345,11 @@ body{
 	}
 /* end footer */
 
-/*
-* Модальное окно исключительно средствами CSS;
-* без javascript и дополительных изображений;
-* работает на скрытых чекбоксах;
-*/
+
+
+
 /* Стили модального окна */
-.mymodal-header {
+.modal-window-header {
 	color: #555;
 	font-size: 20px;
 	font-weight: normal;
@@ -359,7 +357,7 @@ body{
 	margin: 0;
 }
 /* кнопка закрытия окна */
-.mymodal .mybtn-close {
+.modal-window .mybtn-close {
 	color: #aaa;
 	cursor: pointer;
 	font-size: 30px;
@@ -368,11 +366,11 @@ body{
 	right: 5px;
 	top: 0;
 }
-.mymodal .mybtn-close:hover {
+.modal-window .mybtn-close:hover {
 	color: red;
 }
 /* слой затемнения */
-.mymodal-wrap:before {
+.modal-window-wrap:before {
 	content: "";
 	display: none;
 	background: rgba(0, 0, 0, 0.6);
@@ -383,7 +381,7 @@ body{
 	bottom: 0;
 	z-index: 101;
 }
-.mymodal-overlay {
+.modal-window-overlay {
 	bottom: 0;
 	display: none;
 	left: 0;
@@ -393,11 +391,11 @@ body{
 	z-index: 102;
 }
 /* активация слоя затемнения и модального блока */
-.mymodal-open:checked ~ .mymodal-wrap:before,
-.mymodal-open:checked ~ .mymodal-wrap .modal-overlay {
+.modal-window-open:checked ~ .modal-window-wrap:before,
+.modal-window-open:checked ~ .modal-window-wrap .modal-overlay {
 	display: block;
 }
-.mymodal-open:checked ~ .mymodal-wrap .mymodal-dialog {
+.modal-window-open:checked ~ .modal-window-wrap .modal-window-dialog {
 	-webkit-transform: translate(-50%, 0);
 	-ms-transform: translate(-50%, 0);
 	-o-transform: translate(-50%, 0);
@@ -405,7 +403,7 @@ body{
 	top: 20%;
 }
 /* элементы модального окна */
-.mymodal-dialog {
+.modal-window-dialog {
 	background: #fefefe;
 	border: #555555 solid 1px;
 	border-radius: 5px;
@@ -424,29 +422,29 @@ body{
 	max-width: 400px;
 	z-index: 103;
 }
-.mymodal-body {
+.modal-window-body {
 	padding: 20px;
 }
-.mymodal-body p {
+.modal-window-body p {
 	margin: 0;
 }
-.mymodal-header,
-.mymodal-footer {
+.modal-window-header,
+.modal-window-footer {
 	padding: 5px 5px;
 }
-.mymodal-header {
+.modal-window-header {
 	border-bottom: #eaeaea solid 1px;
 }
-.mymodal-header {
+.modal-window-header {
 	font-size: 20px;
 	margin: 0;
 }
-.mymodal-footer {
+.modal-window-footer {
 	border-top: #eaeaea solid 1px;
 	text-align: right;
 }
 /* адаптивные картинки в модальном блоке */
-.mymodal-body img {
+.modal-window-body img {
 	max-width: 100%;
 	height: auto;
 }
@@ -476,38 +474,6 @@ body{
 	background: #66A1D3;
 }
 
-/* Элементы формы контактов */
-.mytextbox{
-	height:45px;
-	width:100%;
-	border-radius:3px;
-	border:rgba(0,0,0,.3) 1px solid;
-	box-sizing:border-box;
-	font-size:14px;
-	padding:8px;
-	margin-bottom:20px;
-}
-.mymessage:focus,
-.mytextbox:focus{
-	outline:none;
-	border:rgba(24,149,215,1) 1px solid;
-	color:rgba(24,149,215,1);
-}
-.mymessage{
-	background: rgba(255, 255, 255, 0.4);
-	width:100%;
-	height: 120px;
-	border:rgba(0,0,0,.3) 1px solid;
-	box-sizing:border-box;
-	-moz-border-radius: 3px;
-	font-size:14px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
-	display:block;
-	padding:10px;
-	margin-bottom:20px;
-	overflow:hidden;
-}
 /* кнопка "отправить" формы */
 .mybtn-form{
 	width:100%;
@@ -521,4 +487,12 @@ body{
 /* Изменение фона кнопки при наведении */
 .mybtn-form:hover{
 	background: #f2f2f2;
+}
+
+.order-general{
+	margin-top: 20px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
