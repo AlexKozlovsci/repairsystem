@@ -19,4 +19,5 @@ public interface PricelistRepository extends JpaRepository<Pricelist, Long> {
 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN 'true' ELSE 'false' END FROM Pricelist p WHERE p.id = ?1")
     public Boolean existsById(long id);
+
 }

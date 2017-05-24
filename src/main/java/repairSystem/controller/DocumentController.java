@@ -2,26 +2,19 @@ package repairSystem.controller;
 
 
 import com.itextpdf.text.DocumentException;
-import com.opencsv.CSVWriter;
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import repairSystem.documentGeneration.CSVGeneration;
-import repairSystem.documentGeneration.XLSGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
+import repairSystem.documentGeneration.XLSGeneration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 /**
@@ -33,25 +26,27 @@ public class DocumentController {
 
     private static final Logger log = Logger.getLogger(AdminController.class);
 
+    private CSVGeneration csvGen = new CSVGeneration();
 
-        @RequestMapping(value = "/document/getcsv", method = RequestMethod.GET)
-        public void getCsv(final HttpServletRequest request,
-                final HttpServletResponse response) throws IOException {
 
-            response.setContentType("application/csv");
-            response.setContentLength(CSVGeneration.generateSomeCSV().toByteArray().length);
+    @RequestMapping(value = "/document/getcsv", method = RequestMethod.GET)
+    public void getCsv(final HttpServletRequest request,
+            final HttpServletResponse response) throws IOException {
+        ByteArrayOutputStream stream = csvGen.generateCSV();
+        response.setContentType("application/csv");
+        response.setContentLength(stream.toByteArray().length);
 
-            String headerKey = "Content-Disposition";
-            String headerValue = String.format("attachment; filename=\"%s\"",
-                    "someFileName.csv");
-            response.setHeader(headerKey, headerValue);
+        String headerKey = "Content-Disposition";
+        String headerValue = String.format("attachment; filename=\"%s\"",
+                "someFileName.csv");
+        response.setHeader(headerKey, headerValue);
 
-            OutputStream outStream = response.getOutputStream();
+        OutputStream outStream = response.getOutputStream();
 
-            outStream.write(CSVGeneration.generateSomeCSV().toByteArray());
+        outStream.write(stream.toByteArray());
 
-            outStream.close();
-        }
+        outStream.close();
+    }
 
     @RequestMapping(value = "/document/getxls", method = RequestMethod.GET)
     public void getXls(final HttpServletRequest request,
