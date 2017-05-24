@@ -18,6 +18,12 @@
         </div>
     </div>
 
+    <div class= "col-sm-6 col-sm-offset-3  col-xs-6 col-xs-offset-3">
+        <div th:if="${error}">
+            <h4 class="error_second text-center">Id is incorrect.</h4>
+        </div>
+    </div>
+
     <form action="/manager/editOrder" th:action="@{/manager/editOrder}" enctype="multipart/form-data" method="post" class="form-horizontal">
         <div class="col-sm-12">
             <div class="panel panel-default" id="type_tasks">

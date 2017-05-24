@@ -23,4 +23,7 @@ public interface WorkorderRepository extends JpaRepository<Workorder, Long>{
     @Query(value = "SELECT * FROM workorder WHERE id_engineer = :id", nativeQuery = true)
     List<Workorder> findAllByIdEngineer(@Param("id") long id);
     Workorder save(Workorder workorder);
+
+    @Query("SELECT CASE WHEN COUNT(w) > 0 THEN 'true' ELSE 'false' END FROM Workorder w WHERE w.id = ?1")
+    public Boolean existsById(long id);
 }

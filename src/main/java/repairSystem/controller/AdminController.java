@@ -108,10 +108,10 @@ public class AdminController {
             List<String> roles = Arrays.asList("admin", "manager", "engineer");
             mav.addObject("roles", roles);
             error = true;
-            mav.addObject("error", error);
             mav.setViewName("/admin/addUser");
         }
         finally {
+            mav.addObject("error", error);
             return mav;
         }
     }
@@ -156,10 +156,10 @@ public class AdminController {
             List<String> roles = Arrays.asList("admin", "manager", "engineer");
             mav.addObject("roles", roles);
             error = true;
-            mav.addObject("error", error);
             mav.setViewName("/admin/editUser");
         }
         finally {
+            mav.addObject("error", error);
             return mav;
         }
 
@@ -196,10 +196,10 @@ public class AdminController {
         }
         catch(Exception e){
             error = true;
-            mav.addObject("error", error);
             mav.setViewName("/admin/addPart");
         }
         finally {
+            mav.addObject("error", error);
             return mav;
         }
     }
@@ -227,10 +227,10 @@ public class AdminController {
         }
         catch(Exception e){
             error = true;
-            mav.addObject("error", error);
             mav.setViewName("/admin/editPart");
         }
         finally {
+            mav.addObject("error", error);
             return mav;
         }
     }

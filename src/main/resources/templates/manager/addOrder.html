@@ -18,6 +18,11 @@
         </div>
     </div>
 
+    <div class= "col-sm-6 col-sm-offset-3  col-xs-6 col-xs-offset-3">
+        <div th:if="${error}">
+            <h4 class="error_second text-center">Client with this email or phone number already exist.</h4>
+        </div>
+    </div>
 
         <form action="/manager/addOrder" th:action="@{/manager/addOrder}" enctype="multipart/form-data" method="post" class="form-horizontal">
             <div class="row">

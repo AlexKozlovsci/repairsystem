@@ -18,14 +18,9 @@ import repairSystem.model.Detail;
 import repairSystem.model.Pricelist;
 import repairSystem.model.Workorder;
 
-import javax.persistence.OrderBy;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Vlad on 01.05.2017.
@@ -143,6 +138,9 @@ public class EngineerController {
                 status = "Complete";
                 break;
             case "4":
+                status = "Closed";
+                break;
+            default:
                 status = "Closed";
                 break;
         }
