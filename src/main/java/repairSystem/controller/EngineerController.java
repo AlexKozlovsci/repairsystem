@@ -96,40 +96,8 @@ public class EngineerController {
         mav.setViewName("engineer/order");
         return mav;
     }
-    @RequestMapping(value = "/engineer/DiagnosticsList", method = RequestMethod.GET)
-    public ModelAndView DiagnosticsList(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("engineer/DiagnosticsList");
-        return mav;
 
-    }
-    @RequestMapping(value = "/engineer/Report", method = RequestMethod.GET)
-    public ModelAndView Report(){
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("engineer/Report");
-        return mav;
-    }
-    @RequestMapping(value = "/engineer/WorkItems", method = RequestMethod.GET)
-    public ModelAndView WorkItems(){
 
-        Workorder workorders = (Workorder) workorderRepository.findById(1);
-        for (Detail detail :  workorders.getDetail()) {
-            log.info(detail);
-        }
-
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("engineer/WorkItems");
-        return mav;
-    }
-
-    @RequestMapping(value="/engineer/logout", method = RequestMethod.GET)
-    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null){
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-        }
-        return "redirect:/auth/login";
-    }
 
     @RequestMapping(value = "/engineer/addDetailToOrder", method = RequestMethod.GET)
     public ModelAndView addDetailToOrder(@ModelAttribute  Detail detail, int orderId){
@@ -233,12 +201,12 @@ public class EngineerController {
 
 
 
-    @RequestMapping(value = "/engineer/order/createDiagnosticsList", method = RequestMethod.POST)
-    public ModelAndView createDiagnosticsList(@ModelAttribute Workorder workorder, String document, HttpServletRequest request){
+    @RequestMapping(value = "/engineer/order/createDocument", method = RequestMethod.POST)
+    public ModelAndView createDocument(@ModelAttribute Workorder workorder, String document, HttpServletRequest request){
         ModelAndView mav = new ModelAndView();
         switch (document) {
             case "1":
-                document = "pdf";
+                document = "diagnostic";
                 try {
                     //stream = ByteArrayInputStream();
                 }
@@ -248,12 +216,18 @@ public class EngineerController {
                 }
                 break;
             case "2":
-                document = "xml";
-                break;
-            case "3":
-                document = "Drisnya";
+                document = "report";
                 break;
         }
         return mav;
+    }
+
+    @RequestMapping(value="/engineer/logout", method = RequestMethod.GET)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/auth/login";
     }
 }

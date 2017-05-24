@@ -6,29 +6,14 @@
 <body>
 <div th:fragment="header">
     <ul class="nav navbar-nav" >
-        <li class="dropdown" >
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="active_nav">Tasks <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="http://localhost:8080/engineer/">Engineer</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="http://localhost:8080/engineer/order/">Order</a></li>
-                <li><a href="http://localhost:8080/engineer/WorkItems/">Work</a></li>
-            </ul>
-        </li>
-        <!--<li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Projects</a></li>
-        {% if session.role == 'pm'%}
-        <li><a href="/project/{{ project.id }}/executors/page:1">Executors</a></li>
-        {% endif %}-->
+        <li><a href="/engineer/" id="active_nav">Orders<span class="sr-only">(current)</span></a></li>
     </ul>
 </div>
 <div th:fragment="container">
 
     <div class="row">
         <div class="col-sm-4">
-            <h3 id="head_name">Orders
-                <a href="#" class="pull-right">+</a>
-            </h3>
+            <h3 id="head_name">Orders</h3>
 
             <hr id="head_hr" />
         </div>
@@ -40,9 +25,9 @@
                         <tr>
                             <th>№</th>
                             <th>Status</th>
-                            <th>Problem</th>
+                            <th>Description</th>
                             <th>Manager</th>
-                            <th>More</th>
+                            <th class="text-center">Action</th>
 
                         </tr>
                         </thead>
@@ -50,51 +35,21 @@
                         <tr th:each="order : ${orders}">
                             <td th:text="${order.id}"></td>
                             <td th:text="${order.status}"></td>
-                            <td th:text="${order.problem}"></td>
+                            <td th:text="${order.description}"></td>
                             <td th:text="${managers['__${order.id}__']}"></td>
                             <td>
 
                                 <form action="/engineer/order" th:action="@{/engineer/order}" method="get">
-                                    <!--<div class="btn-group btn-group-sm" role="group" aria-label="Small button group">-->
-                                    <button type="submit" name="id" class="btn btn-default" th:value="${order.id}">Info</button>
+                                    <button type="submit" name="id" class="btn btn-info col-sm-12" th:value="${order.id}">More</button>
                                 </form>
                             </td>
                         </tr>
                     </table>
 
-
-
-                </div>
-               <!-- <div class="panel-body">
-                    <button class="btn btn-success" type="submit">Create report</button>
-
-                </div> -->
-            </div>
-        </div>
-    </div>
-
-
-
-
-  <!--  <div class="row">
-        <div class="col-md-12">
-            <h4>Diagnostic
-                <a href="#" >+</a>
-            </h4>
-        </div>
-    </div>
-<div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-default" id="type_tasks">
-                <div class="panel-body" >
-                    <button class="btn btn-success" type="submit">Create Diagnostics</button>
-                    <button class="btn btn-success" type="submit">Create report</button>
-                    <button class="btn btn-success" type="submit">Change status</button>
                 </div>
             </div>
         </div>
     </div>
--->
 
 
 

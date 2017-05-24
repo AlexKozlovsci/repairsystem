@@ -6,136 +6,150 @@
 <body>
 <div th:fragment="header">
     <ul class="nav navbar-nav" >
-        <li class="dropdown" >
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" id="active_nav">Tasks <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="http://localhost:8080/engineer/">Engineer</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="http://localhost:8080/engineer/order/">Order</a></li>
-                <li><a href="http://localhost:8080/engineer/WorkItems/">Work</a></li>
-            </ul>
-        </li>
-        <li ><a href="#">Discussions<span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Projects</a></li>
-        <!--{% if session.role == 'pm'%}
-        <li><a href="/project/{{ project.id }}/executors/page:1">Executors</a></li>
-        {% endif %}-->
+        <li><a href="/engineer/">Orders<span class="sr-only">(current)</span></a></li>
     </ul>
 </div>
 <div th:fragment="container" class="main">
 
     <div class="row">
         <div class="col-sm-4">
-            <h3 id="head_name">Order name
-                <a href="#" class="pull-right">+</a>
-            </h3>
-
+            <h3 id="head_name" th:text="| Order № ${order.id}|"></h3>
             <hr id="head_hr" />
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-12">
-            <div class="panel panel-default" id="type_tasks">
-                <div class="panel-body" >
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>№</th>
-                            <th>Start date</th>
-                            <th>Problem</th>
-                            <th>Status</th>
-                            <th>Client</th>
-                            <th>Manager</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <td th:text="${order.id}"></td>
-                            <td th:text="${order.create_at}"></td>
-                            <td th:text="${order.problem}"></td>
-                            <td >
-                                <p th:text="${order.status}"></p>
-                                <label class="btn btn-warning" for="modal-1">Change status</label>
-                            </td>
-                            <td th:text="${client}"></td>
-                            <td th:text="${manager}"></td>
-                        </tbody>
-                    </table>
+            <div class="panel panel-default" >
+                <div class="panel-body" id="order_actions">
+                    <h2 class="text-center margin_top20" th:text="| Order № ${workorder.id}|"></h2>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <div class="order-general ">
 
-                </div>
-                <div class="panel-body" >
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>№</th>
-                            <th>Action</th>
-                            <th>Cost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="price : ${prices}">
-                            <td th:text="${price.id}"></td>
-                            <td th:text="${price.action}"></td>
-                            <td th:text="${price.cost}"></td>
-                            <td>
-                                <form action="/engineer/deleteActionFromOrder" th:action="@{/engineer/deleteActionFromOrder}"  method="post">
-                                    <input type="hidden" name="id" th:value="${price.id}"/>
-                                    <input type="hidden" name="orderId" th:value="${order.id}"/>
-                                    <button class="btn btn-danger col-sm-10 col-sm-offset-1" th:value="${price.id}">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                <div class="row margin_top20">
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-12">
+                                            <b class="col-sm-6">Client: </b>
+                                            <p class="col-sm-6 text-left" th:text="${client}"></p>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <b class="col-sm-6">Manager: </b>
+                                            <p class="col-sm-6 text-left" th:text="${manager}"></p>
+                                        </div>
+                                    </div>
 
-                </div>
-                <div class="panel-body" >
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>№</th>
-                            <th>Name</th>
-                            <th>Cost</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="detail : ${details}">
-                                <td th:text="${detail.id}"></td>
-                                <td th:text="${detail.name}"></td>
-                                <td th:text="${detail.cost}"></td>
-                                <td>
-                                    <form action="/engineer/deleteDetailFromOrder" th:action="@{/engineer/deleteDetailFromOrder}"  method="post" class="col-sm-6">
-                                        <input type="hidden" name="id" th:value="${detail.id}"/>
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-12">
+                                            <b class="col-sm-6">Status: </b>
+                                            <p class="col-sm-6 text-left" th:text="${order.status}"></p>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <b class="col-sm-6">Create at: </b>
+                                            <p class="col-sm-6 text-left" th:text="${order.create_at}"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-12">
+                                            <b class="col-sm-2">Description: </b>
+                                            <p class="col-sm-10 text-left" th:text="${order.description}"></p>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <b class="col-sm-2">Problem: </b>
+                                            <p class="col-sm-10 text-left" th:text="${order.problem}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h3 class="col-sm-2 col-sm-offset-8" th:text="| Total cost: ${totalCost}|"></h3>
+                    </div>
+                    <h2 class="margin_top20 text-center">Details and pricing</h2>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Work</th>
+                                    <th>Cost</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="price : ${prices}">
+                                    <td th:text="${price.id}"></td>
+                                    <td th:text="${price.action}"></td>
+                                    <td th:text="${price.cost}"></td>
+                                    <td>
+                                        <form action="/engineer/deleteActionFromOrder" th:action="@{/engineer/deleteActionFromOrder}"  method="post">
+                                            <input type="hidden" name="id" th:value="${price.id}"/>
+                                            <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                            <button class="btn btn-danger col-sm-12" th:value="${price.id}">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Name</th>
+                                    <th>Cost</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="detail : ${details}">
+                                    <td th:text="${detail.id}"></td>
+                                    <td th:text="${detail.name}"></td>
+                                    <td th:text="${detail.cost}"></td>
+                                    <td>
+                                        <form action="/engineer/deleteDetailFromOrder" th:action="@{/engineer/deleteDetailFromOrder}"  method="post">
+                                            <input type="hidden" name="id" th:value="${detail.id}"/>
+                                            <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                            <button class="btn btn-danger col-sm-12" th:value="${detail.id}">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <h2 class="margin_top20 text-center">Actions:</h2>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text-center">
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    <form action="/engineer/addDetailToOrder" th:action="@{/engineer/addDetailToOrder}" method="get">
                                         <input type="hidden" name="orderId" th:value="${order.id}"/>
-                                        <button class="btn btn-danger col-sm-10 col-sm-offset-1" th:value="${detail.id}">Delete</button>
+                                        <a class="btn btn-warning" type="submit">Add detail</a>
                                     </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </div>
+                                <div class="col-sm-6 text-left">
+                                    <form action="/engineer/addActionToOrder" th:action="@{/engineer/addActionToOrder}" method="get">
+                                        <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                        <a class="btn btn-warning" type="submit">Add action</a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
+                            <label class="btn btn-success" for="modal-1">Change status</label>
+                            <label class="btn btn-success" for="modal-2">Change document</label>
+                        </div>
+                    </div>
 
-                </div>
-
-                <div class="panel-body">
-                    <h3>Total cost</h3>
-                    <h3 th:text="${totalCost}"></h3>
-                </div>
-
-                <div class="panel-body" >
-                    <label class="btn btn-warning" for="modal-2">Create Diagnostics</label>
-                    <form action="/engineer/addDetailToOrder" th:action="@{/engineer/addDetailToOrder}" method="get">
-                        <input type="hidden" name="orderId" th:value="${order.id}"/>
-                        <button class="btn btn-success" type="submit">Add detail</button>
-                    </form>
-                    <form action="/engineer/addActionToOrder" th:action="@{/engineer/addActionToOrder}" method="get">
-                        <input type="hidden" name="orderId" th:value="${order.id}"/>
-                        <button class="btn btn-success" type="submit">Add action</button>
-                    </form>
-                    <button class="btn btn-success" type="submit">Create report</button>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="modal-window row">
         <input class="modal-window-open" id="modal-1" type="checkbox" hidden>
@@ -149,7 +163,7 @@
                 <div class="modal-window-body col-sm-12">
                     <form method="post" th:action="@{/engineer/order/changeOrderStatus}" >
                         <div class="row" >
-                            <input type="hidden" name="id" th:value="${workorder.id}"/>
+                            <input type="hidden" name="id" th:value="${order.id}"/>
                             <div class="form-group col-sm-12">
 
                                 <label for="inputStatus" class="col-sm-2 margin_top10 control-label">Status: </label>
@@ -173,41 +187,39 @@
     </div>
 
 
-    <div class="mymodal row">
-        <input class="mymodal-open" id="modal-2" type="checkbox" hidden>
-        <div class="mymodal-wrap" aria-hidden="true" role="dialog">
-            <label class="mymodal-overlay" for="modal-2"></label>
-            <div class="mymodal-dialog">
-                <div class="mymodal-header">
-                    <h2 class="text-center">Change Diagnostics</h2>
-                    <label class="mybtn-close" for="modal-1" aria-hidden="true">×</label>
+    <div class="modal-window row">
+        <input class="modal-window-open" id="modal-2" type="checkbox" hidden>
+        <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+            <label class="modal-window-overlay" for="modal-2"></label>
+            <div class="modal-window-dialog">
+                <div class="modal-window-header">
+                    <h2 class="text-center">Change document</h2>
+                    <label class="mybtn-close" for="modal-2" aria-hidden="true">×</label>
                 </div>
-                <div class="modal-body col-sm-12">
-                    <form method="post" th:action="@{/engineer/order/createDiagnosticsList}" >
+                <div class="modal-window-body col-sm-12">
+                    <form method="post" th:action="@{/engineer/order/createDocument}" >
                         <div class="row" >
-                            <input type="hidden" name="id" th:value="${workorder.id}"/>
+                            <input type="hidden" name="id" th:value="${order.id}"/>
                             <div class="form-group col-sm-12">
 
-                                <label for="inputStatus" class="col-sm-2 margin_top10 control-label">Status: </label>
+                                <label for="inputDocument" class="col-sm-2 margin_top10 control-label">Type: </label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" name="status" id="inputStatus">
-                                        <option value="1">pdf</option>
-                                        <option value="2">xml</option>
-                                        <option value="3">Drisnya</option>
+                                    <select class="form-control" name="document" id="inputDocument">
+                                        <option value="1">Diagnostic list</option>
+                                        <option value="2">Report</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-4 col-sm-offset-2 margin_top20">
-                                    <input type="submit" class="btn btn-success col-sm-12" id="submit_create_diagnostics"  value="Create" />
+                                    <input type="submit" class="btn btn-success col-sm-12" id="submit_create_document"  value="Create" />
                                 </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-
         </div>
-
     </div>
+
 
 
 </div>
