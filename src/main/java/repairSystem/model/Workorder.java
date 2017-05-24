@@ -98,7 +98,7 @@ public class Workorder {
     @Column(name = "problem")
     private String problem;
     public String getProblem(){
-        return description;
+        return problem;
     }
 
     public void setProblem(String problem){

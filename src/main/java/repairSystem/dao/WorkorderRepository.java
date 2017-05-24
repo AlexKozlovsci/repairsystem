@@ -15,6 +15,9 @@ import java.util.List;
 @Repository
 public interface WorkorderRepository extends JpaRepository<Workorder, Long>{
     List<Workorder> findAll();
+
+    @Query(value = "SELECT * FROM workorder WHERE id_manager = :id", nativeQuery = true)
+    List<Workorder> findAllByIdManager(@Param("id") long id);
     Workorder findById(long id);
 
     @Query(value = "SELECT * FROM workorder WHERE id_engineer = :id", nativeQuery = true)

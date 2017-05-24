@@ -4,70 +4,78 @@
     <title>Users</title>
 </head>
 <body>
-<div th:fragment="container">
-    <div class="row">
-        <div class="col-sm-4">
-            <h3 id="head_name">Edit User</h3>
-            <hr id="head_hr" />
-        </div>
+
+    <div th:fragment="header">
+        <ul class="nav navbar-nav" >
+            <li><a href="/admin/users">Manage users<span class="sr-only">(current)</span></a></li>
+            <li><a href="/admin/parts">Manage parts<span class="sr-only">(current)</span></a></li>
+            <li><a href="/admin/prices">Manage prices</a></li>
+        </ul>
     </div>
-
-
-    <form action="/admin/editUser" th:action="@{/admin/editUser}" enctype="multipart/form-data" method="post" class="form-horizontal">
+    <div th:fragment="container">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-default" id="type_tasks">
-                    <div class="panel-body row" >
-                        <input type="hidden" name="id" th:value="${user.id}"/>
-                        <div class="form-group col-sm-6">
-                            <label for="inputName" class="col-sm-4 control-label">Name: </label>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" id="inputName" name="name" placeholder="Name" th:value="${user.name}" required/>
-                            </div>
+            <div class="col-sm-4">
+                <h3 id="head_name">Edit User</h3>
+                <hr id="head_hr" />
+            </div>
+        </div>
 
-                            <label for="inputSername" class="col-sm-4 control-label margin_top20">Sername: </label>
-                            <div class="col-sm-6 margin_top20">
-                                <input type="text" class="form-control" id="inputSername" name="secondname" placeholder="Sername" th:value="${user.secondname}" required/>
-                            </div>
 
-                            <label for="inputPhone" class="col-sm-4 control-label margin_top20">Phone number: </label>
-                            <div class="col-sm-6 margin_top20">
-                                <input type="text" class="form-control" id="inputPhone" name="phoneNumber" placeholder="PhoneNumber" th:value="${user.phoneNumber}"pattern="[0-9_+]+" required/>
-                            </div>
+        <form action="/admin/editUser" th:action="@{/admin/editUser}" enctype="multipart/form-data" method="post" class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default" id="type_tasks">
+                        <div class="panel-body row" >
+                            <input type="hidden" name="id" th:value="${user.id}"/>
+                            <div class="form-group col-sm-6">
+                                <label for="inputName" class="col-sm-4 control-label">Name: </label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Name" th:value="${user.name}" required/>
+                                </div>
 
-                            <label for="inputEmail" class="col-sm-4 control-label margin_top20">Email: </label>
-                            <div class="col-sm-6 margin_top20">
-                                <input type="text" class="form-control" id="inputEmail" name="email" placeholder="Email" th:value="${user.email}" required/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="inputRole" class="col-sm-4 control-label">Role: </label>
-                            <div class="col-sm-6">
-                                <select name="role" class="form-control" id="inputRole">
-                                    <option th:each="role : ${roles}"
-                                            th:value="${role}"
-                                            th:text="${role}"></option>
-                                </select>
-                            </div>
+                                <label for="inputSername" class="col-sm-4 control-label margin_top20">Sername: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputSername" name="secondname" placeholder="Sername" th:value="${user.secondname}" required/>
+                                </div>
 
-                            <label for="inputLogin" class="col-sm-4 control-label margin_top20">Login: </label>
-                            <div class="col-sm-6 margin_top20">
-                                <input type="text" class="form-control" id="inputLogin" name="login" placeholder="Login" th:value="${user.login}" pattern="[A-Za-z0-9_-]+" required/>
-                            </div>
+                                <label for="inputPhone" class="col-sm-4 control-label margin_top20">Phone number: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputPhone" name="phoneNumber" placeholder="PhoneNumber" th:value="${user.phoneNumber}"pattern="[0-9_+]+" required/>
+                                </div>
 
-                            <label for="inputPassword" class="col-sm-4 control-label margin_top20">Password: </label>
-                            <div class="col-sm-6 margin_top20">
-                                <input type="password" class="form-control" id="inputPassword" name="pass" id="password" placeholder="Password" th:value="${pass}" pattern="[A-Za-z0-9]+"/>
+                                <label for="inputEmail" class="col-sm-4 control-label margin_top20">Email: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Email" th:value="${user.email}" required/>
+                                </div>
                             </div>
-                            <div class="col-sm-4 col-sm-offset-5 margin_top20">
-                                <button type="submit" name="editUser" class="btn btn-success col-sm-12">Change</button>
+                            <div class="form-group col-sm-6">
+                                <label for="inputRole" class="col-sm-4 control-label">Role: </label>
+                                <div class="col-sm-6">
+                                    <select name="role" class="form-control" id="inputRole">
+                                        <option th:each="role : ${roles}"
+                                                th:value="${role}"
+                                                th:text="${role}"></option>
+                                    </select>
+                                </div>
+
+                                <label for="inputLogin" class="col-sm-4 control-label margin_top20">Login: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="text" class="form-control" id="inputLogin" name="login" placeholder="Login" th:value="${user.login}" pattern="[A-Za-z0-9_-]+" required/>
+                                </div>
+
+                                <label for="inputPassword" class="col-sm-4 control-label margin_top20">Password: </label>
+                                <div class="col-sm-6 margin_top20">
+                                    <input type="password" class="form-control" id="inputPassword" name="pass" id="password" placeholder="Password" th:value="${pass}" pattern="[A-Za-z0-9]+"/>
+                                </div>
+                                <div class="col-sm-4 col-sm-offset-5 margin_top20">
+                                    <button type="submit" name="editUser" class="btn btn-success col-sm-12">Change</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </body>
 </html>

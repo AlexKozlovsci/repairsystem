@@ -43,8 +43,12 @@ public class ManagerController {
 
     @RequestMapping(value = "/manager/", method = RequestMethod.GET)
     public ModelAndView index(){
+
+        User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        repairSystem.model.User u = userRepository.findByLogin(authUser.getUsername());
+
         ModelAndView mav = new ModelAndView();
-        List<Workorder> workorders = (List<Workorder>) workorderRepository.findAll();
+        List<Workorder> workorders = (List<Workorder>) workorderRepository.findAllByIdManager(u.getId());
         Workorder item;
         Client client;
         repairSystem.model.User engineer;

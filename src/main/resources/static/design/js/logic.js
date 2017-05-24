@@ -26,6 +26,7 @@ $( document ).ready(function(){
             });
     });
 
+
 	/*var add;
 	$("#add_new_project").click(function(){
 		add = $("#add_new_project").detach();
@@ -45,6 +46,7 @@ $( document ).ready(function(){
 
 	});
 
+
 	/*$("#submit_status_change").click(function(){
 		AjaxFormRequest('status_change', '/changeStatus');
 		 return false; 
@@ -52,6 +54,8 @@ $( document ).ready(function(){
 	
 */
 });
+
+
 function AjaxFormRequest(form_id,url) {
     jQuery.ajax({
         url:     url, //Адрес подгружаемой страницы
