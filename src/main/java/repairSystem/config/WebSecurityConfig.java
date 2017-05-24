@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+
     @Bean
     public CustomAuthenticationSuccessHandler successHandler() {
         CustomAuthenticationSuccessHandler successHandler = new CustomAuthenticationSuccessHandler();
@@ -44,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/design/**").permitAll()
+                .antMatchers("/document/**").permitAll()
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/manager/**").access("hasRole('ROLE_MANAGER')")
                 .antMatchers("/engineer/**").access("hasRole('ROLE_ENGINEER')")

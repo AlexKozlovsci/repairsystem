@@ -71,6 +71,9 @@ public class EngineerController {
     @RequestMapping(value = "/engineer/order", method = RequestMethod.GET, params = {"id"})
     public ModelAndView order(@ModelAttribute Workorder workorder, final HttpServletRequest req){
         final Integer orderId = Integer.valueOf(req.getParameter("id"));
+        if (!workorderRepository.existsById(orderId)){
+            return new ModelAndView("404");
+        }
         workorder = (Workorder) workorderRepository.findById(orderId);
         repairSystem.model.User manager = userRepository.findById(workorder.getId_manager());
         String managerName = manager.getName().concat(" ").concat(manager.getSecondname());
@@ -133,13 +136,19 @@ public class EngineerController {
         workorderRepository.save(workorder);
         ModelAndView mav = new ModelAndView();
         Integer temp = (int)orderId;
-        String orderIdstr = temp.toString();
-        return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
+        String id = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(id));
     }
 
     @RequestMapping(value = "/engineer/deleteDetailFromOrder", method = RequestMethod.POST)
     public ModelAndView deleteDetailFromOrder(@ModelAttribute Detail detail, int orderId){
         long id = detail.getId();
+        if (!detailRepository.existsById(id)){
+            return new ModelAndView("404");
+        }
+        if (!workorderRepository.existsById(orderId)){
+            return new ModelAndView("404");
+        }
         Detail detailItem = (Detail) detailRepository.findById(id);
         Workorder workorder = (Workorder) workorderRepository.findById(orderId);
         workorder.details.remove(detailItem);
@@ -219,13 +228,20 @@ public class EngineerController {
         }
         Workorder wo = workorderRepository.findById(workorder.getId());
         wo.setStatus(status);
-        workorderRepository.save(wo);
         ModelAndView mav = new ModelAndView();
-        Integer temp = (int)workorder.getId();
-        String id = temp.toString();
-        String referer = request.getHeader("Referer");
-        mav.setViewName("redirect:"+ referer);
-        return mav;
+        boolean error = false;
+        try{
+            workorderRepository.save(wo);
+        }
+        catch(Exception e){
+            String referer = request.getHeader("Referer");
+            mav.setViewName("redirect:"+ referer);
+            error = true;
+        }
+        finally {
+            mav.addObject("error", error);
+            return mav;
+        }
     }
 
 
