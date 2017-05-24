@@ -81,6 +81,104 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/admin/addUser", method = RequestMethod.GET)
+    public ModelAndView addUser(@ModelAttribute User user){
+        ModelAndView mav = new ModelAndView();
+        List<String> roles = Arrays.asList("admin", "manager", "engineer");
+        String role = "";
+        mav.addObject("role", role);
+        mav.addObject("roles", roles);
+        mav.setViewName("admin/addUser");
+        return mav;
+    }
+
+
+    @RequestMapping(value = "/admin/addUser", method = RequestMethod.POST)
+    public ModelAndView addUser(@ModelAttribute User user, Model model, String role){
+        user.setRole("ROLE_".concat(role.toUpperCase()));
+        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+        user.setPassword(encoder.encodePassword(user.getPassword(),""));
+        ModelAndView mav = new ModelAndView();
+        boolean error = false;
+        mav.setViewName("redirect:/admin/users");
+        try{
+            userRepository.save(user);
+        }
+        catch(Exception e){
+            List<String> roles = Arrays.asList("admin", "manager", "engineer");
+            mav.addObject("roles", roles);
+            error = true;
+            mav.addObject("error", error);
+            mav.setViewName("/admin/addUser");
+        }
+        finally {
+            return mav;
+        }
+    }
+
+    @RequestMapping(value = "/admin/editUser", method = RequestMethod.GET, params = {"id"})
+    public ModelAndView editUser(@ModelAttribute User user, final HttpServletRequest req) {
+        final Integer userId = Integer.valueOf(req.getParameter("id"));
+        if (!userRepository.existsById(userId)){
+            return new ModelAndView("404");
+        }
+        User userItem = (User) userRepository.findById(userId);
+        userItem.setRole(userItem.getRole().substring(5,userItem.getRole().length()).toLowerCase());
+        ModelAndView mav = new ModelAndView();
+        String pass = "";
+        List<String> roles = Arrays.asList("admin", "manager", "engineer");
+        String role = "";
+        mav.addObject("role", role);
+        mav.addObject("roles", roles);
+        mav.addObject("user", userItem);
+        mav.addObject("pass", pass);
+        mav.setViewName("admin/editUser");
+        return mav;
+    }
+
+    @RequestMapping(value = "/admin/editUser", method = RequestMethod.POST)
+    public ModelAndView editUser(@ModelAttribute User user, String pass, String role){
+        user.setRole("ROLE_".concat(role.toUpperCase()));
+        User oldUser = userRepository.findById(user.getId());
+        if(pass.isEmpty()){
+            user.setPassword(oldUser.getPassword());
+        }else{
+            Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+            user.setPassword(encoder.encodePassword(pass, ""));
+        }
+        ModelAndView mav = new ModelAndView();
+        boolean error = false;
+        mav.setViewName("redirect:/admin/users");
+        try{
+            userRepository.save(user);
+        }
+        catch(Exception e){
+            List<String> roles = Arrays.asList("admin", "manager", "engineer");
+            mav.addObject("roles", roles);
+            error = true;
+            mav.addObject("error", error);
+            mav.setViewName("/admin/editUser");
+        }
+        finally {
+            return mav;
+        }
+
+    }
+
+    @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.POST)
+    public ModelAndView deleteUser(@ModelAttribute User user){
+        long id = user.getId();
+        if (!userRepository.existsById(id)){
+            return new ModelAndView("404");
+        }
+        User userItem = (User) userRepository.findById(id);
+        userRepository.delete(userItem);
+        return new ModelAndView("redirect:/admin/users");
+    }
+
+
+
+
     @RequestMapping(value = "/admin/addPart", method = RequestMethod.GET)
     public ModelAndView addPart(@ModelAttribute Detail detail){
         ModelAndView mav = new ModelAndView();
@@ -90,17 +188,29 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/addPart", method = RequestMethod.POST)
     public ModelAndView addPart(@ModelAttribute Detail detail, Model model){
-        detailRepository.save(detail);
-        return new ModelAndView("redirect:/admin/parts");
+        ModelAndView mav = new ModelAndView();
+        boolean error = false;
+        mav.setViewName("redirect:/admin/parts");
+        try{
+            detailRepository.save(detail);
+        }
+        catch(Exception e){
+            error = true;
+            mav.addObject("error", error);
+            mav.setViewName("/admin/addPart");
+        }
+        finally {
+            return mav;
+        }
     }
 
     @RequestMapping(value = "/admin/editPart", method = RequestMethod.GET, params = {"id"})
     public ModelAndView editPart(@ModelAttribute Detail detail, final HttpServletRequest req) {
         final Integer detailId = Integer.valueOf(req.getParameter("id"));
-        Detail det = (Detail) detailRepository.findById(detailId);
-        if (det == null) {
+        if (!detailRepository.existsById(detailId)){
             return new ModelAndView("404");
         }
+        Detail det = (Detail) detailRepository.findById(detailId);
         ModelAndView mav = new ModelAndView();
         mav.addObject("detail", det);
         mav.setViewName("admin/editPart");
@@ -109,25 +219,35 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/editPart", method = RequestMethod.POST)
     public ModelAndView editPart(@ModelAttribute Detail detail){
-        if (detail.getId() != 0){
+        ModelAndView mav = new ModelAndView();
+        boolean error = false;
+        mav.setViewName("redirect:/admin/parts");
+        try{
             detailRepository.save(detail);
-            return new ModelAndView("redirect:/admin/parts");
         }
-        else {
-            return new ModelAndView("404");
+        catch(Exception e){
+            error = true;
+            mav.addObject("error", error);
+            mav.setViewName("/admin/editPart");
+        }
+        finally {
+            return mav;
         }
     }
 
     @RequestMapping(value = "/admin/deletePart", method = RequestMethod.POST)
     public ModelAndView deleteParts(@ModelAttribute Detail detail){
         long id = detail.getId();
-        Detail det = (Detail) detailRepository.findById(id);
-        if (det == null) {
+        if (!detailRepository.existsById(id)){
             return new ModelAndView("404");
         }
+        Detail det = (Detail) detailRepository.findById(id);
         detailRepository.delete(det);
         return new ModelAndView("redirect:/admin/parts");
     }
+
+
+
 
     @RequestMapping(value = "/admin/addPriceItem", method = RequestMethod.GET)
     public ModelAndView addPriceItem(@ModelAttribute Pricelist priceList){
@@ -146,10 +266,10 @@ public class AdminController {
     @RequestMapping(value = "/admin/editPriceItem", method = RequestMethod.GET, params = {"id"})
     public ModelAndView editPriceItem(@ModelAttribute Pricelist priceList, final HttpServletRequest req) {
         final Integer priceItemId = Integer.valueOf(req.getParameter("id"));
-        Pricelist priceItem = (Pricelist) priceListRepository.findById(priceItemId);
-        if (priceItem == null) {
+        if (!priceListRepository.existsById(priceItemId)){
             return new ModelAndView("404");
         }
+        Pricelist priceItem = (Pricelist) priceListRepository.findById(priceItemId);
         ModelAndView mav = new ModelAndView();
         mav.addObject("priceItem", priceItem);
         mav.setViewName("admin/editPriceItem");
@@ -158,99 +278,22 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/editPriceItem", method = RequestMethod.POST)
     public ModelAndView editPriceItem(@ModelAttribute Pricelist priceList){
-        log.info(priceList.getId());
-        if (priceList.getId() != 0){
-            priceListRepository.save(priceList);
-            return new ModelAndView("redirect:/admin/prices");
-        }
-        else {
-            return new ModelAndView("404");
-        }
+        priceListRepository.save(priceList);
+        return new ModelAndView("redirect:/admin/prices");
     }
 
     @RequestMapping(value = "/admin/deletePriceItem", method = RequestMethod.POST)
     public ModelAndView deletePriceItem(@ModelAttribute Pricelist pricelistItem){
         long id = pricelistItem.getId();
-        Pricelist priceItem = (Pricelist) priceListRepository.findById(id);
-        if (priceItem == null) {
+        if (!priceListRepository.existsById(id)){
             return new ModelAndView("404");
         }
+        Pricelist priceItem = (Pricelist) priceListRepository.findById(id);
         priceListRepository.delete(priceItem);
         return new ModelAndView("redirect:/admin/prices");
     }
 
-    @RequestMapping(value = "/admin/addUser", method = RequestMethod.GET)
-    public ModelAndView addUser(@ModelAttribute User user){
-        ModelAndView mav = new ModelAndView();
-        List<String> roles = Arrays.asList("admin", "manager", "engineer");
-        String role = "";
-        mav.addObject("role", role);
-        mav.addObject("roles", roles);
-        mav.setViewName("admin/addUser");
-        return mav;
-    }
 
-    @RequestMapping(value = "/admin/addUser", method = RequestMethod.POST)
-    public ModelAndView addUser(@ModelAttribute User user, Model model, String role){
-        user.setRole("ROLE_".concat(role.toUpperCase()));
-        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        user.setPassword(encoder.encodePassword(user.getPassword(),""));
-        userRepository.save(user);
-        return new ModelAndView("redirect:/admin/users");
-    }
-
-
-    @RequestMapping(value = "/admin/editUser", method = RequestMethod.GET, params = {"id"})
-    public ModelAndView editUser(@ModelAttribute User user, final HttpServletRequest req) {
-        final Integer userId = Integer.valueOf(req.getParameter("id"));
-        User userItem = (User) userRepository.findById(userId);
-        userItem.setRole(userItem.getRole().substring(5,userItem.getRole().length()).toLowerCase());
-        if (userItem == null) {
-            return new ModelAndView("404");
-        }
-        ModelAndView mav = new ModelAndView();
-        String pass = "";
-        List<String> roles = Arrays.asList("admin", "manager", "engineer");
-        String role = "";
-        mav.addObject("role", role);
-        mav.addObject("roles", roles);
-        mav.addObject("user", userItem);
-        mav.addObject("pass", pass);
-        mav.setViewName("admin/editUser");
-        return mav;
-    }
-
-    @RequestMapping(value = "/admin/editUser", method = RequestMethod.POST)
-    public ModelAndView editUser(@ModelAttribute User user, String pass, String role){
-    log.info(pass);
-        if (user.getId() != 0){
-            user.setRole("ROLE_".concat(role.toUpperCase()));
-            User oldUser = userRepository.findById(user.getId());
-            if(pass.isEmpty()){
-                user.setPassword(oldUser.getPassword());
-            }else{
-                Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-                user.setPassword(encoder.encodePassword(pass, ""));
-            }
-            userRepository.save(user);
-            return new ModelAndView("redirect:/admin/users");
-        }
-        else {
-            return new ModelAndView("404");
-        }
-    }
-
-
-    @RequestMapping(value = "/admin/deleteUser", method = RequestMethod.POST)
-    public ModelAndView deleteUser(@ModelAttribute User user){
-        long id = user.getId();
-        User userItem = (User) userRepository.findById(id);
-        if (userItem == null) {
-            return new ModelAndView("404");
-        }
-        userRepository.delete(userItem);
-        return new ModelAndView("redirect:/admin/users");
-    }
 
     @RequestMapping(value="/admin/logout", method = RequestMethod.GET)
     public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
