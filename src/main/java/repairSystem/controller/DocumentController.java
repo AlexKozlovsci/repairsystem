@@ -3,9 +3,11 @@ package repairSystem.controller;
 
 import com.itextpdf.text.DocumentException;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import repairSystem.dao.PricelistRepository;
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
 import repairSystem.documentGeneration.XLSGeneration;
@@ -26,13 +28,15 @@ public class DocumentController {
 
     private static final Logger log = Logger.getLogger(AdminController.class);
 
+    @Autowired
+    private PricelistRepository pricelistRepository;
     private CSVGeneration csvGen = new CSVGeneration();
 
 
     @RequestMapping(value = "/document/getcsv", method = RequestMethod.GET)
     public void getCsv(final HttpServletRequest request,
             final HttpServletResponse response) throws IOException {
-        ByteArrayOutputStream stream = csvGen.generateCSV();
+        ByteArrayOutputStream stream = csvGen.generateCSV(pricelistRepository);
         response.setContentType("application/csv");
         response.setContentLength(stream.toByteArray().length);
 
@@ -54,7 +58,6 @@ public class DocumentController {
 
         response.setContentType("application/xls");
         response.setContentLength(XLSGeneration.generateSomeXLS().toByteArray().length);
-
         String headerKey = "Content-Disposition";
         String headerValue = String.format("attachment; filename=\"%s\"",
                 "someFileName.xls");

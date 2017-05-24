@@ -2,7 +2,6 @@ package repairSystem.documentGeneration;
 
 import com.opencsv.CSVWriter;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.model.Pricelist;
 
@@ -20,13 +19,13 @@ import java.util.List;
 
 public class CSVGeneration {
 
-    @Autowired
     private PricelistRepository pricelistRepository;
 
     private static final Logger log = Logger.getLogger(CSVGeneration.class);
 
 
-    public ByteArrayOutputStream generateCSV() throws IOException {
+    public ByteArrayOutputStream generateCSV(PricelistRepository psr) throws IOException {
+        pricelistRepository = psr;
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         OutputStreamWriter osw = new OutputStreamWriter(stream, Charset.forName("cp1251"));
