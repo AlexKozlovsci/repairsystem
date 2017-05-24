@@ -5,9 +5,7 @@ package repairSystem.model;
  */
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -33,7 +31,7 @@ public class Workorder {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "order_detail", joinColumns = @JoinColumn(name = "id_order", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_detail", referencedColumnName = "id"))
-    private Set<Detail> details;
+    public Set<Detail> details;
     public Set<Detail> getDetail() {
         return details;
     }
@@ -44,7 +42,7 @@ public class Workorder {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "order_pricelist", joinColumns = @JoinColumn(name = "id_order", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "id_pricelist", referencedColumnName = "id"))
-    private Set<Pricelist> pricelists;
+    public Set<Pricelist> pricelists;
     public Set<Pricelist> getPricelists() {
         return pricelists;
     }
