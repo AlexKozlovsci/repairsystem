@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import repairSystem.config.CheckboxModel;
 import repairSystem.dao.*;
 import repairSystem.model.Detail;
 import repairSystem.model.Pricelist;
@@ -105,42 +106,38 @@ public class EngineerController {
     @RequestMapping(value = "/engineer/addDetailToOrder", method = RequestMethod.GET)
     public ModelAndView addDetailToOrder(@ModelAttribute  Detail detail, int orderId){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("engineer/addDetailToOrder");
-        mav.addObject("detail", detail);
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        List<Detail> parts = (List<Detail>) detailRepository.findAll();
+        Set<Detail> existDetails = workorder.getDetail();
+        for (Detail detailItem: existDetails) {
+            if (parts.contains(detailItem)) {
+                parts.remove(detailItem);
+            }
+        }
+        CheckboxModel checkboxModel = new CheckboxModel();
+        mav.addObject("checkboxModel", checkboxModel);
+        mav.addObject("parts", parts);
         mav.addObject("orderId", orderId);
+        mav.setViewName("/engineer/addDetailToOrder");
         return mav;
     }
 
     @RequestMapping(value = "/engineer/addDetailToOrder", method = RequestMethod.POST)
-    public ModelAndView addDetailToOrder(@ModelAttribute Detail detail, int orderId, Model model){
+    public ModelAndView addDetailToOrder(@ModelAttribute(value="checkboxModel") CheckboxModel checkboxModel, int orderId, Model model){
+        List<String> checkedItems = checkboxModel.getCheckedItems();
         Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        Detail detailItem;
         Set<Detail> details = new HashSet<Detail>(workorder.getDetail());
-        details.add(detail);
+        for (String id:checkedItems) {
+            detailItem = (Detail) detailRepository.findById(Integer.parseInt(id));
+            details.add(detailItem);
+        }
         workorder.setDetail(details);
         workorderRepository.save(workorder);
+        ModelAndView mav = new ModelAndView();
         Integer temp = (int)orderId;
         String id = temp.toString();
         return new ModelAndView("redirect:/engineer/order?id=".concat(id));
-    }
-
-    @RequestMapping(value = "/engineer/deleteActionFromOrder", method = RequestMethod.POST)
-    public ModelAndView deleteActionFromOrder(@ModelAttribute Pricelist priceList, int orderId){
-        long id = priceList.getId();
-        if (!detailRepository.existsById(id)){
-            return new ModelAndView("404");
-        }
-        if (!workorderRepository.existsById(orderId)){
-            return new ModelAndView("404");
-        }
-        Pricelist actionItem = (Pricelist) pricelistRepository.findById(id);
-        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
-        for (Workorder orderAction : actionItem.workorder) {
-            orderAction.pricelists.remove(actionItem);
-        }
-        pricelistRepository.delete(actionItem);
-        Integer temp = (int)orderId;
-        String orderIdstr = temp.toString();
-        return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
     }
 
     @RequestMapping(value = "/engineer/deleteDetailFromOrder", method = RequestMethod.POST)
@@ -154,10 +151,20 @@ public class EngineerController {
         }
         Detail detailItem = (Detail) detailRepository.findById(id);
         Workorder workorder = (Workorder) workorderRepository.findById(orderId);
-        for (Workorder orderDetail : detailItem.workorder) {
-            orderDetail.details.remove(detailItem);
-        }
-        detailRepository.delete(detailItem);
+        workorder.details.remove(detailItem);
+        workorderRepository.save(workorder);
+        Integer temp = (int)orderId;
+        String orderIdstr = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
+    }
+
+    @RequestMapping(value = "/engineer/deleteActionFromOrder", method = RequestMethod.POST)
+    public ModelAndView deleteActionFromOrder(@ModelAttribute Pricelist priceList, int orderId){
+        long id = priceList.getId();
+        Pricelist actionItem = (Pricelist) pricelistRepository.findById(id);
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        workorder.pricelists.remove(actionItem);
+        workorderRepository.save(workorder);
         Integer temp = (int)orderId;
         String orderIdstr = temp.toString();
         return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
@@ -166,22 +173,38 @@ public class EngineerController {
     @RequestMapping(value = "/engineer/addActionToOrder", method = RequestMethod.GET)
     public ModelAndView addActionToOrder(@ModelAttribute  Pricelist priceList, int orderId){
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("engineer/addActionToOrder");
-        mav.addObject("priceList", priceList);
+        Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        List<Pricelist> action = (List<Pricelist>) pricelistRepository.findAll();
+        Set<Pricelist> existActions = workorder.getPricelists();
+        for (Pricelist actionItem: existActions) {
+            if (action.contains(actionItem)) {
+                action.remove(actionItem);
+            }
+        }
+        CheckboxModel checkboxModel = new CheckboxModel();
+        mav.addObject("checkboxModel", checkboxModel);
+        mav.addObject("prices", action);
         mav.addObject("orderId", orderId);
+        mav.setViewName("/engineer/addActionToOrder");
         return mav;
     }
 
     @RequestMapping(value = "/engineer/addActionToOrder", method = RequestMethod.POST)
-    public ModelAndView addActionToOrder(@ModelAttribute Pricelist priceList, int orderId, Model model){
+    public ModelAndView addActionToOrder(@ModelAttribute(value="checkboxModel") CheckboxModel checkboxModel, int orderId, Model model){
+        List<String> checkedItems = checkboxModel.getCheckedItems();
         Workorder workorder = (Workorder) workorderRepository.findById(orderId);
+        Pricelist actionItem;
         Set<Pricelist> actions = new HashSet<Pricelist>(workorder.getPricelists());
-        actions.add(priceList);
+        for (String id:checkedItems) {
+            actionItem = (Pricelist) pricelistRepository.findById(Integer.parseInt(id));
+            actions.add(actionItem);
+        }
         workorder.setPricelists(actions);
         workorderRepository.save(workorder);
+        ModelAndView mav = new ModelAndView();
         Integer temp = (int)orderId;
-        String id = temp.toString();
-        return new ModelAndView("redirect:/engineer/order?id=".concat(id));
+        String orderIdstr = temp.toString();
+        return new ModelAndView("redirect:/engineer/order?id=".concat(orderIdstr));
     }
 
     @RequestMapping(value = "/engineer/order/changeOrderStatus", method = RequestMethod.POST)
