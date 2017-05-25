@@ -30,19 +30,19 @@ public class AdminControllerTest {
 
 
     @Test
-    public void TestTimeoutMinutes() {
+    public void testTimeoutMinutes() {
         assertTimeout(ofMinutes(2), () -> {
         });
     }
 
     @Test
-    public void TestTimeoutMillis() {
+    public void testTimeoutMillis() {
         assertTimeout(ofMillis(2), () -> {
         });
     }
 
     @Test
-    public void TestUserNullException() throws NullPointerException {
+    public void testUserNullException() throws NullPointerException {
         repairSystem.model.User u = new repairSystem.model.User();
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             userRepository.save(u);
@@ -51,7 +51,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestPricelistNullException() throws NullPointerException {
+    public void testPricelistNullException() throws NullPointerException {
         Pricelist price = new Pricelist();
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             priceListRepository.save(price);
@@ -60,7 +60,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestDetailNullException() throws NullPointerException {
+    public void testDetailNullException() throws NullPointerException {
         Detail detail = new Detail();
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             detailRepository.save(detail);
@@ -69,7 +69,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    void TestUserName() {
+    void testUserName() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setName("Admin");
         assertEquals("Admin", u.getName());
@@ -84,14 +84,14 @@ public class AdminControllerTest {
     }
 
     @Test
-    void TestUserLogin() {
+    void testUserLogin() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setLogin("Lexa");
         assertEquals("Lexa", u.getLogin());
     }
 
     @Test
-    public void TestUser() {
+    public void testUser() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setLogin("Administrator");
         u.setName("yura");
@@ -112,15 +112,15 @@ public class AdminControllerTest {
                 () -> assertNotEquals("tipo zvezdochki", u.getPassword()));
     }
     @Test
-    public void TestText() {
-        System.out.println("test");
+    public void testText() {
+        System.out.println("");
     }
 
     @Test
-    public void TestNullUser() {
+    public void testNullUser() {
         repairSystem.model.User u = new repairSystem.model.User();
         assertAll("user",
-                () -> assertNotNull(u.getId()),
+                () -> assertEquals(0,u.getId()),
                 () -> assertNull(u.getLogin()),
                 () -> assertNull(u.getName()),
                 () -> assertNull(u.getEmail()),
@@ -131,91 +131,91 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestModelViewIndex() {
+    public void testModelViewIndex() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/index");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewParts() {
+    public void testModelViewParts() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/parts");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewPrices() {
+    public void testModelViewPrices() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/prices");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewUsers() {
+    public void testModelViewUsers() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/users");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewAddPart() {
+    public void testModelViewAddPart() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/addPart");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewEditPart() {
+    public void testModelViewEditPart() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("admin/editPart");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewAddPriceItem() {
+    public void testModelViewAddPriceItem() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("manager/addPriceItem");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewEditPriceItem() {
+    public void testModelViewEditPriceItem() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("manager/editPriceItem");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewAddUser() {
+    public void testModelViewAddUser() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("manager/addUser");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewEditUser() {
+    public void testModelViewEditUser() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("manager/editUser");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewLogout() {
+    public void testModelViewLogout() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("/auth/login");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewNotFound() {
+    public void testModelViewNotFound() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("404");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestUserIdIllegalArgument() throws NullPointerException {
+    public void testUserIdIllegalArgument() throws NullPointerException {
         repairSystem.model.User u = new repairSystem.model.User();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             u.setId(Long.parseLong("9.25"));
@@ -227,7 +227,7 @@ public class AdminControllerTest {
 
     @Test
 
-    public void TestAddUser() {
+    public void testAddUser() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setId(100);
         u.setLogin("Administrator");
@@ -249,14 +249,14 @@ public class AdminControllerTest {
     }
 
     @Test
-    void TestDetailName() {
+    void testDetailName() {
         Detail detail = new Detail();
         detail.setName("screen");
         assertEquals("screen", detail.getName());
     }
 
     @Test
-    public void TestDetail() {
+    public void testDetail() {
         Detail detail = new Detail();
         detail.setName("screen");
         detail.setCost(10);
@@ -268,16 +268,16 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestNullDetail() {
+    public void testNullDetail() {
         Detail detail = new Detail();
         assertAll("user",
-                () -> assertNotNull(detail.getId()),
+                () -> assertEquals(0,detail.getId()),
                 () -> assertNull(detail.getName()),
-                () -> assertNotNull(detail.getCost()),
-                () -> assertNotNull(detail.getCount()));
+                () -> assertEquals(0,detail.getCost()),
+                () -> assertEquals(0,detail.getCount()));
 }
     @Test
-    public void TestDetailIdIllegalArgument() throws NullPointerException {
+    public void testDetailIdIllegalArgument() throws NullPointerException {
         Detail detail = new Detail();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             detail.setId(Long.parseLong("9.25"));
@@ -285,7 +285,7 @@ public class AdminControllerTest {
         assertNotNull(thrown.getMessage());
     }
     @Test
-    public void TestDetailCountIllegalArgument() throws NullPointerException {
+    public void testDetailCountIllegalArgument() throws NullPointerException {
         Detail detail = new Detail();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             detail.setCount(Long.parseLong("10.5"));
@@ -293,7 +293,7 @@ public class AdminControllerTest {
         assertNotNull(thrown.getMessage());
     }
     @Test
-    public void TestDetailCostIllegalArgument() throws NullPointerException {
+    public void testDetailCostIllegalArgument() throws NullPointerException {
         Detail detail = new Detail();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             detail.setCost(Long.parseLong("99.99"));
@@ -302,7 +302,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestAddDetail() {
+    public void testAddDetail() {
         Detail detail = new Detail();
         detail.setId(100);
         detail.setName("screen");
@@ -318,14 +318,14 @@ public class AdminControllerTest {
     }
 
     @Test
-    void TestPriceListDevice() {
+    void testPriceListDevice() {
         Pricelist pricelist = new Pricelist();
         pricelist.setDeviceType("IPhone");
         assertEquals("IPhone", pricelist.getDeviceType());
     }
 
     @Test
-    public void TestPriceList() {
+    public void testPriceList() {
         Pricelist pricelist = new Pricelist();
         pricelist.setDeviceType("IPhone");
         pricelist.setCost(10);
@@ -337,7 +337,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestNullPriceList() {
+    public void testNullPriceList() {
         Pricelist pricelist = new Pricelist();
         assertAll("PriceList",
                 () -> assertNotNull(pricelist.getId()),
@@ -346,7 +346,7 @@ public class AdminControllerTest {
                 () -> assertNull(pricelist.getAction()));
     }
     @Test
-    public void TestPriceListIdIllegalArgument() throws NullPointerException {
+    public void testPriceListIdIllegalArgument() throws NullPointerException {
         Pricelist pricelist = new Pricelist();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             pricelist.setId(Long.parseLong("9.25"));
@@ -355,7 +355,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestPriceListCostIllegalArgument() throws NullPointerException {
+    public void testPriceListCostIllegalArgument() throws NullPointerException {
         Pricelist pricelist = new Pricelist();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             pricelist.setCost(Long.parseLong("50.96"));
@@ -364,7 +364,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestAddPriceList() {
+    public void testAddPriceList() {
         Pricelist pricelist = new Pricelist();
         pricelist.setId(100);
         pricelist.setDeviceType("IPhone");
@@ -380,7 +380,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestDisplayDetail() {
+    public void testDisplayDetail() {
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             List<Detail> details = (List<Detail>) detailRepository.findAll();
         });
@@ -389,7 +389,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestDisplayUser() {
+    public void testDisplayUser() {
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             List<User> users = (List<User>) userRepository.findAll();
         });
@@ -398,7 +398,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestDisplayPriceList() {
+    public void testDisplayPriceList() {
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             List<Pricelist> users = (List<Pricelist>) priceListRepository.findAll();
         });
@@ -406,7 +406,7 @@ public class AdminControllerTest {
 
     }
     @Test
-    public void TestDeleteUser() {
+    public void testDeleteUser() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setId(100);
         u.setLogin("Administrator");
@@ -430,7 +430,7 @@ public class AdminControllerTest {
     }
 
     @Test
-    public void TestDeletePriceList() {
+    public void testDeletePriceList() {
         Pricelist pricelist = new Pricelist();
         pricelist.setId(100);
         pricelist.setDeviceType("IPhone");
@@ -447,7 +447,7 @@ public class AdminControllerTest {
         assertThrows(NullPointerException.class, () -> priceListRepository.findById(100));
     }
     @Test
-    public void TestDeleteDetail() {
+    public void testDeleteDetail() {
         Detail detail = new Detail();
         detail.setId(100);
         detail.setName("screen");

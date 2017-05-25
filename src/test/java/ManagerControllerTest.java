@@ -1,5 +1,9 @@
+import org.junit.After;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ExtendedModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.ClientRepository;
 import repairSystem.dao.UserRepository;
@@ -29,25 +33,36 @@ class ManagerControllerTest {
     @Autowired
     private ClientRepository clientRepository;
 
+    private Model model;
+
+    @Before
+    public void setUp() throws Exception {
+        model = new ExtendedModelMap();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+    }
+
     @Test
-        public void Test() {
-            System.out.println("test");
+        public void test() {
+            System.out.println("");
         }
 
         @Test
-        public void TestTimeoutMinutes() {
+        public void testTimeoutMinutes() {
             assertTimeout(ofMinutes(2), () -> {
             });
         }
 
         @Test
-        public void TestTimeoutMillis() {
+        public void testTimeoutMillis() {
             assertTimeout(ofMillis(2), () -> {
             });
         }
 
         @Test
-        public void TestUserNullException() throws NullPointerException {
+        public void testUserNullException() throws NullPointerException {
             repairSystem.model.User u = new repairSystem.model.User();
             Throwable thrown = assertThrows(NullPointerException.class, () -> {
                 userRepository.save(u);
@@ -56,7 +71,7 @@ class ManagerControllerTest {
         }
 
         @Test
-        public void TestWorkOrdersNullException() throws NullPointerException {
+        public void testWorkOrdersNullException() throws NullPointerException {
             Workorder workorder = new Workorder();
             Throwable thrown = assertThrows(NullPointerException.class, () -> {
                 workorderRepository.save(workorder);
@@ -65,7 +80,7 @@ class ManagerControllerTest {
         }
 
         @Test
-        public void TestClientNullException() throws NullPointerException {
+        public void testClientNullException() throws NullPointerException {
             Client client = new Client();
             Throwable thrown = assertThrows(NullPointerException.class, () -> {
                 clientRepository.save(client);
@@ -74,14 +89,14 @@ class ManagerControllerTest {
         }
 
         @Test
-        void TestName() {
+        void testName() {
             repairSystem.model.User u = new repairSystem.model.User();
             u.setName("manager");
             assertEquals("manager", u.getName());
         }
 
         @Test
-        void TestException() {
+        void testException() {
             Throwable exception = assertThrows(IllegalArgumentException.class, () -> {
                 throw new IllegalArgumentException("a message");
             });
@@ -89,70 +104,74 @@ class ManagerControllerTest {
         }
 
         @Test
-        void TestUserLogin() {
+        void testUserLogin() {
             repairSystem.model.User u = new repairSystem.model.User();
             u.setLogin("Vlad");
             assertEquals("Vlad", u.getLogin());
         }
 
         @Test
-        public void TestWorkOrder() {
+        public void testWorkOrder() {
             Workorder workorder = new Workorder();
-            workorder.setId_client(1);
-            workorder.setComplete_at("");
-            workorder.setDescription("");
+            workorder.setId_client(7);
+            workorder.setComplete_at("24.12.2005");
+            workorder.setDescription("blabla");
             workorder.setId_engineer(1);
             workorder.setId_manager(1);
-            workorder.setProblem("");
-            workorder.setStatus("");
-            workorder.setCreate_at("");
+            workorder.setProblem("i'ts work");
+            workorder.setStatus("close");
+            workorder.setCreate_at("23.12.2005");
             assertAll("workorder",
-                    () -> assertEquals(1, workorder.getId_client()),
-                    () -> assertEquals("", workorder.getComplete_at()),
-                    () -> assertEquals("", workorder.getDescription()),
+                    () -> assertEquals(7, workorder.getId_client()),
+                    () -> assertEquals("24.12.2005", workorder.getComplete_at()),
+                    () -> assertEquals("blabla", workorder.getDescription()),
                     () -> assertEquals(1, workorder.getId_engineer()),
                     () -> assertEquals(1, workorder.getId_manager()),
-                    () -> assertEquals("", workorder.getProblem()),
-                    () -> assertEquals("", workorder.getStatus()),
-                    () -> assertEquals("", workorder.getCreate_at()));
+                    () -> assertEquals("i'ts work", workorder.getProblem()),
+                    () -> assertEquals("close", workorder.getStatus()),
+                    () -> assertEquals("23.12.2005", workorder.getCreate_at()));
         }
 
         @Test
-        public void TestNullOrder() {
+        public void testNullOrder() {
             Workorder workorder = new Workorder();
             assertAll("workorder",
-                    () -> assertNotNull(workorder.getId()),
+                    () -> assertEquals(0,workorder.getId()),
                     () -> assertNull(workorder.getComplete_at()),
                     () -> assertNull(workorder.getDescription()),
-                    () -> assertNotNull(workorder.getId_engineer()),
-                    () -> assertNotNull(workorder.getId_manager()),
+                    () -> assertEquals(0,workorder.getId_engineer()),
+                    () -> assertEquals(0,workorder.getId_manager()),
                     () -> assertNull(workorder.getProblem()),
                     () -> assertNull(workorder.getStatus()),
                     () -> assertNull(workorder.getCreate_at()));
         }
 
         @Test
-        public void TestModelViewIndex() {
+        public void testModelViewIndex() {
+            //Workorder wo = new Workorder();
+           // Client client = new Client();
+           // HttpServletRequest request;
+            //String result = ManagerController.index();
             ModelAndView mav = new ModelAndView();
             mav.setViewName("manager/index");
             assertNotNull(mav);
         }
 
         @Test
-        public void TestModelViewAddOrder() {
+        public void testModelViewAddOrder() {
             ModelAndView mav = new ModelAndView();
             mav.setViewName("manager/addOrder");
             assertNotNull(mav);
         }
 
         @Test
-        public void TestModelViewEditOrder() {
+        public void testModelViewEditOrder() {
             ModelAndView mav = new ModelAndView();
             mav.setViewName("manager/editOrder");
             assertNotNull(mav);
         }
     @Test
-    public void TestModelViewLogout() {
+    public void testModelViewLogout() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("/auth/login");
         assertNotNull(mav);
@@ -160,14 +179,14 @@ class ManagerControllerTest {
 
 
         @Test
-        public void TestModelViewNotFound() {
+        public void testModelViewNotFound() {
             ModelAndView mav = new ModelAndView();
             mav.setViewName("404");
             assertNotNull(mav);
         }
 
         @Test
-        public void TestWorkOrdersIdIllegalArgument() throws NullPointerException {
+        public void testWorkOrdersIdIllegalArgument() throws NullPointerException {
             Workorder workorder = new Workorder();
             Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
                 workorder.setId(Long.parseLong("9.25"));
@@ -176,7 +195,7 @@ class ManagerControllerTest {
         }
 
         @Test
-        public void TestWorkOrdersIdClientIllegalArgument() throws NullPointerException {
+        public void testWorkOrdersIdClientIllegalArgument() throws NullPointerException {
             Workorder workorder = new Workorder();
             Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
                 workorder.setId_client(Long.parseLong("11.55"));
@@ -185,7 +204,7 @@ class ManagerControllerTest {
         }
 
         @Test
-        public void TestWorkOrdersIdManagerIllegalArgument() throws NullPointerException {
+        public void testWorkOrdersIdManagerIllegalArgument() throws NullPointerException {
             Workorder workorder = new Workorder();
             Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
                 workorder.setId_manager(Long.parseLong("27.15"));
@@ -194,7 +213,7 @@ class ManagerControllerTest {
         }
 
         @Test
-        public void TestWorkOrdersIdEngineerIllegalArgument() throws NullPointerException {
+        public void testWorkOrdersIdEngineerIllegalArgument() throws NullPointerException {
             Workorder workorder = new Workorder();
             Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
                 workorder.setId_engineer(Long.parseLong("hello"));
@@ -204,7 +223,7 @@ class ManagerControllerTest {
 
         @Test
 
-        public void TestAddWorkOrder() {
+        public void testAddWorkOrder() {
             Workorder workorder = new Workorder();
             workorder.setId(100);
             workorder.setId_client(1);
@@ -223,7 +242,7 @@ class ManagerControllerTest {
             assertNull(thrown2.getMessage());
     }
     @Test
-    public void TestDisplayUserEngineers() {
+    public void testDisplayUserEngineers() {
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             List<User> engineers = (List<repairSystem.model.User>) userRepository.findAllByRole("ROLE_ENGINEER");;
         });
@@ -232,7 +251,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestClient() {
+    public void testClient() {
         Client client = new Client();
         client.setName("Gleb");
         client.setSecondname("Legchilov");
@@ -248,18 +267,18 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestNullClient() {
+    public void testNullClient() {
         Client client = new Client();
         assertAll("Client",
-                () -> assertNotNull(client.getId()),
+                () -> assertEquals(0,client.getId()),
                 () -> assertNull(client.getName()),
                 () -> assertNull(client.getSecondname()),
-                () -> assertNotNull(client.getDiscount()),
+                () -> assertEquals(0,client.getDiscount()),
                 () -> assertNull(client.getEmail()),
                 () -> assertNull(client.getPhone_number()));
     }
     @Test
-    public void TestClientIdIllegalArgument() throws NullPointerException {
+    public void testClientIdIllegalArgument() throws NullPointerException {
         Client client = new Client();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             client.setId(Long.parseLong("14.2"));
@@ -268,7 +287,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestClientDiscountIllegalArgument() throws NullPointerException {
+    public void testClientDiscountIllegalArgument() throws NullPointerException {
         Client client = new Client();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             client.setDiscount(Long.parseLong("99.99"));
@@ -277,7 +296,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestAddClient() {
+    public void testAddClient() {
         Client client = new Client();
         client.setName("Gleb");
         client.setSecondname("Legchilov");
@@ -294,7 +313,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestDeleteClient() {
+    public void testDeleteClient() {
         Client client = new Client();
         client.setId(100);
         client.setName("Gleb");
@@ -314,7 +333,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestDeleteWorkorder() {
+    public void testDeleteWorkorder() {
         Workorder workorder = new Workorder();
         workorder.setId(100);
         workorder.setId_client(1);
@@ -336,7 +355,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    public void TestChangeEngineer() {
+    public void testChangeEngineer() {
         Workorder workorder = new Workorder();
         workorder.setId(100);
         workorder.setId_client(1);
