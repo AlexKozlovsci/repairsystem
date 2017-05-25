@@ -6,8 +6,10 @@ import org.apache.log4j.Logger;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.dao.DetailRepository;
 import repairSystem.dao.PricelistRepository;
-import repairSystem.dao.UserRepository;
 import repairSystem.dao.WorkorderRepository;
+import repairSystem.model.Pricelist;
+import repairSystem.dao.UserRepository;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -51,6 +53,20 @@ public class CSVGeneration {
         OutputStreamWriter osw = new OutputStreamWriter(stream, Charset.forName("cp1251"));
         CSVWriter writer = new CSVWriter(osw, ',');
         writer.writeNext(new String[]{fileName});
+        writer.writeAll(dataToWrite);
+        writer.close();
+        return stream;
+    }
+
+    public ByteArrayOutputStream generateDetailsList(JpaRepository psr,int orderid) throws IOException, DocumentException {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        OutputStreamWriter osw = new OutputStreamWriter(stream, Charset.forName("cp1251"));
+        CSVWriter writer = new CSVWriter(osw, ',');
+
+        List<String[]> dataToWrite = DataLoad.getDetailList((WorkorderRepository)psr,orderid);
+        writer.writeNext(new String[]{"Detail List"});
+        writer.writeNext(new String[]{"Order number: ",String.valueOf(orderid)});
         writer.writeAll(dataToWrite);
         writer.close();
         return stream;

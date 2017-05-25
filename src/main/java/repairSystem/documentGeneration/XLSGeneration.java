@@ -10,6 +10,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.dao.DetailRepository;
 import repairSystem.dao.PricelistRepository;
+
+import repairSystem.dao.WorkorderRepository;
+import repairSystem.model.Detail;
+import repairSystem.model.Pricelist;
+
 import repairSystem.dao.UserRepository;
 import repairSystem.dao.WorkorderRepository;
 
@@ -69,5 +74,34 @@ public class XLSGeneration {
         return stream;
     }
 
+    public ByteArrayOutputStream generateDetailList(JpaRepository psr, String sheetName, int orderid) throws FileNotFoundException, IOException, DocumentException {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        Workbook book = new HSSFWorkbook();
+        Sheet sheet = book.createSheet(sheetName);
+        List<String[]> detail = DataLoad.getDetailList( (WorkorderRepository)psr,orderid);
+        int j = 0;
+        int i = 0;
+        Row row = sheet.createRow(j++);
+        Cell name = row.createCell(i++);
+        name.setCellValue("Order number ");
+        name = row.createCell(i++);
+        name.setCellValue(orderid);
+        name = row.createCell(i++);
+        for (String[] str: detail) {
+            row = sheet.createRow(j++);
+            i = 0;
+            for (String elem: str){
+                name = row.createCell(i++);
+                name.setCellValue(elem);
+            }
+        }
+
+        sheet.autoSizeColumn(0);
+        sheet.autoSizeColumn(1);
+        sheet.autoSizeColumn(2);
+        book.write(stream);
+        book.close();
+        return stream;
+    }
 
 }
