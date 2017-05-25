@@ -4,12 +4,13 @@ package repairSystem.controller;
 import com.itextpdf.text.DocumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import repairSystem.dao.DetailRepository;
 import repairSystem.dao.PricelistRepository;
+import repairSystem.dao.UserRepository;
+import repairSystem.dao.WorkorderRepository;
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
 import repairSystem.documentGeneration.XLSGeneration;
@@ -34,6 +35,17 @@ public class DocumentController {
 
     @Autowired
     private PricelistRepository pricelistRepository;
+
+    @Autowired
+    private WorkorderRepository workorderRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DetailRepository detailRepository;
+
+
     private CSVGeneration csvGen = new CSVGeneration();
     private XLSGeneration xlsGen = new XLSGeneration();
     private PDFGeneration pdfGen = new PDFGeneration();
@@ -47,10 +59,35 @@ public class DocumentController {
 
 
     @RequestMapping(value = "/document/csv/getpricelist", method = RequestMethod.GET)
-    public void getPriceList(final HttpServletRequest request,
+    public void getPriceListcsv(final HttpServletRequest request,
             final HttpServletResponse response) throws IOException, DocumentException {
 
-        getCsv(response, csvGen.generatePricelist(pricelistRepository), "PriceList".concat("_").concat(curTime).concat(".csv"));
+        String fileName = "PriceList";
+        getCsv(response, csvGen.generatePricelist(pricelistRepository, fileName), fileName.concat(" ").concat(curTime).concat(".csv"));
+    }
+
+    @RequestMapping(value = "/document/csv/getmonthreport", method = RequestMethod.GET)
+    public void getMonthReportcsv(final HttpServletRequest request,
+                             final HttpServletResponse response) throws IOException, DocumentException {
+
+        String fileName =  "Month report";
+        getCsv(response, csvGen.generateMonthReport(workorderRepository, userRepository, fileName), fileName.concat(" ").concat(curTime).concat(".csv"));
+    }
+
+    @RequestMapping(value = "/document/csv/getprocurementsheet", method = RequestMethod.GET)
+    public void getProcurementSheetcsv(final HttpServletRequest request,
+                                  final HttpServletResponse response) throws IOException, DocumentException {
+
+        String fileName =  "Procurement sheet";
+        getCsv(response, csvGen.generateProcurementSheet(detailRepository, fileName), fileName.concat(" ").concat(curTime).concat(".csv"));
+    }
+
+    @RequestMapping(value = "/document/csv/getpaymentrecipe", method = RequestMethod.GET, params = {"id"})
+    public void getPaymentRecipecsv(final HttpServletRequest request,
+                                       final HttpServletResponse response) throws IOException, DocumentException {
+        final Integer id = Integer.valueOf(request.getParameter("id"));
+        String fileName =  "Payment recipe";
+        getCsv(response, csvGen.generatePaymentRecipe(workorderRepository, fileName, id), fileName.concat(" ").concat(curTime).concat(".csv"));
     }
 
 
@@ -68,13 +105,36 @@ public class DocumentController {
 
 
     @RequestMapping(value =  "/document/xls/getpricelist", method = RequestMethod.GET)
-    public void getSomeXls(final HttpServletRequest request,
+    public void getPriceListxls(final HttpServletRequest request,
                            final HttpServletResponse response) throws IOException, DocumentException {
 
-        String fileName = "PriceList".concat("_").concat(curTime);
-        getXls(response, xlsGen.generateSome(pricelistRepository, fileName), fileName.concat(".xls"));
+        String fileName = "PriceList";
+        getXls(response, xlsGen.generatePricelist(pricelistRepository, fileName), fileName.concat(" ").concat(curTime).concat(".xls"));
     }
 
+    @RequestMapping(value =  "/document/xls/getmonthreport", method = RequestMethod.GET)
+    public void getMonthReportxsl(final HttpServletRequest request,
+                           final HttpServletResponse response) throws IOException, DocumentException {
+
+        String fileName = "Month report";
+        getXls(response, xlsGen.generateMonthReport(workorderRepository, userRepository, fileName), fileName.concat(" ").concat(curTime).concat(".xls"));
+    }
+
+    @RequestMapping(value = "/document/xls/getprocurementsheet", method = RequestMethod.GET)
+    public void getProcurementSheetxls(final HttpServletRequest request,
+                                       final HttpServletResponse response) throws IOException, DocumentException {
+
+        String fileName =  "Procurement sheet";
+        getXls(response, xlsGen.generateProcurementSheet(detailRepository, fileName), fileName.concat(" ").concat(curTime).concat(".xls"));
+    }
+
+    @RequestMapping(value = "/document/xls/getpaymentrecipe", method = RequestMethod.GET, params = {"id"})
+    public void getPaymentRecipexls(final HttpServletRequest request,
+                                    final HttpServletResponse response) throws IOException, DocumentException {
+        final Integer id = Integer.valueOf(request.getParameter("id"));
+        String fileName =  "Payment recipe";
+        getCsv(response, xlsGen.generatePaymentRecipe(workorderRepository, fileName, id), fileName.concat(" ").concat(curTime).concat(".xls"));
+    }
 
     private void getXls (final HttpServletResponse response, ByteArrayOutputStream stream, String fileName) throws IOException {
 
