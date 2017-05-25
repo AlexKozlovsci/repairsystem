@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.controller.AdminController;
 import repairSystem.dao.PricelistRepository;
+import repairSystem.dao.UserRepository;
+import repairSystem.dao.WorkorderRepository;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,16 +49,12 @@ public class PDFGeneration  {
     private static final Logger log = Logger.getLogger(AdminController.class);
 
     public ByteArrayOutputStream generateReceipt(JpaRepository psr, String[] data) throws IOException, DocumentException {
-
-        //data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4"};
-
         Date curDate = new Date();
         String curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
 
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
         writer.createXmpMetadata();
 
         document.open();
@@ -330,6 +328,27 @@ public class PDFGeneration  {
         doc.add(t);
     }
 
+    public ByteArrayOutputStream getmonthreport(JpaRepository order, JpaRepository user) throws IOException, DocumentException {
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        writer.createXmpMetadata();
+
+        document.open();
+        Paragraph paragraph = new Paragraph();
+        paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, FONT_SIZE_BIG + 6));
+        paragraph.setIndentationLeft(VERTICAL_SPACE_BIG * 2 + 30);
+        paragraph.add(new Chunk("Report"));
+        document.add(paragraph);
+
+        List<String[]> dataToWrite = DataLoad.getMonthReportList((WorkorderRepository)order, (UserRepository)user);
+        generateTable(document, dataToWrite);
+
+        document.close();
+
+        return stream;
+    }
+
     public ByteArrayOutputStream generateOrder(String[] data) throws IOException, DocumentException {
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -376,12 +395,6 @@ public class PDFGeneration  {
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
         paragraph.add(new Chunk("Client's signature: ____________    Manager's signature: _________"));
         document.add(paragraph);
-
-        /*paragraph = new Paragraph();
-        paragraph.setFont(NORMAL_BOLD_FONT);
-        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY + 5);
-        paragraph.add(new Chunk("Manager's signature: _________"));
-        document.add(paragraph);*/
 
         document.close();
 

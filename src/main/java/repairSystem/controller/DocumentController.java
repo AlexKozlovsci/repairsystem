@@ -203,6 +203,13 @@ public class DocumentController {
 
     }
 
+    @RequestMapping(value = "/document/pdf/getmonthreport", method = RequestMethod.GET)
+    public void getmonthreport(final HttpServletRequest request,
+                                 final HttpServletResponse response) throws IOException, DocumentException {
+        String fileName = "Month report".concat("_").concat(curTime);
+       getPdf(response, pdfGen.getmonthreport(workorderRepository, userRepository), fileName.concat(".pdf"));
+    }
+
     @RequestMapping(value = "/document/pdf/getreceipt", method = RequestMethod.GET)
     public void getgetReceiptPdf(final HttpServletRequest request,
                              final HttpServletResponse response, int workorderId) throws IOException, DocumentException {
