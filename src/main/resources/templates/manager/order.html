@@ -81,8 +81,14 @@
                             </form>
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
-                            <h2><a href="/document/pdf/getwarrantycard" class="btn btn-success">Warranty card</a></h2>
-                            <h2><a href="/document/pdf/getreceipt" class="btn btn-success">Confirm completition</a></h2>
+                            <form action="/document/pdf/getwarrantycard" th:action="@{/document/pdf/getwarrantycard}" method="get">
+                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                <button class="btn btn-success" type="submit">Warranty card</button>
+                            </form>
+                            <form action="/document/pdf/getreceipt" th:action="@{/document/pdf/getreceipt}" method="get">
+                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                <button class="btn btn-success" type="submit">Confirm completition</button>
+                            </form>
                             <button class="btn btn-success" type="submit">Generate payment recipe</button>
                         </div>
                     </div>
@@ -158,6 +164,37 @@
             </div>
         </div>
     </div>
+
+    <div class="modal-window row">
+        <input class="modal-window-open" id="modal-3" type="checkbox" hidden>
+        <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+            <label class="modal-window-overlay" for="modal-3"></label>
+            <div class="modal-window-dialog">
+                <div class="modal-window-header">
+                    <h2 class="text-center">Choose document type</h2>
+                    <label class="mybtn-close" for="modal-3" aria-hidden="true">×</label>
+                </div>
+                <div class="modal-window-body col-sm-12">
+
+                    <div class="row" >
+                        <div class="col-sm-12">
+                            <form th:action="@{/document/csv/getpaymentrecipe}" method="get">
+                                <input type="hidden" name="id" th:value="${workorder.id}"/>
+                                <button name="getPaymentRecipecsv"  class="btn btn-warning col-sm-6 col-sm-offset-3" type="submit">CSV</button>
+                            </form>
+                            <form th:action="@{/document/xls/getpaymentrecipe}" method="get">
+                                <input type="hidden" name="id" th:value="${workorder.id}"/>
+                                <button name="getPaymentRecipexls"  class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10" type="submit">XLS</button>
+                            </form>
+                            <a href="/document/pdf/getpaymentrecipe" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 </div>

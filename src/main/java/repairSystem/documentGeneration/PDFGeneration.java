@@ -9,18 +9,14 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import org.apache.log4j.Logger;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.controller.AdminController;
-import repairSystem.dao.ClientRepository;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.dao.UserRepository;
 import repairSystem.dao.WorkorderRepository;
-import repairSystem.model.Client;
-import repairSystem.model.User;
-import repairSystem.model.Workorder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,16 +49,15 @@ public class PDFGeneration  {
     private static final Logger log = Logger.getLogger(AdminController.class);
 
     public ByteArrayOutputStream generateReceipt(JpaRepository psr, String[] data) throws IOException, DocumentException {
-
-        data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4"};
-
         Date curDate = new Date();
         String curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
 
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
+
         //writer.setEncryption(null, null, PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_128);
+
         writer.createXmpMetadata();
 
         document.open();
@@ -78,8 +73,8 @@ public class PDFGeneration  {
         document.add(paragraph);
         document.add(new LineSeparator());
 
-        String text = String.format("%s was taken to repair the %s for repair work.",
-                data[0], data[1]);
+        String text = String.format("%s was taken to repair the device for repair work.",
+                data[0]);
 
         paragraph = new Paragraph();
         paragraph.setFont(NORMAL_FONT);
@@ -88,8 +83,8 @@ public class PDFGeneration  {
         paragraph.add(new Chunk(text));
         document.add(paragraph);
 
-        text = String.format("The order is accepted %s in the name %s.",
-                data[2], data[3]);
+        text = String.format("The order is accepted %s %s in the name %s %s.",
+                data[1], data[2], data[3], data[4]);
 
         paragraph = new Paragraph();
         paragraph.setFont(NORMAL_FONT);
@@ -130,9 +125,6 @@ public class PDFGeneration  {
 
 
     public ByteArrayOutputStream generateWarrantyCard(JpaRepository psr, String[] data) throws IOException, DocumentException {
-
-        data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4", "Word_5"};
-
         Date curDate = new Date();
         String curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
 
@@ -140,6 +132,7 @@ public class PDFGeneration  {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
         //writer.setEncryption(true, "1", "2", PdfWriter.ALLOW_COPY);
+
         writer.createXmpMetadata();
 
         document.open();
@@ -159,14 +152,14 @@ public class PDFGeneration  {
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
-        paragraph.add(new Chunk("Client's name: ".concat(data[0])));
+        paragraph.add(new Chunk("Client's name: ".concat(data[0]).concat(" ").concat(data[1])));
         document.add(paragraph);
 
         paragraph = new Paragraph();
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
-        paragraph.add(new Chunk("Phone's number: ".concat(data[1])));
+        paragraph.add(new Chunk("Phone's number: ".concat(data[2])));
         document.add(paragraph);
 
         paragraph = new Paragraph();
@@ -180,14 +173,7 @@ public class PDFGeneration  {
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
-        paragraph.add(new Chunk("Device: ".concat(data[2])));
-        document.add(paragraph);
-
-        paragraph = new Paragraph();
-        paragraph.setFont(NORMAL_FONT);
-        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
-        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
-        paragraph.add(new Chunk("What's been fixed: ".concat(data[3])));
+        paragraph.add(new Chunk("Problem: ".concat(data[3])));
         document.add(paragraph);
 
         paragraph = new Paragraph();
@@ -218,13 +204,9 @@ public class PDFGeneration  {
     }
 
     public ByteArrayOutputStream generateReport(JpaRepository psr, String[] data) throws IOException, DocumentException {
-
-        data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4", "Word_5"};
-
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
         writer.createXmpMetadata();
 
         Date curDate = new Date();
@@ -244,8 +226,8 @@ public class PDFGeneration  {
         document.add(paragraph);
         document.add(new LineSeparator());
 
-        String text = String.format("The order was received %s of the number. The order was delivered %s. During the hard work, broken parts %s of the device %s were found. %s conducted titanic efforts to eliminate them. The repaired parts and functions were repaired and tested. The device does not have any more breakdowns.",
-                data[0], data[1], data[2], data[3], data[4]);
+        String text = String.format("The order was received %s. The order was delivered by %s %s. During the hard work, broken parts of the device were found. %s %s conducted titanic efforts to eliminate them. The repaired parts and functions were repaired and tested. The device does not have any more breakdowns.",
+                data[0], data[1], data[2], data[1], data[2]);
 
         paragraph = new Paragraph();
         paragraph.setFont(NORMAL_FONT);
@@ -269,7 +251,7 @@ public class PDFGeneration  {
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
-        paragraph.add(new Chunk("Expiration date: ".concat(curTime).concat("Engineer's signature: ____________")));
+        paragraph.add(new Chunk("Expiration date: ".concat(curTime).concat("   ").concat("Engineer's signature: ____________")));
         document.add(paragraph);
 
         document.close();
@@ -283,7 +265,6 @@ public class PDFGeneration  {
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
         writer.createXmpMetadata();
 
 
@@ -352,35 +333,40 @@ public class PDFGeneration  {
         doc.add(t);
     }
 
-    public ByteArrayOutputStream generateOrder(JpaRepository orderRep, JpaRepository userRep, JpaRepository clientRep, int orderId) throws IOException, DocumentException {
+    public ByteArrayOutputStream getmonthreport(JpaRepository order, JpaRepository user) throws IOException, DocumentException {
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
         writer.createXmpMetadata();
-        WorkorderRepository workorderRepository;
-        workorderRepository = (WorkorderRepository) orderRep;
-        Workorder order = (Workorder) workorderRepository.findById(orderId);
-        Integer tempOrder = (int)orderId;
-        String orderStr = tempOrder.toString();
-
-        ClientRepository clientRepository;
-        clientRepository = (ClientRepository) clientRep;
-        Client client = (Client) clientRepository.findById(order.getId_client());
-
-        UserRepository userRepository;
-        userRepository = (UserRepository) userRep;
-        User manager = (User) userRepository.findById(order.getId_manager());
-        User engineer = (User) userRepository.findById(order.getId_engineer());
 
         document.open();
+        Paragraph paragraph = new Paragraph();
+        paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, FONT_SIZE_BIG + 6));
+        paragraph.setIndentationLeft(VERTICAL_SPACE_BIG * 2 + 30);
+        paragraph.add(new Chunk("Report"));
+        document.add(paragraph);
 
+        List<String[]> dataToWrite = DataLoad.getMonthReportList((WorkorderRepository)order, (UserRepository)user);
+        generateTable(document, dataToWrite);
+
+        document.close();
+
+        return stream;
+    }
+
+    public ByteArrayOutputStream generateOrder(String[] data) throws IOException, DocumentException {
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        writer.createXmpMetadata();
+
+        document.open();
 
         generateTitle(document);
         Paragraph paragraph = new Paragraph();
         paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, FONT_SIZE_BIG + 6));
         paragraph.setIndentationLeft(VERTICAL_SPACE_BIG * 2 + 30);
-        paragraph.add(new Chunk("Order №".concat(orderStr)));
+        paragraph.add(new Chunk("Order #".concat(data[0])));
         document.add(paragraph);
 
         paragraph = new Paragraph(" ");
@@ -391,14 +377,14 @@ public class PDFGeneration  {
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
-        paragraph.add(new Chunk("This document states the conclusion of a contract for repair between RepairSystem on the one hand and the client ".concat(client.getSecondname()).concat(" ").concat(client.getName()).concat(" on another hand.")));
+        paragraph.add(new Chunk("This document states the conclusion of a contract for repair between RepairSystem on the one hand and the client ".concat(data[1]).concat(" ").concat(data[2]).concat(" on another hand.")));
         document.add(paragraph);
 
         paragraph = new Paragraph();
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
-        paragraph.add(new Chunk("Order accepted ".concat(order.getCreate_at()).concat(". Manager ").concat(manager.getSecondname()).concat(" ").concat(manager.getName()).concat(" to perform the repair. The order was assigned to an engineer ").concat(engineer.getSecondname()).concat(" ").concat(engineer.getName()).concat(". The customer was given a receipt on the acceptance of the device, as well as the conditions for performing repair and maintenance of the repair.")));
+        paragraph.add(new Chunk("Order accepted ".concat(data[3]).concat(". Manager ").concat(data[4]).concat(" ").concat(data[5]).concat(" to perform the repair. The order was assigned to an engineer ").concat(data[6]).concat(" ").concat(data[7]).concat(". The customer was given a receipt on the acceptance of the device, as well as the conditions for performing repair and maintenance of the repair.")));
         document.add(paragraph);
 
         paragraph = new Paragraph();
@@ -414,12 +400,6 @@ public class PDFGeneration  {
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
         paragraph.add(new Chunk("Client's signature: ____________    Manager's signature: _________"));
         document.add(paragraph);
-
-        /*paragraph = new Paragraph();
-        paragraph.setFont(NORMAL_BOLD_FONT);
-        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY + 5);
-        paragraph.add(new Chunk("Manager's signature: _________"));
-        document.add(paragraph);*/
 
         document.close();
 

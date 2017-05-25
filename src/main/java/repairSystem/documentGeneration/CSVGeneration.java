@@ -8,13 +8,13 @@ import repairSystem.dao.DetailRepository;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.dao.WorkorderRepository;
 import repairSystem.model.Pricelist;
+import repairSystem.dao.UserRepository;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,15 +27,32 @@ public class CSVGeneration {
     private final Logger log = Logger.getLogger(CSVGeneration.class);
 
 
-    public ByteArrayOutputStream generatePricelist(JpaRepository psr) throws IOException, DocumentException {
+    public ByteArrayOutputStream generatePricelist(JpaRepository psr, String fileName) throws IOException, DocumentException {
+        List<String[]> dataToWrite = DataLoad.getPriceCurrentList((PricelistRepository)psr);
+        return generate(fileName, dataToWrite);
+    }
+
+    public ByteArrayOutputStream generateMonthReport(JpaRepository psr, JpaRepository usr, String fileName) throws IOException, DocumentException {
+        List<String[]> dataToWrite = DataLoad.getMonthReportList((WorkorderRepository)psr, (UserRepository)usr);
+        return generate(fileName, dataToWrite);
+    }
+
+    public ByteArrayOutputStream generateProcurementSheet(JpaRepository psr, String fileName) throws IOException, DocumentException {
+        List<String[]> dataToWrite = DataLoad.getProcurementSheetList((DetailRepository)psr);
+        return generate(fileName, dataToWrite);
+    }
+
+    public ByteArrayOutputStream generatePaymentRecipe(JpaRepository psr, String fileName, int id) throws IOException, DocumentException {
+        List<String[]> dataToWrite = DataLoad.getPaymentRecipeList((WorkorderRepository)psr, id);
+        return generate(fileName, dataToWrite);
+    }
+
+    private ByteArrayOutputStream generate(String fileName, List<String[]> dataToWrite) throws IOException, DocumentException {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         OutputStreamWriter osw = new OutputStreamWriter(stream, Charset.forName("cp1251"));
         CSVWriter writer = new CSVWriter(osw, ',');
-
-        List<String[]> dataToWrite = DataLoad.getPriceCurrentList((PricelistRepository)psr);
-        writer.writeNext(new String[]{"PriceList"});
-
+        writer.writeNext(new String[]{fileName});
         writer.writeAll(dataToWrite);
         writer.close();
         return stream;
