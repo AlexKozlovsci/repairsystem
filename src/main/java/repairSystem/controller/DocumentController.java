@@ -91,15 +91,44 @@ public class DocumentController {
     }
 
     @RequestMapping(value = "/document/pdf/getpricelist", method = RequestMethod.GET)
-    public void getSomePdf(final HttpServletRequest request,
+    public void getPriceListPdf(final HttpServletRequest request,
                            final HttpServletResponse response) throws IOException, DocumentException {
         String fileName = "PriceList".concat("_").concat(curTime);
         getPdf(response, pdfGen.gneratePriceList(pricelistRepository), fileName.concat(".pdf"));
 
     }
 
+    @RequestMapping(value = "/document/pdf/getreport", method = RequestMethod.GET)
+    public void getReportPdf(final HttpServletRequest request,
+                           final HttpServletResponse response) throws IOException, DocumentException {
+        String fileName = "Progress Report".concat("_").concat(curTime);
+
+        //Replace null with data
+        getPdf(response, pdfGen.generateReport(pricelistRepository, null), fileName.concat(".pdf"));
+
+    }
+
+    @RequestMapping(value = "/document/pdf/getwarrantycard", method = RequestMethod.GET)
+    public void getWarrantyCard(final HttpServletRequest request,
+                             final HttpServletResponse response) throws IOException, DocumentException {
+        String fileName = "Warranty Card".concat("_").concat(curTime);
+
+        //Replace null with data
+        getPdf(response, pdfGen.generateWarrantyCard(pricelistRepository, null), fileName.concat(".pdf"));
+
+    }
+
+    @RequestMapping(value = "/document/pdf/getreceipt", method = RequestMethod.GET)
+    public void getgetReceiptPdf(final HttpServletRequest request,
+                             final HttpServletResponse response) throws IOException, DocumentException {
+        String fileName = "Receipt".concat("_").concat(curTime);
+
+        //Replace null with data
+        getPdf(response, pdfGen.generateReceipt(pricelistRepository, null), fileName.concat(".pdf"));
+
+    }
+
     private void getPdf(final HttpServletResponse response, ByteArrayOutputStream stream, String fileName) throws IOException, DocumentException {
-        log.info("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         try {
 
             response.setContentType("application/pdf");

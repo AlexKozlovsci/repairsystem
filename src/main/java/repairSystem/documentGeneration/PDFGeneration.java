@@ -17,6 +17,7 @@ import repairSystem.dao.PricelistRepository;
 import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -50,6 +51,232 @@ public class PDFGeneration  {
 
     private static final Logger log = Logger.getLogger(AdminController.class);
 
+    public ByteArrayOutputStream generateReceipt(JpaRepository psr, String[] data) throws IOException, DocumentException {
+
+        data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4"};
+
+        Date curDate = new Date();
+        String curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
+
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+        writer.createXmpMetadata();
+
+        document.open();
+        generateTitle(document);
+
+        Paragraph paragraph = new Paragraph();
+
+        paragraph = new Paragraph();
+        paragraph.setFont(BIG_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Receipt"));
+        document.add(paragraph);
+        document.add(new LineSeparator());
+
+        String text = String.format("%s was taken to repair the %s for repair work.",
+                data[0], data[1]);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk(text));
+        document.add(paragraph);
+
+        text = String.format("The order is accepted %s in the name %s.",
+                data[2], data[3]);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk(text));
+        document.add(paragraph);
+
+        text = ("In case of loss or damage to the customer's property, the amount of money equal to the loss is paid.");
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk(text));
+        document.add(paragraph);
+
+        text = ("In the absence of communication from the client within 6 months, the device becomes the property of RepairSystem.");
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk(text));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("                                                     Manager's signature: ____________"));
+        document.add(paragraph);
+
+        document.close();
+
+        return stream;
+    }
+
+
+    public ByteArrayOutputStream generateWarrantyCard(JpaRepository psr, String[] data) throws IOException, DocumentException {
+
+        data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4", "Word_5"};
+
+        Date curDate = new Date();
+        String curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
+
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+        writer.createXmpMetadata();
+
+        document.open();
+        generateTitle(document);
+
+        Paragraph paragraph = new Paragraph();
+
+        paragraph = new Paragraph();
+        paragraph.setFont(BIG_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Warranty Card"));
+        document.add(paragraph);
+        document.add(new LineSeparator());
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Client's name: ".concat(data[0])));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Phone's number: ".concat(data[1])));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Date of issue: ".concat(curTime)));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Device: ".concat(data[2])));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("What's been fixed: ".concat(data[3])));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Company performing repairs: RepairSystem"));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Valid until: ".concat("6(six) months")));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("Client's signature: ____________    Manager's signature: ____________"));
+        document.add(paragraph);
+
+
+        document.close();
+
+        return stream;
+    }
+
+    public ByteArrayOutputStream generateReport(JpaRepository psr, String[] data) throws IOException, DocumentException {
+
+        data = new String[]{"Word_1", "Word_2", "Word_3", "Word_4", "Word_5"};
+
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+        writer.createXmpMetadata();
+
+        Date curDate = new Date();
+        String curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
+
+        document.open();
+
+        generateTitle(document);
+
+        Paragraph paragraph = new Paragraph();
+
+        paragraph = new Paragraph();
+        paragraph.setFont(BIG_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Progress Report"));
+        document.add(paragraph);
+        document.add(new LineSeparator());
+
+        String text = String.format("The order was received %s of the number. The order was delivered %s. During the hard work, broken parts %s of the device %s were found. %s conducted titanic efforts to eliminate them. The repaired parts and functions were repaired and tested. The device does not have any more breakdowns.",
+                data[0], data[1], data[2], data[3], data[4]);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk(text));
+        document.add(paragraph);
+
+
+
+        paragraph = new Paragraph();
+        paragraph.setFont(SMALL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_SMALL);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Appendage"));
+        document.add(paragraph);
+
+        generateTable(document, DataLoad.getPriceCurrentList((PricelistRepository)psr));
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("Expiration date: ".concat(curTime).concat("Engineer's signature: ____________")));
+        document.add(paragraph);
+
+        document.close();
+
+        return stream;
+    }
+
+
     public ByteArrayOutputStream gneratePriceList(JpaRepository psr) throws IOException, DocumentException {
 
         Document document = new Document(PageSize.A4);
@@ -61,6 +288,17 @@ public class PDFGeneration  {
 
         document.open();
         generateTitle(document);
+
+        Paragraph paragraph = new Paragraph();
+
+        paragraph = new Paragraph();
+        paragraph.setFont(BIG_FONT);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("PriceList"));
+        document.add(paragraph);
+        document.add(new LineSeparator());
+
         generateTable(document, DataLoad.getPriceCurrentList((PricelistRepository)psr));
 
         document.close();
@@ -90,13 +328,6 @@ public class PDFGeneration  {
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
         document.add(paragraph);
 
-        paragraph = new Paragraph();
-        paragraph.setFont(BIG_FONT);
-        paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
-        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
-        paragraph.add(new Chunk("Summary"));
-        document.add(paragraph);
-        document.add(new LineSeparator());
 
     }
 
