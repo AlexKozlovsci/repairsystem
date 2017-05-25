@@ -142,14 +142,8 @@
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
                             <label class="btn btn-success" for="modal-1">Change status</label>
-                        </div>
-                        <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
-                            <h2><label class="btn btn-lg btn-default"  for="modal-3">Detail list</label></h2>
-                            <form action="/document/pdf/getreport" th:action="@{/document/pdf/getreport}" method="get">
-                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
-                                <button class="btn btn-success" type="submit">Progress Report</button>
-                            </form>
-                            <!--<h2><a href="/document/pdf/getreport" class="btn btn-lg btn-default">Progress Report</a></h2>-->
+                            <label class="btn btn-success"  for="modal-3">Detail list</label>
+                            <a href="/document/pdf/getreport" class="btn btn-success">Progress Report</a>
                         </div>
                     </div>
 
@@ -241,9 +235,14 @@
 
                     <div class="row" >
                         <div class="col-sm-12">
-                            <!--<a th:href="|/document/csv/getdetaillist?id=${order.id}|" class="btn btn-warning col-sm-6 col-sm-offset-3">CSV</a>
-                            <a th:href="/document/xls/getdetaillist?id=${order.id}" class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10">XLS</a>
-                            <a th:href="/document/pdf/getdetaillist?id=${order.id}" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>-->
+                            <form th:action="@{/document/csv/getdetaillist}" method="get">
+                                <input type="hidden" name="id" th:value="${order.id}"/>
+                                <button name="getDetaillist"  class="btn btn-warning col-sm-6 col-sm-offset-3" type="submit">CSV</button>
+                            </form>
+                            <form th:action="@{/document/xls/getdetaillist}" method="get">
+                                <input type="hidden" name="id" th:value="${order.id}"/>
+                                <button name="getDetaillist"  class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10" type="submit">XLS</button>
+                            </form>
                         </div>
                     </div>
 
