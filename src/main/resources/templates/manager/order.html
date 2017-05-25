@@ -75,22 +75,33 @@
                         <div class="col-sm-6 col-sm-offset-3 text-center">
                             <label class="btn btn-warning" for="modal-2">Change status</label>
                             <label class="btn btn-warning" for="modal-1">Change engineer</label>
-                            <form action="/document/pdf/getOrder" th:action="@{/document/pdf/getOrder}" method="get">
-                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
-                                <button class="btn btn-success" type="submit">Create recipe</button>
-                            </form>
+
                         </div>
-                        <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
-                            <form action="/document/pdf/getwarrantycard" th:action="@{/document/pdf/getwarrantycard}" method="get">
-                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
-                                <button class="btn btn-success" type="submit">Warranty card</button>
-                            </form>
-                            <form action="/document/pdf/getreceipt" th:action="@{/document/pdf/getreceipt}" method="get">
-                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
-                                <button class="btn btn-success" type="submit">Confirm completition</button>
-                            </form>
-                            <!--<button class="btn btn-success" type="submit">Generate payment recipe</button>-->
-                            <h2><label class="btn btn-lg btn-default"  for="modal-3">Generate payment recipe</label></h2>
+                        <div class="col-sm-10 col-sm-offset-1 margin_top20 text-center">
+                            <div class="row">
+                                <div class="col-sm-6 text-right">
+                                    <form action="/document/pdf/getOrder" th:action="@{/document/pdf/getOrder}" method="get">
+                                        <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                        <button class="btn btn-success" type="submit">Create order</button>
+                                    </form>
+                                </div>
+                                <div class="col-sm-6 text-left">
+                                    <form action="/document/pdf/getreceipt" th:action="@{/document/pdf/getreceipt}" method="get">
+                                        <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                        <button class="btn btn-success" type="submit">Create recipe</button>
+                                    </form>
+                                </div>
+                                <div class="col-sm-6 text-right margin_top10">
+
+                                    <form action="/document/pdf/getwarrantycard" th:action="@{/document/pdf/getwarrantycard}" method="get">
+                                        <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                        <button class="btn btn-success" type="submit">Create warranty card</button>
+                                    </form>
+                                </div>
+                                <div class="col-sm-6 text-left margin_top10">
+                                    <label class="btn btn-success"  for="modal-3">Generate payment recipe</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -187,11 +198,6 @@
                                 <input type="hidden" name="id" th:value="${workorder.id}"/>
                                 <button name="getPaymentRecipexls"  class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10" type="submit">XLS</button>
                             </form>
-                            <form th:action="@{/document/pdf/getpaymentrecipe}" method="get">
-                                <input type="hidden" name="id" th:value="${workorder.id}"/>
-                                <button name="getPaymentRecipepdf"  class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10" type="submit">PDF</button>
-                            </form>
-                            <a href="/document/pdf/getpaymentrecipe" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
                         </div>
                     </div>
 

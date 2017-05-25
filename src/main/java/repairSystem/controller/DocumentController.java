@@ -5,16 +5,9 @@ import com.itextpdf.text.DocumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import repairSystem.dao.*;
-import repairSystem.dao.DetailRepository;
-import repairSystem.dao.ClientRepository;
-import repairSystem.dao.PricelistRepository;
-import repairSystem.dao.UserRepository;
-import repairSystem.dao.WorkorderRepository;
-
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
 import repairSystem.documentGeneration.XLSGeneration;
@@ -208,15 +201,16 @@ public class DocumentController {
 
     }
 
-    @RequestMapping(value = "/document/pdf/getreport", method = RequestMethod.GET)
+    @RequestMapping(value = "/document/pdf/getreport", method = RequestMethod.GET, params = {"id"})
     public void getReportPdf(final HttpServletRequest request,
-                           final HttpServletResponse response, int workorderId) throws IOException, DocumentException {
-        String fileName = "Progress Report".concat("_").concat(curTime);
-        Workorder order = (Workorder) workorderRepository.findById(workorderId);
+                           final HttpServletResponse response) throws IOException, DocumentException {
+        final Integer id = Integer.valueOf(request.getParameter("id"));
+        String fileName = "Progress Report".concat(" ").concat(curTime);
+        Workorder order = (Workorder) workorderRepository.findById(id);
         Client client = (Client) clientRepository.findById(order.getId_client());
         User engineer = (User) userRepository.findById(order.getId_engineer());
         String[] data = new String[]{order.getCreate_at(), engineer.getSecondname(), engineer.getName()};
-        getPdf(response, pdfGen.generateReport(pricelistRepository, data), fileName.concat(".pdf"));
+        getPdf(response, pdfGen.generateReport(workorderRepository, data, id), fileName.concat(".pdf"));
     }
 
     @RequestMapping(value = "/document/pdf/getwarrantycard", method = RequestMethod.GET)

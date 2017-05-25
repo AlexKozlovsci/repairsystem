@@ -82,6 +82,7 @@ public class EngineerController {
 
         Set<Detail> details =  workorder.getDetail();
         Set<Pricelist> pricelists =  workorder.getPricelists();
+
         int totalCost = 0;
         for (Detail detail: details)
             totalCost += detail.getCost();

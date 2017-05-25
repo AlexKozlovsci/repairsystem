@@ -141,9 +141,12 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
-                            <label class="btn btn-success" for="modal-1">Change status</label>
                             <label class="btn btn-success"  for="modal-3">Detail list</label>
-                            <a href="/document/pdf/getreport" class="btn btn-success">Progress Report</a>
+                            <label class="btn btn-success" for="modal-1">Change status</label>
+                            <form class="margin_top10" action="/document/pdf/getreport" th:action="@{/document/pdf/getreport}" method="get">
+                                <input type="hidden" name="id" th:value="${order.id}"/>
+                                <button class="btn btn-success" type="submit">Progress Report</button>
+                            </form>
                         </div>
                     </div>
 

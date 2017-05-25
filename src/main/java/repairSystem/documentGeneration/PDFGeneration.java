@@ -204,7 +204,7 @@ public class PDFGeneration  {
         return stream;
     }
 
-    public ByteArrayOutputStream generateReport(JpaRepository psr, String[] data) throws IOException, DocumentException {
+    public ByteArrayOutputStream generateReport(JpaRepository psr, String[] data, int id) throws IOException, DocumentException {
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
@@ -246,7 +246,7 @@ public class PDFGeneration  {
         paragraph.add(new Chunk("Appendage"));
         document.add(paragraph);
 
-        generateTable(document, DataLoad.getPriceCurrentList((PricelistRepository)psr));
+        generateTable(document, DataLoad.getReport((WorkorderRepository)psr, id));
 
         paragraph = new Paragraph();
         paragraph.setFont(NORMAL_FONT);

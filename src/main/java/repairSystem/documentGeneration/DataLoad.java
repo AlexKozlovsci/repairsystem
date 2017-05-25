@@ -1,18 +1,6 @@
 package repairSystem.documentGeneration;
 
 
-import repairSystem.dao.DetailRepository;
-import repairSystem.dao.PricelistRepository;
-import repairSystem.dao.WorkorderRepository;
-import repairSystem.model.Detail;
-import repairSystem.model.Pricelist;
-import repairSystem.model.Workorder;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 import repairSystem.controller.EngineerController;
 import repairSystem.dao.DetailRepository;
@@ -163,6 +151,25 @@ public class DataLoad {
             totalCost += (int)pricelist.getCost();
 
         finalList.add(new String[]{"Total cost: ", totalCost.toString()});
+        return finalList;
+    }
+
+    public static List<String[]> getReport(WorkorderRepository workorderRepository, int id){
+        List<String[]> finalList = new ArrayList<>();
+
+        finalList.add(new String[]{"Device", "Action", "Cost"});
+
+
+        Workorder workorder = workorderRepository.findById(id);
+        Set<Pricelist> prices = workorder.getPricelists();
+        Set<Detail> details = workorder.getDetail();
+
+        for(Pricelist price: prices){
+            Integer temp = (int)price.getCost();
+            finalList.add(new String[]{price.getDeviceType(), price.getAction(), temp.toString()});
+        }
+
+
         return finalList;
     }
 }
