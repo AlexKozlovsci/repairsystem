@@ -75,12 +75,16 @@
                         <div class="col-sm-6 col-sm-offset-3 text-center">
                             <label class="btn btn-warning" for="modal-2">Change status</label>
                             <label class="btn btn-warning" for="modal-1">Change engineer</label>
-                            <button class="btn btn-success" type="submit">Create recipe</button>
+                            <form action="/document/pdf/getOrder" th:action="@{/document/pdf/getOrder}" method="get">
+                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                <button class="btn btn-success" type="submit">Create recipe</button>
+                            </form>
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
-                            <button class="btn btn-success" type="submit">Create warranty card</button>
-                            <button class="btn btn-success" type="submit">Confirm completition</button>
+                            <h2><a href="/document/pdf/getwarrantycard" class="btn btn-success">Warranty card</a></h2>
+                            <h2><a href="/document/pdf/getreceipt" class="btn btn-success">Confirm completition</a></h2>
                             <label class="btn btn-warning" for="modal-3">Generate payment recipe</label>
+
                         </div>
                     </div>
 

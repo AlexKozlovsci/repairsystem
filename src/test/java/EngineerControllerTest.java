@@ -30,24 +30,24 @@ public class EngineerControllerTest {
     private PricelistRepository priceListRepository;
 
     @Test
-    public void Test() {
-        System.out.println("test");
+    public void test() {
+        System.out.println("");
     }
 
     @Test
-    public void TestTimeoutMinutes() {
+    public void testTimeoutMinutes() {
         assertTimeout(ofMinutes(2), () -> {
         });
     }
 
     @Test
-    public void TestTimeoutMillis() {
+    public void testTimeoutMillis() {
         assertTimeout(ofMillis(2), () -> {
         });
     }
 
     @Test
-    public void TestUserNullException() throws NullPointerException {
+    public void testUserNullException() throws NullPointerException {
         repairSystem.model.User u = new repairSystem.model.User();
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             userRepository.save(u);
@@ -56,7 +56,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestWorkOrdersNullException() throws NullPointerException {
+    public void testWorkOrdersNullException() throws NullPointerException {
         Workorder workorder = new Workorder();
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             workorderRepository.save(workorder);
@@ -65,7 +65,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestClientNullException() throws NullPointerException {
+    public void testClientNullException() throws NullPointerException {
         Client client = new Client();
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             clientRepository.save(client);
@@ -74,7 +74,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    void TestName() {
+    void testName() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setName("Engineer");
         assertEquals("Engineer", u.getName());
@@ -89,14 +89,14 @@ public class EngineerControllerTest {
     }
 
     @Test
-    void TestUser() {
+    void testUser() {
         repairSystem.model.User u = new repairSystem.model.User();
         u.setLogin("Vlad");
         assertEquals("Vlad", u.getLogin());
     }
 
     @Test
-    public void TestDisplayOrder() {
+    public void testDisplayOrder() {
         Throwable thrown = assertThrows(NullPointerException.class, () -> {
             List<Workorder> workorders = (List<Workorder>) workorderRepository.findAll();
         });
@@ -106,69 +106,69 @@ public class EngineerControllerTest {
 
 
     @Test
-    public void TestModelViewIndex() {
+    public void testModelViewIndex() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/index");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewAddDetailToOrder() {
+    public void testModelViewAddDetailToOrder() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/addDetailToOrder");
         assertNotNull(mav);
     }
     @Test
-    public void TestModelViewAddActionToOrder() {
+    public void testModelViewAddActionToOrder() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/addActionToOrder");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewOrder() {
+    public void testModelViewOrder() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/order");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewDiagnosticsList() {
+    public void testModelViewDiagnosticsList() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/DiagnosticsList");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewLogout() {
+    public void testModelViewLogout() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("/auth/login");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewReport() {
+    public void testModelViewReport() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/Report");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewWorkItems() {
+    public void testModelViewWorkItems() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("engineer/WorkItems");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestModelViewNotFound() {
+    public void testModelViewNotFound() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("404");
         assertNotNull(mav);
     }
 
     @Test
-    public void TestWorkOrdersIdIllegalArgument() throws NullPointerException {
+    public void testWorkOrdersIdIllegalArgument() throws NullPointerException {
         Workorder workorder = new Workorder();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             workorder.setId(Long.parseLong("9.25"));
@@ -177,7 +177,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestWorkOrdersIdClientIllegalArgument() throws NullPointerException {
+    public void testWorkOrdersIdClientIllegalArgument() throws NullPointerException {
         Workorder workorder = new Workorder();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             workorder.setId_client(Long.parseLong("11.55"));
@@ -186,7 +186,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestWorkOrdersIdManagerIllegalArgument() throws NullPointerException {
+    public void testWorkOrdersIdManagerIllegalArgument() throws NullPointerException {
         Workorder workorder = new Workorder();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             workorder.setId_manager(Long.parseLong("27.15"));
@@ -195,7 +195,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestWorkOrdersIdEngineerIllegalArgument() throws NullPointerException {
+    public void testWorkOrdersIdEngineerIllegalArgument() throws NullPointerException {
         Workorder workorder = new Workorder();
         Throwable thrown = assertThrows(IllegalArgumentException.class, () -> {
             workorder.setId_engineer(Long.parseLong("hello"));
@@ -205,7 +205,7 @@ public class EngineerControllerTest {
 
     @Test
 
-    public void TestChangeStatus() {
+    public void testChangeStatus() {
         Workorder workorder = new Workorder();
         workorder.setId(100);
         workorder.setId_client(1);
@@ -227,7 +227,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestAddDetailToOrder() {
+    public void testAddDetailToOrder() {
         Detail detail = new Detail();
         detail.setId(100);
         detail.setName("Display");
@@ -242,7 +242,7 @@ public class EngineerControllerTest {
         assertNull(thrown2.getMessage());
     }
     @Test
-    public void TestAddPriceListToOrder() {
+    public void testAddPriceListToOrder() {
         Pricelist pricelist = new Pricelist();
         pricelist.setId(100);
         pricelist.setDeviceType("Android");
@@ -257,7 +257,7 @@ public class EngineerControllerTest {
         assertNull(thrown2.getMessage());
     }
     @Test
-    public void TestDeletePriceListToOrder() {
+    public void testDeletePriceListToOrder() {
         Pricelist pricelist = new Pricelist();
         pricelist.setId(100);
         pricelist.setDeviceType("Android");
@@ -275,7 +275,7 @@ public class EngineerControllerTest {
     }
 
     @Test
-    public void TestDeleteDetailToOrder() {
+    public void testDeleteDetailToOrder() {
         Detail detail = new Detail();
         detail.setId(100);
         detail.setName("Display");

@@ -142,7 +142,10 @@
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
                             <label class="btn btn-success" for="modal-1">Change status</label>
-                            <label class="btn btn-success" for="modal-2">Change document</label>
+                        </div>
+                        <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
+                            <h2><label class="btn btn-lg btn-default"  for="modal-3">Detail list</label></h2>
+                            <h2><a href="/document/pdf/getreport" class="btn btn-lg btn-default">Progress Report</a></h2>
                         </div>
                     </div>
 
@@ -220,6 +223,32 @@
             </div>
         </div>
     </div>
+
+    <div class="modal-window row">
+        <input class="modal-window-open" id="modal-3" type="checkbox" hidden>
+        <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+            <label class="modal-window-overlay" for="modal-1"></label>
+            <div class="modal-window-dialog">
+                <div class="modal-window-header">
+                    <h2 class="text-center">Choose document type</h2>
+                    <label class="mybtn-close" for="modal-3" aria-hidden="true">×</label>
+                </div>
+                <div class="modal-window-body col-sm-12">
+
+                    <div class="row" >
+                        <div class="col-sm-12">
+                            <!--<a th:href="|/document/csv/getdetaillist?id=${order.id}|" class="btn btn-warning col-sm-6 col-sm-offset-3">CSV</a>
+                            <a th:href="/document/xls/getdetaillist?id=${order.id}" class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10">XLS</a>
+                            <a th:href="/document/pdf/getdetaillist?id=${order.id}" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>-->
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 
 
