@@ -62,7 +62,7 @@ public class PDFGeneration  {
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+        //writer.setEncryption(null, null, PdfWriter.ALLOW_COPY, PdfWriter.STANDARD_ENCRYPTION_128);
         writer.createXmpMetadata();
 
         document.open();
@@ -139,7 +139,7 @@ public class PDFGeneration  {
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+        //writer.setEncryption(true, "1", "2", PdfWriter.ALLOW_COPY);
         writer.createXmpMetadata();
 
         document.open();

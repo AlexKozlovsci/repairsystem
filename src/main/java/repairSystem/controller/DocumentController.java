@@ -5,12 +5,10 @@ import com.itextpdf.text.DocumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import repairSystem.dao.ClientRepository;
-import repairSystem.dao.PricelistRepository;
-import repairSystem.dao.UserRepository;
-import repairSystem.dao.WorkorderRepository;
+import repairSystem.dao.*;
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
 import repairSystem.documentGeneration.XLSGeneration;
@@ -40,7 +38,10 @@ public class DocumentController {
     @Autowired
     private ClientRepository clientRepository;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository detailRepository;
+    @Autowired
+    private DetailRepository userRepository;
+
     private CSVGeneration csvGen = new CSVGeneration();
     private XLSGeneration xlsGen = new XLSGeneration();
     private PDFGeneration pdfGen = new PDFGeneration();
@@ -61,6 +62,20 @@ public class DocumentController {
         getPdf(response, pdfGen.generateOrder(workorderRepository, userRepository, clientRepository, workorderId), fileName.concat(".pdf"));
 
     }
+
+
+
+    @RequestMapping(value =  "/document/csv/getdetaillist", method = RequestMethod.GET, params = {"id"})
+    public void getdetailCsv(final HttpServletRequest request,
+                             final HttpServletResponse response) throws IOException, DocumentException {
+
+        final Integer id = Integer.valueOf(request.getParameter("id"));
+        getCsv(response, csvGen.generateDetailsList( workorderRepository, id), "DetailList".concat("_").concat(curTime).concat(".csv"));
+    }
+
+
+
+
 
     @RequestMapping(value = "/document/csv/getpricelist", method = RequestMethod.GET)
     public void getPriceList(final HttpServletRequest request,
@@ -92,9 +107,21 @@ public class DocumentController {
     }
 
 
+
+
+    @RequestMapping(value =  "/document/xls/getdetaillist", method = RequestMethod.GET, params = {"id"})
+    public void getdetailXls(final HttpServletRequest request,
+                             final HttpServletResponse response) throws IOException, DocumentException {
+
+        final Integer id = Integer.valueOf(request.getParameter("id"));
+        String fileName = "Detail".concat("_").concat(curTime);
+        getXls(response, xlsGen.generateDetailList( workorderRepository, fileName, id), fileName.concat(".xls"));
+    }
+
+
+
+
     private void getXls (final HttpServletResponse response, ByteArrayOutputStream stream, String fileName) throws IOException {
-
-
 
         response.setContentLength(stream.toByteArray().length);
         response.setContentType("application/xls");
