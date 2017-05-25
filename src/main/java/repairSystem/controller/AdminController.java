@@ -17,9 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.DetailRepository;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.dao.UserRepository;
+import repairSystem.dao.WorkorderRepository;
 import repairSystem.model.Detail;
 import repairSystem.model.Pricelist;
 import repairSystem.model.User;
+import repairSystem.model.Workorder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +45,8 @@ public class AdminController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private WorkorderRepository workorderRepository;
 
     @RequestMapping(value = "/admin/", method = RequestMethod.GET)
     public ModelAndView index(){
@@ -242,6 +246,10 @@ public class AdminController {
             return new ModelAndView("404");
         }
         Detail det = (Detail) detailRepository.findById(id);
+        List<Workorder> wlist = (List<Workorder>) workorderRepository.findAll();
+        for (Workorder w:det.workorder) {
+            w.details.remove(det);
+        }
         detailRepository.delete(det);
         return new ModelAndView("redirect:/admin/parts");
     }
@@ -289,6 +297,12 @@ public class AdminController {
             return new ModelAndView("404");
         }
         Pricelist priceItem = (Pricelist) priceListRepository.findById(id);
+
+        //Detail det = (Detail) detailRepository.findById(id);
+        List<Workorder> wlist = (List<Workorder>) workorderRepository.findAll();
+        for (Workorder w:priceItem.workorder) {
+            w.pricelists.remove(priceItem);
+        }
         priceListRepository.delete(priceItem);
         return new ModelAndView("redirect:/admin/prices");
     }
