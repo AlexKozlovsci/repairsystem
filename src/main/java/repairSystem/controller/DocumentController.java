@@ -46,7 +46,6 @@ public class DocumentController {
     @Autowired
     private DetailRepository detailRepository;
 
-
     @Autowired
     private ClientRepository clientRepository;
 
