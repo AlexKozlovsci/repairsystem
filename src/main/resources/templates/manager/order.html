@@ -89,7 +89,8 @@
                                 <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
                                 <button class="btn btn-success" type="submit">Confirm completition</button>
                             </form>
-                            <button class="btn btn-success" type="submit">Generate payment recipe</button>
+                            <!--<button class="btn btn-success" type="submit">Generate payment recipe</button>-->
+                            <h2><label class="btn btn-lg btn-default"  for="modal-3">Generate payment recipe</label></h2>
                         </div>
                     </div>
 
@@ -185,6 +186,10 @@
                             <form th:action="@{/document/xls/getpaymentrecipe}" method="get">
                                 <input type="hidden" name="id" th:value="${workorder.id}"/>
                                 <button name="getPaymentRecipexls"  class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10" type="submit">XLS</button>
+                            </form>
+                            <form th:action="@{/document/pdf/getpaymentrecipe}" method="get">
+                                <input type="hidden" name="id" th:value="${workorder.id}"/>
+                                <button name="getPaymentRecipepdf"  class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10" type="submit">PDF</button>
                             </form>
                             <a href="/document/pdf/getpaymentrecipe" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
                         </div>

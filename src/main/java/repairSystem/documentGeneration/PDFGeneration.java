@@ -9,6 +9,7 @@ import com.itextpdf.text.pdf.draw.LineSeparator;
 import org.apache.log4j.Logger;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.controller.AdminController;
+import repairSystem.dao.DetailRepository;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.dao.UserRepository;
 import repairSystem.dao.WorkorderRepository;
@@ -342,6 +343,27 @@ public class PDFGeneration  {
         document.add(paragraph);
 
         List<String[]> dataToWrite = DataLoad.getMonthReportList((WorkorderRepository)order, (UserRepository)user);
+        generateTable(document, dataToWrite);
+
+        document.close();
+
+        return stream;
+    }
+
+    public ByteArrayOutputStream getprocurementsheet(JpaRepository detailRep) throws IOException, DocumentException {
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        writer.createXmpMetadata();
+
+        document.open();
+        Paragraph paragraph = new Paragraph();
+        paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, FONT_SIZE_BIG + 6));
+        paragraph.setIndentationLeft(VERTICAL_SPACE_BIG * 2 + 40);
+        paragraph.add(new Chunk("Procurement Sheet"));
+        document.add(paragraph);
+
+        List<String[]> dataToWrite = DataLoad.getProcurementSheetList((DetailRepository)detailRep);
         generateTable(document, dataToWrite);
 
         document.close();

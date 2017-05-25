@@ -203,6 +203,20 @@ public class DocumentController {
 
     }
 
+    @RequestMapping(value = "/document/pdf/getprocurementsheet", method = RequestMethod.GET)
+    public void getprocurementsheet(final HttpServletRequest request,
+                                final HttpServletResponse response) throws IOException, DocumentException {
+        String fileName = "Procurment sheet";
+        getPdf(response, pdfGen.getprocurementsheet(detailRepository), fileName.concat(".pdf"));
+    }
+
+    @RequestMapping(value = "/document/pdf/getpaymentrecipe", method = RequestMethod.GET)
+    public void getpaymentrecipe(final HttpServletRequest request,
+                                    final HttpServletResponse response) throws IOException, DocumentException {
+        String fileName = "Procurment sheet";
+        getPdf(response, pdfGen.getprocurementsheet(detailRepository), fileName.concat(".pdf"));
+    }
+
     @RequestMapping(value = "/document/pdf/getmonthreport", method = RequestMethod.GET)
     public void getmonthreport(final HttpServletRequest request,
                                  final HttpServletResponse response) throws IOException, DocumentException {
