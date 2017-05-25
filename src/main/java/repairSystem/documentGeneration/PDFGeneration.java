@@ -2,15 +2,23 @@ package repairSystem.documentGeneration;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.controller.AdminController;
+import repairSystem.dao.PricelistRepository;
 
 
+import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by Глеб on 24.05.2017.
@@ -42,19 +50,26 @@ public class PDFGeneration  {
 
     private static final Logger log = Logger.getLogger(AdminController.class);
 
-    public ByteArrayOutputStream generateSome(JpaRepository psr) throws IOException, DocumentException{
+    public ByteArrayOutputStream gneratePriceList(JpaRepository psr) throws IOException, DocumentException {
 
         Document document = new Document(PageSize.A4);
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();;
-
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
         PdfWriter writer = PdfWriter.getInstance(document, stream);
-
         //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
-
         writer.createXmpMetadata();
 
+
         document.open();
+        generateTitle(document);
+        generateTable(document, DataLoad.getPriceCurrentList((PricelistRepository)psr));
+
+        document.close();
+
+        return stream;
+    }
+
+    private void generateTitle(Document document) throws IOException, DocumentException{
+
 
 
         Paragraph paragraph = new Paragraph();
@@ -64,10 +79,16 @@ public class PDFGeneration  {
         document.add(paragraph);
         document.add(new LineSeparator());
 
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("Powered by RepairSystem(Kozlovski, Legchilov, Lukynchik, Sych)"));
+        document.add(paragraph);
+
         paragraph = new Paragraph(" ");
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
         document.add(paragraph);
-
 
         paragraph = new Paragraph();
         paragraph.setFont(BIG_FONT);
@@ -77,10 +98,29 @@ public class PDFGeneration  {
         document.add(paragraph);
         document.add(new LineSeparator());
 
+    }
 
-        //SOME DATA
+    private void generateTable(Document doc, List<String[]> dataToWrite) throws DocumentException {
 
-        document.close();
-        return stream;
+        PdfPTable t = new PdfPTable(dataToWrite.get(0).length);
+
+        t.setSpacingBefore(25);
+        t.setSpacingAfter(25);
+
+        String[] strHead = dataToWrite.get(0);
+
+        dataToWrite.remove(0);
+        for (String elem: strHead) {
+            PdfPCell c1 = new PdfPCell(new Phrase(elem));
+            t.addCell(c1);
+        }
+
+        for (String[] str: dataToWrite) {
+            for (String elem: str) {
+                t.addCell(elem);
+            }
+        }
+
+        doc.add(t);
     }
 }

@@ -28,13 +28,12 @@ public class CSVGeneration {
     public ByteArrayOutputStream generatePricelist(JpaRepository psr) throws IOException, DocumentException {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
         OutputStreamWriter osw = new OutputStreamWriter(stream, Charset.forName("cp1251"));
         CSVWriter writer = new CSVWriter(osw, ',');
 
         List<String[]> dataToWrite = DataLoad.getPriceCurrentList((PricelistRepository)psr);
-
         writer.writeNext(new String[]{"PriceList"});
+
         writer.writeAll(dataToWrite);
         writer.close();
         return stream;

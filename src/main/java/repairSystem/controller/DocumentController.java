@@ -90,19 +90,17 @@ public class DocumentController {
         outStream.close();
     }
 
-    @RequestMapping(value = "/document/pdf/getsomepdf", method = RequestMethod.GET)
+    @RequestMapping(value = "/document/pdf/getpricelist", method = RequestMethod.GET)
     public void getSomePdf(final HttpServletRequest request,
                            final HttpServletResponse response) throws IOException, DocumentException {
-        //wrong repository
-        getPdf(response, pdfGen.generateSome(pricelistRepository));
+        String fileName = "PriceList".concat("_").concat(curTime);
+        getPdf(response, pdfGen.gneratePriceList(pricelistRepository), fileName.concat(".pdf"));
 
     }
 
-    private void getPdf(final HttpServletResponse response, ByteArrayOutputStream stream) throws IOException, DocumentException {
+    private void getPdf(final HttpServletResponse response, ByteArrayOutputStream stream, String fileName) throws IOException, DocumentException {
         log.info("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         try {
-
-            String fileName = "someFileName.csv";
 
             response.setContentType("application/pdf");
             response.setContentLength(stream.toByteArray().length);
