@@ -38,12 +38,12 @@
                             <td th:text="${detail.count}"></td>
                             <td th:text="${detail.cost}">Some cost</td>
                             <td>
-                                <input type="checkbox"th:field="*{checkedItems}" th:value="${detail.id}" unchecked>
+                                <input class="text-center big-checkbox col-sm-12" type="checkbox"th:field="*{checkedItems}" th:value="${detail.id}" unchecked>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                        <div class="col-sm-4 col-sm-offset-5 margin_top20">
+                        <div class="col-sm-4 col-sm-offset-4 margin_top20">
                             <button type="submit" name="addDetailToOrder" class="btn btn-success col-sm-12">Add</button>
                         </div>
                     </form>

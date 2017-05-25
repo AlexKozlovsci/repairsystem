@@ -75,7 +75,7 @@
                                     <th>№</th>
                                     <th>Work</th>
                                     <th>Cost</th>
-                                    <th>Action</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -126,17 +126,18 @@
                         <div class="col-sm-8 col-sm-offset-2 text-center">
                             <div class="row">
                                 <div class="col-sm-6 text-right">
-                                    <form action="/engineer/addDetailToOrder" th:action="@{/engineer/addDetailToOrder}" method="get">
-                                        <input type="hidden" name="orderId" th:value="${order.id}"/>
-                                        <button class="btn btn-warning" type="submit">Add detail</button>
-                                    </form>
-                                </div>
-                                <div class="col-sm-6 text-left">
                                     <form action="/engineer/addActionToOrder" th:action="@{/engineer/addActionToOrder}" method="get">
                                         <input type="hidden" name="orderId" th:value="${order.id}"/>
                                         <button class="btn btn-warning" type="submit">Add action</button>
                                     </form>
                                 </div>
+                                <div class="col-sm-6  text-left">
+                                    <form action="/engineer/addDetailToOrder" th:action="@{/engineer/addDetailToOrder}" method="get">
+                                        <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                        <button class="btn btn-warning" type="submit">Add detail</button>
+                                    </form>
+                                </div>
+
                             </div>
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
