@@ -14,6 +14,9 @@ import repairSystem.dao.WorkorderRepository;
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
 import repairSystem.documentGeneration.XLSGeneration;
+import repairSystem.model.Client;
+import repairSystem.model.User;
+import repairSystem.model.Workorder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +61,12 @@ public class DocumentController {
         Integer temp = (int)workorderId;
         String orderStr = temp.toString();
         String fileName = "Order".concat("_").concat(orderStr);
-        getPdf(response, pdfGen.generateOrder(workorderRepository, userRepository, clientRepository, workorderId), fileName.concat(".pdf"));
+        Workorder order = (Workorder) workorderRepository.findById(workorderId);
+        Client client = (Client) clientRepository.findById(order.getId_client());
+        User manager = (User) userRepository.findById(order.getId_manager());
+        User engineer = (User) userRepository.findById(order.getId_engineer());
+        String[] data = new String[]{orderStr, client.getSecondname(), client.getName(), order.getCreate_at(), manager.getSecondname(), manager.getName(), engineer.getSecondname(), engineer.getName()};
+        getPdf(response, pdfGen.generateOrder(data), fileName.concat(".pdf"));
 
     }
 
@@ -116,31 +124,37 @@ public class DocumentController {
 
     @RequestMapping(value = "/document/pdf/getreport", method = RequestMethod.GET)
     public void getReportPdf(final HttpServletRequest request,
-                           final HttpServletResponse response) throws IOException, DocumentException {
+                           final HttpServletResponse response, int workorderId) throws IOException, DocumentException {
         String fileName = "Progress Report".concat("_").concat(curTime);
-
-        //Replace null with data
-        getPdf(response, pdfGen.generateReport(pricelistRepository, null), fileName.concat(".pdf"));
+        Workorder order = (Workorder) workorderRepository.findById(workorderId);
+        Client client = (Client) clientRepository.findById(order.getId_client());
+        User engineer = (User) userRepository.findById(order.getId_engineer());
+        String[] data = new String[]{order.getCreate_at(), engineer.getSecondname(), engineer.getName()};
+        getPdf(response, pdfGen.generateReport(pricelistRepository, data), fileName.concat(".pdf"));
 
     }
 
     @RequestMapping(value = "/document/pdf/getwarrantycard", method = RequestMethod.GET)
     public void getWarrantyCard(final HttpServletRequest request,
-                             final HttpServletResponse response) throws IOException, DocumentException {
+                             final HttpServletResponse response, int workorderId) throws IOException, DocumentException {
         String fileName = "Warranty Card".concat("_").concat(curTime);
+        Workorder order = (Workorder) workorderRepository.findById(workorderId);
+        Client client = (Client) clientRepository.findById(order.getId_client());
+        String[] data = new String[]{client.getSecondname(), client.getName(), client.getPhone_number(), order.getDescription() };
 
-        //Replace null with data
-        getPdf(response, pdfGen.generateWarrantyCard(pricelistRepository, null), fileName.concat(".pdf"));
+        getPdf(response, pdfGen.generateWarrantyCard(pricelistRepository, data), fileName.concat(".pdf"));
 
     }
 
     @RequestMapping(value = "/document/pdf/getreceipt", method = RequestMethod.GET)
     public void getgetReceiptPdf(final HttpServletRequest request,
-                             final HttpServletResponse response) throws IOException, DocumentException {
+                             final HttpServletResponse response, int workorderId) throws IOException, DocumentException {
         String fileName = "Receipt".concat("_").concat(curTime);
-
-        //Replace null with data
-        getPdf(response, pdfGen.generateReceipt(pricelistRepository, null), fileName.concat(".pdf"));
+        Workorder order = (Workorder) workorderRepository.findById(workorderId);
+        Client client = (Client) clientRepository.findById(order.getId_client());
+        User manager = (User) userRepository.findById(order.getId_manager());
+        String[] data = new String[]{order.getCreate_at(), manager.getSecondname(), manager.getName(), client.getSecondname(), client.getName()};
+        getPdf(response, pdfGen.generateReceipt(pricelistRepository, data), fileName.concat(".pdf"));
 
     }
 

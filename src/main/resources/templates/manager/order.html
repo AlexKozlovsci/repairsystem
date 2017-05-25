@@ -81,8 +81,14 @@
                             </form>
                         </div>
                         <div class="col-sm-6 col-sm-offset-3 margin_top20 text-center">
-                            <h2><a href="/document/pdf/getwarrantycard" class="btn btn-success">Warranty card</a></h2>
-                            <h2><a href="/document/pdf/getreceipt" class="btn btn-success">Confirm completition</a></h2>
+                            <form action="/document/pdf/getwarrantycard" th:action="@{/document/pdf/getwarrantycard}" method="get">
+                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                <button class="btn btn-success" type="submit">Warranty card</button>
+                            </form>
+                            <form action="/document/pdf/getreceipt" th:action="@{/document/pdf/getreceipt}" method="get">
+                                <input type="hidden" name="workorderId" th:value="${workorder.id}"/>
+                                <button class="btn btn-success" type="submit">Confirm completition</button>
+                            </form>
                             <button class="btn btn-success" type="submit">Generate payment recipe</button>
                         </div>
                     </div>
