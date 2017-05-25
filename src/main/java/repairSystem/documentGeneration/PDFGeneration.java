@@ -303,7 +303,7 @@ public class PDFGeneration  {
         paragraph = new Paragraph(" ");
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
         document.add(paragraph);
-        
+
     }
 
     private void generateTable(Document doc, List<String[]> dataToWrite) throws DocumentException {
@@ -374,12 +374,7 @@ public class PDFGeneration  {
         paragraph.setFont(NORMAL_FONT);
         paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
-        paragraph.add(new Chunk("Client's signature: ________"));
-        paragraph.setIndentationRight(VERTICAL_SPACE_SMALL);
-        paragraph.setExtraParagraphSpace(VERTICAL_SPACE_SMALL);
-        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
-        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
-        paragraph.add(new Chunk("Manager's signature: _________"));
+        paragraph.add(new Chunk("Client's signature: ____________    Manager's signature: _________"));
         document.add(paragraph);
 
         /*paragraph = new Paragraph();

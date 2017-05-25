@@ -32,10 +32,10 @@
                                 <h2><label class="btn btn-lg btn-default"  for="modal-1">Create pricelist</label></h2>
                             </div>
                             <div  class="col-sm-4 text-center">
-                                <h2><a href="" class="btn btn-lg btn-default" type="submit">Create pricelist</a></h2>
+                                <h2><label class="btn btn-lg btn-default"  for="modal-2">Create month report</label></h2>
                             </div>
                             <div  class="col-sm-4 text-center">
-                                <h2><a href="" class="btn btn-lg btn-default" type="submit">Create pricelist</a></h2>
+                                <h2><label class="btn btn-lg btn-default"  for="modal-3">Create procurement sheet</label></h2>
                             </div>
                         </div>
 
@@ -62,6 +62,54 @@
                                     <a href="/document/pdf/getpricelist" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
                                 </div>
                             </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-window row">
+            <input class="modal-window-open" id="modal-2" type="checkbox" hidden>
+            <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+                <label class="modal-window-overlay" for="modal-2"></label>
+                <div class="modal-window-dialog">
+                    <div class="modal-window-header">
+                        <h2 class="text-center">Choose document type</h2>
+                        <label class="mybtn-close" for="modal-2" aria-hidden="true">×</label>
+                    </div>
+                    <div class="modal-window-body col-sm-12">
+
+                        <div class="row" >
+                            <div class="col-sm-12">
+                                <a href="/document/csv/getmonthreport" class="btn btn-warning col-sm-6 col-sm-offset-3">CSV</a>
+                                <a href="/document/xls/getmonthreport" class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10">XLS</a>
+                                <a href="/document/pdf/getmonthreport" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-window row">
+            <input class="modal-window-open" id="modal-3" type="checkbox" hidden>
+            <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+                <label class="modal-window-overlay" for="modal-3"></label>
+                <div class="modal-window-dialog">
+                    <div class="modal-window-header">
+                        <h2 class="text-center">Choose document type</h2>
+                        <label class="mybtn-close" for="modal-3" aria-hidden="true">×</label>
+                    </div>
+                    <div class="modal-window-body col-sm-12">
+
+                        <div class="row" >
+                            <div class="col-sm-12">
+                                <a href="/document/csv/getprocurementsheet" class="btn btn-warning col-sm-6 col-sm-offset-3">CSV</a>
+                                <a href="/document/xls/getprocurementsheet" class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10">XLS</a>
+                                <a href="/document/pdf/getprocurementsheet" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
