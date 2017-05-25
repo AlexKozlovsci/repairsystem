@@ -4,12 +4,13 @@ package repairSystem.controller;
 import com.itextpdf.text.DocumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import repairSystem.dao.ClientRepository;
 import repairSystem.dao.PricelistRepository;
+import repairSystem.dao.UserRepository;
+import repairSystem.dao.WorkorderRepository;
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
 import repairSystem.documentGeneration.XLSGeneration;
@@ -34,6 +35,12 @@ public class DocumentController {
 
     @Autowired
     private PricelistRepository pricelistRepository;
+    @Autowired
+    private WorkorderRepository workorderRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private UserRepository userRepository;
     private CSVGeneration csvGen = new CSVGeneration();
     private XLSGeneration xlsGen = new XLSGeneration();
     private PDFGeneration pdfGen = new PDFGeneration();
@@ -45,6 +52,15 @@ public class DocumentController {
         curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
     }
 
+    @RequestMapping(value = "/document/pdf/getOrder", method = RequestMethod.GET)
+    public void getPDFOrder(final HttpServletRequest request,
+                           final HttpServletResponse response, int workorderId) throws IOException, DocumentException {
+        Integer temp = (int)workorderId;
+        String orderStr = temp.toString();
+        String fileName = "Order".concat("_").concat(orderStr);
+        getPdf(response, pdfGen.generateOrder(workorderRepository, userRepository, clientRepository, workorderId), fileName.concat(".pdf"));
+
+    }
 
     @RequestMapping(value = "/document/csv/getpricelist", method = RequestMethod.GET)
     public void getPriceList(final HttpServletRequest request,
