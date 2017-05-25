@@ -7,14 +7,16 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import org.apache.log4j.Logger;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.controller.AdminController;
+import repairSystem.dao.ClientRepository;
 import repairSystem.dao.PricelistRepository;
+import repairSystem.dao.UserRepository;
+import repairSystem.dao.WorkorderRepository;
+import repairSystem.model.Client;
+import repairSystem.model.User;
+import repairSystem.model.Workorder;
 
-
-import javax.print.Doc;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -47,7 +49,6 @@ public class PDFGeneration  {
     private final static Font NORMAL_BOLD_FONT = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, FONT_SIZE_NORMAL, Font.BOLD);
     private final static Font BIG_FONT = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, FONT_SIZE_BIG, Font.BOLD);
     private final static Font BIG_BOLD_FONT = FontFactory.getFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED, FONT_SIZE_BIG + 2, Font.BOLD);
-
 
     private static final Logger log = Logger.getLogger(AdminController.class);
 
@@ -307,9 +308,6 @@ public class PDFGeneration  {
     }
 
     private void generateTitle(Document document) throws IOException, DocumentException{
-
-
-
         Paragraph paragraph = new Paragraph();
         paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, FONT_SIZE_BIG + 4));
         paragraph.setSpacingAfter(VERTICAL_SPACE_TINY);
@@ -327,8 +325,7 @@ public class PDFGeneration  {
         paragraph = new Paragraph(" ");
         paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
         document.add(paragraph);
-
-
+        
     }
 
     private void generateTable(Document doc, List<String[]> dataToWrite) throws DocumentException {
@@ -353,5 +350,84 @@ public class PDFGeneration  {
         }
 
         doc.add(t);
+    }
+
+    public ByteArrayOutputStream generateOrder(JpaRepository orderRep, JpaRepository userRep, JpaRepository clientRep, int orderId) throws IOException, DocumentException {
+        Document document = new Document(PageSize.A4);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        PdfWriter writer = PdfWriter.getInstance(document, stream);
+        //writer.setEncryption(null, null, PdfWriter.ALLOW_PRINTING, PdfWriter.STANDARD_ENCRYPTION_128);
+        writer.createXmpMetadata();
+        WorkorderRepository workorderRepository;
+        workorderRepository = (WorkorderRepository) orderRep;
+        Workorder order = (Workorder) workorderRepository.findById(orderId);
+        Integer tempOrder = (int)orderId;
+        String orderStr = tempOrder.toString();
+
+        ClientRepository clientRepository;
+        clientRepository = (ClientRepository) clientRep;
+        Client client = (Client) clientRepository.findById(order.getId_client());
+
+        UserRepository userRepository;
+        userRepository = (UserRepository) userRep;
+        User manager = (User) userRepository.findById(order.getId_manager());
+        User engineer = (User) userRepository.findById(order.getId_engineer());
+
+        document.open();
+
+
+        generateTitle(document);
+        Paragraph paragraph = new Paragraph();
+        paragraph.setFont(FontFactory.getFont(FontFactory.TIMES_BOLD, FONT_SIZE_BIG + 6));
+        paragraph.setIndentationLeft(VERTICAL_SPACE_BIG * 2 + 30);
+        paragraph.add(new Chunk("Order №".concat(orderStr)));
+        document.add(paragraph);
+
+        paragraph = new Paragraph(" ");
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("This document states the conclusion of a contract for repair between RepairSystem on the one hand and the client ".concat(client.getSecondname()).concat(" ").concat(client.getName()).concat(" on another hand.")));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("Order accepted ".concat(order.getCreate_at()).concat(". Manager ").concat(manager.getSecondname()).concat(" ").concat(manager.getName()).concat(" to perform the repair. The order was assigned to an engineer ").concat(engineer.getSecondname()).concat(" ").concat(engineer.getName()).concat(". The customer was given a receipt on the acceptance of the device, as well as the conditions for performing repair and maintenance of the repair.")));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("The Contractor undertakes to notify the customer of any faults found and inform about the dates and costs in advance."));
+        document.add(paragraph);
+
+        paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.add(new Chunk("Client's signature: ________"));
+        paragraph.setIndentationRight(VERTICAL_SPACE_SMALL);
+        paragraph.setExtraParagraphSpace(VERTICAL_SPACE_SMALL);
+        paragraph.setSpacingAfter(VERTICAL_SPACE_SMALL);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY);
+        paragraph.add(new Chunk("Manager's signature: _________"));
+        document.add(paragraph);
+
+        /*paragraph = new Paragraph();
+        paragraph.setFont(NORMAL_BOLD_FONT);
+        paragraph.setSpacingBefore(VERTICAL_SPACE_TINY + 5);
+        paragraph.add(new Chunk("Manager's signature: _________"));
+        document.add(paragraph);*/
+
+        document.close();
+
+        return stream;
     }
 }
