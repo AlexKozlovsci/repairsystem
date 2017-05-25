@@ -18,14 +18,24 @@
                     <div class="panel-body" >
                         <h1 class="text-center" th:text="|Hello, ${name}|"></h1>
                         <div class="row">
-                            <div class="col-md-4 text-center">
+                            <div class="col-sm-4 text-center">
                                 <h2><a href="/admin/users" class="btn btn-lg btn-default">Manage users</a></h2>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-sm-4 text-center">
                                 <h2><a href="/admin/parts" class="btn btn-lg btn-default">Manage parts</a></h2>
                             </div>
-                            <div class="col-md-4 text-center">
+                            <div class="col-sm-4 text-center">
                                 <h2><a href="/admin/prices" class="btn btn-lg btn-default">Manage price</a></h2>
+                            </div>
+
+                            <div  class="col-sm-4 text-center">
+                                <h2><label class="btn btn-lg btn-default"  for="modal-1">Create pricelist</label></h2>
+                            </div>
+                            <div  class="col-sm-4 text-center">
+                                <h2><a href="" class="btn btn-lg btn-default" type="submit">Create pricelist</a></h2>
+                            </div>
+                            <div  class="col-sm-4 text-center">
+                                <h2><a href="" class="btn btn-lg btn-default" type="submit">Create pricelist</a></h2>
                             </div>
                         </div>
 
@@ -34,7 +44,34 @@
             </div>
         </div>
 
+        <div class="modal-window row">
+            <input class="modal-window-open" id="modal-1" type="checkbox" hidden>
+            <div class="modal-window-wrap" aria-hidden="true" role="dialog">
+                <label class="modal-window-overlay" for="modal-1"></label>
+                <div class="modal-window-dialog">
+                    <div class="modal-window-header">
+                        <h2 class="text-center">Choose document type</h2>
+                        <label class="mybtn-close" for="modal-1" aria-hidden="true">×</label>
+                    </div>
+                    <div class="modal-window-body col-sm-12">
+
+                            <div class="row" >
+                                <div class="col-sm-12">
+                                    <a href="/document/csv/getpricelist" class="btn btn-warning col-sm-6 col-sm-offset-3">CSV</a>
+                                    <a href="/document/xls/getpricelist" class="btn btn-success col-sm-6 col-sm-offset-3 margin_top10">XLS</a>
+                                    <a href="/document/csv/getpricelist" class="btn btn-danger col-sm-6 col-sm-offset-3 margin_top10">PDF</a>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+
+
 
 </body>
 </html>

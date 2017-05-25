@@ -3,52 +3,50 @@ package repairSystem.documentGeneration;
 
 
 
+import com.itextpdf.text.DocumentException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import repairSystem.dao.PricelistRepository;
+import repairSystem.model.Detail;
+import repairSystem.model.Pricelist;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Глеб on 24.05.2017.
  */
 public class XLSGeneration {
 
-    public static ByteArrayOutputStream generateSomeXLS() throws FileNotFoundException, IOException {
+    public ByteArrayOutputStream generateSome(JpaRepository psr, String sheetName) throws FileNotFoundException, IOException, DocumentException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         Workbook book = new HSSFWorkbook();
-        Sheet sheet = book.createSheet("Birthdays");
+        Sheet sheet = book.createSheet(sheetName);
+        List<String[]> priceList = DataLoad.getPriceCurrentList((PricelistRepository)psr);
 
-        // Нумерация начинается с нуля
-        Row row = sheet.createRow(0);
+        int j =0;
+        for (String[] str: priceList) {
+            Row row = sheet.createRow(j++);
+            int i = 0;
+            for (String elem: str) {
+                Cell name = row.createCell(i++);
+                name.setCellValue(elem);
+            }
+        }
 
-        // Мы запишем имя и дату в два столбца
-        // имя будет String, а дата рождения --- Date,
-        // формата dd.mm.yyyy
-        Cell name = row.createCell(0);
-        name.setCellValue("John");
-
-        Cell birthdate = row.createCell(1);
-
-        DataFormat format = book.createDataFormat();
-        CellStyle dateStyle = book.createCellStyle();
-        dateStyle.setDataFormat(format.getFormat("dd.mm.yyyy"));
-        birthdate.setCellStyle(dateStyle);
-
-
-        // Нумерация лет начинается с 1900-го
-        birthdate.setCellValue(new Date(110, 10, 10));
-
-        // Меняем размер столбца
+        sheet.autoSizeColumn(0);
         sheet.autoSizeColumn(1);
-
-        // Записываем всё в файл
-
+        sheet.autoSizeColumn(2);
         book.write(stream);
         book.close();
         return stream;
     }
+
+
 }

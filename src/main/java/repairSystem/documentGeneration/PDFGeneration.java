@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 import org.apache.log4j.Logger;
+import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.controller.AdminController;
 
 
@@ -14,7 +15,7 @@ import java.io.IOException;
 /**
  * Created by Глеб on 24.05.2017.
  */
-public class PDFGeneration {
+public class PDFGeneration  {
 
 
     private static int FONT_SIZE_SMALL = 10;
@@ -41,7 +42,7 @@ public class PDFGeneration {
 
     private static final Logger log = Logger.getLogger(AdminController.class);
 
-    public static ByteArrayOutputStream generateSomePDF() throws IOException, DocumentException {
+    public ByteArrayOutputStream generateSome(JpaRepository psr) throws IOException, DocumentException{
 
         Document document = new Document(PageSize.A4);
 

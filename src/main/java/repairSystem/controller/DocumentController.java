@@ -4,9 +4,11 @@ package repairSystem.controller;
 import com.itextpdf.text.DocumentException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.documentGeneration.CSVGeneration;
 import repairSystem.documentGeneration.PDFGeneration;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -31,64 +35,83 @@ public class DocumentController {
     @Autowired
     private PricelistRepository pricelistRepository;
     private CSVGeneration csvGen = new CSVGeneration();
+    private XLSGeneration xlsGen = new XLSGeneration();
+    private PDFGeneration pdfGen = new PDFGeneration();
+    private String curTime;
+
+    public DocumentController()
+    {
+        Date curDate = new Date();
+        curTime = new SimpleDateFormat("yyyy-MM-dd").format(curDate);
+    }
 
 
-    @RequestMapping(value = "/document/getcsv", method = RequestMethod.GET)
-    public void getCsv(final HttpServletRequest request,
-            final HttpServletResponse response) throws IOException {
-        ByteArrayOutputStream stream = csvGen.generateCSV(pricelistRepository);
+    @RequestMapping(value = "/document/csv/getpricelist", method = RequestMethod.GET)
+    public void getPriceList(final HttpServletRequest request,
+            final HttpServletResponse response) throws IOException, DocumentException {
+
+        getCsv(response, csvGen.generatePricelist(pricelistRepository), "PriceList".concat("_").concat(curTime).concat(".csv"));
+    }
+
+
+    private void getCsv (final HttpServletResponse response, ByteArrayOutputStream stream, String fileName) throws IOException {
+
         response.setContentType("application/csv");
         response.setContentLength(stream.toByteArray().length);
-
         String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"",
-                "someFileName.csv");
+        String headerValue = String.format("attachment; filename=\"%s\"", fileName);
         response.setHeader(headerKey, headerValue);
-
         OutputStream outStream = response.getOutputStream();
-
         outStream.write(stream.toByteArray());
-
         outStream.close();
     }
 
-    @RequestMapping(value = "/document/getxls", method = RequestMethod.GET)
-    public void getXls(final HttpServletRequest request,
-                           final HttpServletResponse response) throws IOException {
 
+    @RequestMapping(value =  "/document/xls/getpricelist", method = RequestMethod.GET)
+    public void getSomeXls(final HttpServletRequest request,
+                           final HttpServletResponse response) throws IOException, DocumentException {
+
+        String fileName = "PriceList".concat("_").concat(curTime);
+        getXls(response, xlsGen.generateSome(pricelistRepository, fileName), fileName.concat(".xls"));
+    }
+
+
+    private void getXls (final HttpServletResponse response, ByteArrayOutputStream stream, String fileName) throws IOException {
+
+
+
+        response.setContentLength(stream.toByteArray().length);
         response.setContentType("application/xls");
-        response.setContentLength(XLSGeneration.generateSomeXLS().toByteArray().length);
         String headerKey = "Content-Disposition";
-        String headerValue = String.format("attachment; filename=\"%s\"",
-                "someFileName.xls");
+        String headerValue = String.format("attachment; filename=\"%s\"", fileName);
         response.setHeader(headerKey, headerValue);
-
         OutputStream outStream = response.getOutputStream();
-
-        outStream.write(XLSGeneration.generateSomeXLS().toByteArray());
-
+        outStream.write(stream.toByteArray());
         outStream.close();
     }
 
-    @RequestMapping(value = "/document/getpdf", method = RequestMethod.GET)
-    public void getPdf(final HttpServletRequest request,
-                       final HttpServletResponse response) throws IOException, DocumentException {
+    @RequestMapping(value = "/document/pdf/getsomepdf", method = RequestMethod.GET)
+    public void getSomePdf(final HttpServletRequest request,
+                           final HttpServletResponse response) throws IOException, DocumentException {
+        //wrong repository
+        getPdf(response, pdfGen.generateSome(pricelistRepository));
+
+    }
+
+    private void getPdf(final HttpServletResponse response, ByteArrayOutputStream stream) throws IOException, DocumentException {
         log.info("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
         try {
 
+            String fileName = "someFileName.csv";
 
             response.setContentType("application/pdf");
-            response.setContentLength(PDFGeneration.generateSomePDF().toByteArray().length);
+            response.setContentLength(stream.toByteArray().length);
 
             String headerKey = "Content-Disposition";
-            String headerValue = String.format("attachment; filename=\"%s\"",
-                    "someFileName.pdf");
+            String headerValue = String.format("attachment; filename=\"%s\"", fileName);
             response.setHeader(headerKey, headerValue);
-
             OutputStream outStream = response.getOutputStream();
-
-            outStream.write(PDFGeneration.generateSomePDF().toByteArray());
-
+            outStream.write(stream.toByteArray());
             outStream.close();
         }
         catch (Exception e)
@@ -96,6 +119,8 @@ public class DocumentController {
             log.info(e.getMessage());
         }
     }
+
+
 
 
 }

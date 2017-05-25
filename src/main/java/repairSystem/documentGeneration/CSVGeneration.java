@@ -1,7 +1,9 @@
 package repairSystem.documentGeneration;
 
+import com.itextpdf.text.DocumentException;
 import com.opencsv.CSVWriter;
 import org.apache.log4j.Logger;
+import org.springframework.data.jpa.repository.JpaRepository;
 import repairSystem.dao.PricelistRepository;
 import repairSystem.model.Pricelist;
 
@@ -19,20 +21,20 @@ import java.util.List;
 
 public class CSVGeneration {
 
-    private PricelistRepository pricelistRepository;
 
-    private static final Logger log = Logger.getLogger(CSVGeneration.class);
+    private final Logger log = Logger.getLogger(CSVGeneration.class);
 
 
-    public ByteArrayOutputStream generateCSV(PricelistRepository psr) throws IOException {
-        pricelistRepository = psr;
+    public ByteArrayOutputStream generatePricelist(JpaRepository psr) throws IOException, DocumentException {
+
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
         OutputStreamWriter osw = new OutputStreamWriter(stream, Charset.forName("cp1251"));
         CSVWriter writer = new CSVWriter(osw, ',');
 
-        List<String[]> dataToWrite = getPriceCurrentList();
+        List<String[]> dataToWrite = DataLoad.getPriceCurrentList((PricelistRepository)psr);
 
+        writer.writeNext(new String[]{"PriceList"});
         writer.writeAll(dataToWrite);
         writer.close();
         return stream;
@@ -40,17 +42,5 @@ public class CSVGeneration {
 
 
 
-    private  List<String[]> getPriceCurrentList(){
-        List<String[]> priceCurrentList = new ArrayList<>();
-        priceCurrentList.add(new String[]{"Device", "Action", "Cost"});
-        List<Pricelist> prices = pricelistRepository.findAll();
-        for (Iterator<Pricelist> i = prices.iterator(); i.hasNext();) {
-            Pricelist item = i.next();
-            Integer temp = (int)item.getCost();
-            priceCurrentList.add(new String[]{item.getDeviceType(), item.getAction(), temp.toString()});
-        }
-        log.info(4);
-        return priceCurrentList;
-    }
 
 }
