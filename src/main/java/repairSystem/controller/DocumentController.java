@@ -119,7 +119,10 @@ public class DocumentController {
                            final HttpServletResponse response) throws IOException, DocumentException {
         String fileName = "Progress Report".concat("_").concat(curTime);
 
-        //Replace null with data
+
+
+
+
         getPdf(response, pdfGen.generateReport(pricelistRepository, null), fileName.concat(".pdf"));
 
     }
@@ -139,7 +142,12 @@ public class DocumentController {
                              final HttpServletResponse response) throws IOException, DocumentException {
         String fileName = "Receipt".concat("_").concat(curTime);
 
-        //Replace null with data
+
+
+
+
+
+
         getPdf(response, pdfGen.generateReceipt(pricelistRepository, null), fileName.concat(".pdf"));
 
     }
